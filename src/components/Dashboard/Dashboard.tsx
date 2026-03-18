@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { AlertCircle, TrendingUp, Settings, Trophy, ThumbsDown } from 'lucide-react';
+import { AlertCircle, TrendingUp, Settings, Trophy, ThumbsDown, Zap } from 'lucide-react';
 import { differenceInDays, differenceInMinutes } from 'date-fns';
 import type { Habit, Page } from '../../types';
 import { getDailyQuote } from '../../data/quotes';
@@ -11,9 +11,12 @@ interface DashboardProps {
   onNavigate: (page: Page) => void;
   todaySummary: { falls: number; victories: number; total: number };
   hardHours: number[];
+  dopamineCount: number;
+  dopamineGoal: number;
+  dopamineGoalProgress: number;
 }
 
-export default function Dashboard({ habits, onNavigate, todaySummary, hardHours }: DashboardProps) {
+export default function Dashboard({ habits, onNavigate, todaySummary, hardHours, dopamineCount, dopamineGoal, dopamineGoalProgress }: DashboardProps) {
   const activeQuitHabits = habits.filter((h) => h.type === 'quit' && h.isActive);
   const activeBuildHabits = habits.filter((h) => h.type === 'build' && h.isActive);
   const quote = getDailyQuote();
@@ -163,6 +166,28 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours 
           </div>
         );
       })()}
+
+      {/* Dopamine tracker shortcut */}
+      <button
+        onClick={() => onNavigate('sos')}
+        className="w-full bg-card rounded-xl p-3 shadow-sm mb-4 flex items-center gap-3 text-right"
+      >
+        <div className="w-9 h-9 rounded-full bg-sage/15 flex items-center justify-center flex-shrink-0">
+          <Zap size={18} className="text-sage" />
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs font-medium text-text">דופמין בריא</span>
+            <span className="text-xs font-bold text-sage">{dopamineCount}/{dopamineGoal}</span>
+          </div>
+          <div className="h-1.5 bg-cream-dark rounded-full overflow-hidden">
+            <div
+              className="h-full bg-sage rounded-full transition-all duration-500"
+              style={{ width: `${dopamineGoalProgress * 100}%` }}
+            />
+          </div>
+        </div>
+      </button>
 
       {/* Inner Space entry */}
       <button

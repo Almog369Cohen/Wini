@@ -4,6 +4,7 @@ import type { Page } from './types';
 import { useHabits } from './hooks/useHabits';
 import { useJournal } from './hooks/useJournal';
 import { useInnerSpace } from './hooks/useInnerSpace';
+import { useDopamine } from './hooks/useDopamine';
 import { useToast } from './hooks/useToast';
 import Layout from './components/Layout';
 import Dashboard from './components/Dashboard/Dashboard';
@@ -22,6 +23,7 @@ export default function App() {
   const habitState = useHabits();
   const journalState = useJournal();
   const innerSpaceState = useInnerSpace();
+  const dopamineState = useDopamine();
   const { toasts, show: showToast, dismiss: dismissToast } = useToast();
 
   const handleExport = useCallback(() => {
@@ -115,6 +117,9 @@ export default function App() {
             onNavigate={setCurrentPage}
             todaySummary={journalState.todaySummary}
             hardHours={journalState.hardHours}
+            dopamineCount={dopamineState.todayCount}
+            dopamineGoal={dopamineState.dailyGoal}
+            dopamineGoalProgress={dopamineState.goalProgress}
           />
         );
       case 'habits':
@@ -127,7 +132,18 @@ export default function App() {
           />
         );
       case 'sos':
-        return <SOSPage habits={habitState.habits} />;
+        return (
+          <SOSPage
+            habits={habitState.habits}
+            todayDopamineLogs={dopamineState.todayLogs}
+            todayDopamineCount={dopamineState.todayCount}
+            dopamineGoalProgress={dopamineState.goalProgress}
+            dopamineStreak={dopamineState.streak}
+            dailyGoal={dopamineState.dailyGoal}
+            onLogDopamine={dopamineState.logActivity}
+            showToast={showToast}
+          />
+        );
       case 'journal':
         return (
           <JournalPage

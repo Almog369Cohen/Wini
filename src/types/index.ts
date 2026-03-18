@@ -107,6 +107,14 @@ export interface InnerSpaceData {
   journeyStage: number; // 0-4
 }
 
+export interface DopamineLog {
+  id: string;
+  activityTitle: string;
+  activityIcon: string;
+  date: string; // ISO timestamp
+  customActivity?: boolean;
+}
+
 export interface AppData {
   habits: Habit[];
   journal: JournalEntry[];
