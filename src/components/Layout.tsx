@@ -25,9 +25,9 @@ const navItems: { page: Page; label: string; Icon: typeof Home }[] = [
 export default function Layout({ currentPage, onNavigate, children }: LayoutProps) {
   return (
     <div className="flex flex-col min-h-dvh">
-      <main className="flex-1 pb-20 overflow-y-auto">{children}</main>
+      <main className="flex-1 overflow-y-auto" style={{ paddingBottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))' }}>{children}</main>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-sm border-t border-cream-dark z-50">
+      <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-sm border-t border-cream-dark z-50" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
         <div className="flex justify-around items-center max-w-lg mx-auto h-16">
           {navItems.map(({ page, label, Icon }) => {
             const isActive = currentPage === page;
