@@ -2,7 +2,8 @@
   "name": "Wini - המסע שלי לחיים טובים יותר",
   "short_name": "Wini",
   "description": "אפליקציה לגמילה מהרגלים רעים ובניית הרגלים חיוביים",
-  "start_url": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f5f0e8",
   "theme_color": "#5b8a72",
@@ -10,12 +11,12 @@
   "lang": "he",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "./icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icon-512.png",
+      "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
