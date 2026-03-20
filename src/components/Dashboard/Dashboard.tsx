@@ -6,6 +6,7 @@ import { getDailyQuote } from '../../data/quotes';
 import GrowingTree from './GrowingTree';
 import LiveTimer from './LiveTimer';
 import MoodWidget from '../MoodCheckIn/MoodWidget';
+import ChallengeWidget from '../Challenges/ChallengeWidget';
 import type { useMood } from '../../hooks/useMood';
 
 interface DashboardProps {
@@ -245,6 +246,9 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
         </button>
       )}
 
+      {/* Daily Challenges Widget */}
+      <ChallengeWidget onNavigate={onNavigate} />
+
       {/* Quick links */}
       <div className="grid grid-cols-2 gap-3 mb-3">
         <button
@@ -290,7 +294,7 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
           </div>
         </button>
       </div>
-      <div className="grid grid-cols-1 gap-3 mb-4">
+      <div className="grid grid-cols-2 gap-3 mb-4">
         <button
           onClick={() => onNavigate('calendar')}
           className="bg-gradient-to-l from-sage/10 to-sand/5 border border-sage/15 rounded-xl p-3 flex items-center gap-2 text-right"
@@ -299,6 +303,16 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
           <div>
             <p className="text-xs font-medium text-sage">לוח שנה</p>
             <p className="text-[9px] text-text-light">מעקב התקדמות</p>
+          </div>
+        </button>
+        <button
+          onClick={() => onNavigate('partner')}
+          className="bg-gradient-to-l from-sage/10 to-sea/5 border border-sage/15 rounded-xl p-3 flex items-center gap-2 text-right"
+        >
+          <span className="text-lg">👥</span>
+          <div>
+            <p className="text-xs font-medium text-sage">שותף לאחריות</p>
+            <p className="text-[9px] text-text-light">שתף ובקש תמיכה</p>
           </div>
         </button>
       </div>

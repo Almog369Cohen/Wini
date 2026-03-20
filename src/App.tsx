@@ -30,6 +30,8 @@ import NutritionPage from './components/Nutrition/NutritionPage';
 import RemindersPage from './components/Reminders/RemindersPage';
 import TasksPage from './components/Tasks/TasksPage';
 import CalendarPage from './components/Calendar/CalendarPage';
+import PartnerPage from './components/Partner/PartnerPage';
+import DailyChallengesPage from './components/Challenges/DailyChallengesPage';
 import { useMealTracker } from './hooks/useMealTracker';
 import { useNotifications } from './hooks/useNotifications';
 import { useTasks } from './hooks/useTasks';
@@ -40,9 +42,15 @@ import Toast from './components/ui/Toast';
 import Confetti from './components/ui/Confetti';
 import { useAuth } from './contexts/AuthContext';
 import LoginScreen from './components/Auth/LoginScreen';
+import SplashScreen from './components/SplashScreen';
 
 export default function App() {
   const { user, loading, signOut } = useAuth();
+  const [showSplash, setShowSplash] = useState(true);
+
+  if (showSplash) {
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
+  }
 
   if (loading) {
     return (
@@ -384,6 +392,21 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
             habits={habitState.habits}
             journalEntries={journalState.entries}
             moodHistory={moodState.history}
+          />
+        );
+      case 'partner':
+        return (
+          <PartnerPage
+            habits={habitState.habits}
+            userName={profile?.name}
+            todayVictories={journalState.todaySummary.victories}
+            showToast={showToast}
+          />
+        );
+      case 'challenges':
+        return (
+          <DailyChallengesPage
+            showToast={showToast}
           />
         );
     }
