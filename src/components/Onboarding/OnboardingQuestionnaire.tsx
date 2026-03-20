@@ -150,11 +150,9 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
             key={opt.id}
             whileTap={{ scale: 0.96 }}
             onClick={() => toggleSelection(selected, setSelected, opt.id)}
-            className="relative text-right px-3 py-2.5 rounded-xl border-2 transition-all"
-            style={{
-              borderColor: isSelected ? '#03b28c' : '#dceee9',
-              backgroundColor: isSelected ? 'rgba(3, 178, 140, 0.08)' : '#ffffff',
-            }}
+            className={`relative text-right px-3 py-2.5 rounded-xl border-2 transition-all ${
+              isSelected ? 'border-sage bg-sage/8' : 'border-cream-dark bg-card'
+            }`}
           >
             <div className="flex items-center gap-2">
               <span className="text-xl flex-shrink-0">{opt.emoji}</span>
@@ -167,8 +165,7 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs flex-shrink-0"
-                  style={{ backgroundColor: '#03b28c' }}
+                  className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs flex-shrink-0 bg-sage"
                 >
                   ✓
                 </motion.div>
@@ -193,11 +190,9 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
             key={opt.id}
             whileTap={{ scale: 0.96 }}
             onClick={() => setSelected(opt.id)}
-            className="text-right p-4 rounded-xl border-2 transition-all"
-            style={{
-              borderColor: isSelected ? '#03b28c' : '#dceee9',
-              backgroundColor: isSelected ? 'rgba(3, 178, 140, 0.08)' : '#ffffff',
-            }}
+            className={`text-right p-4 rounded-xl border-2 transition-all ${
+              isSelected ? 'border-sage bg-sage/8' : 'border-cream-dark bg-card'
+            }`}
           >
             <div className="flex items-center gap-3">
               <span className="text-2xl">{opt.emoji}</span>
@@ -347,14 +342,14 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
           {stepLabels.map((label, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1">
               <div
-                className="w-full h-1.5 rounded-full transition-all duration-300"
-                style={{
-                  backgroundColor: i <= step ? '#03b28c' : '#dceee9',
-                }}
+                className={`w-full h-1.5 rounded-full transition-all duration-300 ${
+                  i <= step ? 'bg-sage' : 'bg-cream-dark'
+                }`}
               />
               <span
-                className="text-[9px] transition-colors"
-                style={{ color: i <= step ? '#03b28c' : '#8eb8ac' }}
+                className={`text-[9px] transition-colors ${
+                  i <= step ? 'text-sage' : 'text-text-light'
+                }`}
               >
                 {label}
               </span>
@@ -402,11 +397,9 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
             whileTap={canProceed() ? { scale: 0.95 } : undefined}
             onClick={goNext}
             disabled={!canProceed()}
-            className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-semibold text-base transition-all"
-            style={{
-              backgroundColor: canProceed() ? '#03b28c' : '#c0ddd6',
-              cursor: canProceed() ? 'pointer' : 'not-allowed',
-            }}
+            className={`flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-semibold text-base transition-all ${
+              canProceed() ? 'bg-sage cursor-pointer' : 'bg-sage/30 cursor-not-allowed'
+            }`}
           >
             {step === TOTAL_STEPS - 1 ? (
               <>

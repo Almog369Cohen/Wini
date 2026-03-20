@@ -13,7 +13,7 @@ export default function ShareCard({ userName, streak, victories, habitsCount }: 
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, type: 'spring', stiffness: 120 }}
-      className="bg-white rounded-3xl p-6 shadow-lg border border-sage/20 overflow-hidden relative"
+      className="bg-card rounded-3xl p-6 shadow-lg border border-sage/20 overflow-hidden relative"
     >
       {/* Decorative background circles */}
       <div className="absolute top-[-30px] left-[-30px] w-24 h-24 rounded-full bg-sage/10" />
