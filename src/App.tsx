@@ -25,6 +25,14 @@ import RoutinesPage from './components/Routines/RoutinesPage';
 import OnboardingQuestionnaire from './components/Onboarding/OnboardingQuestionnaire';
 import type { OnboardingResult } from './components/Onboarding/OnboardingQuestionnaire';
 import { HABIT_TEMPLATES } from './data/habitTemplates';
+import AppTour from './components/Onboarding/AppTour';
+import NutritionPage from './components/Nutrition/NutritionPage';
+import RemindersPage from './components/Reminders/RemindersPage';
+import TasksPage from './components/Tasks/TasksPage';
+import CalendarPage from './components/Calendar/CalendarPage';
+import { useMealTracker } from './hooks/useMealTracker';
+import { useNotifications } from './hooks/useNotifications';
+import { useTasks } from './hooks/useTasks';
 import FeedbackButton from './components/Feedback/FeedbackButton';
 import UrgeIntervention from './components/UrgeIntervention/UrgeIntervention';
 import BarrierIntervention from './components/UrgeIntervention/BarrierIntervention';
@@ -61,6 +69,7 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
   const [showUrgeIntervention, setShowUrgeIntervention] = useState(false);
   const [showBarrierIntervention, setShowBarrierIntervention] = useState(false);
   const [showSOSChoice, setShowSOSChoice] = useState(false);
+  const [showTour, setShowTour] = useState(false);
   const habitState = useHabits();
   const journalState = useJournal();
   const innerSpaceState = useInnerSpace();
@@ -70,6 +79,9 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
   const { profile, hasProfile, createProfile } = useUserProfile();
   const feedbackState = useFeedback();
   const urgeLogState = useUrgeLog();
+  const mealTracker = useMealTracker();
+  const notifications = useNotifications();
+  const tasksState = useTasks();
   const { toasts, show: showToast, dismiss: dismissToast } = useToast();
 
   // Show mood check-in on first open if not checked in today
@@ -239,6 +251,9 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
 
     const habitCount = allSelectedIds.length;
     showToast(`שלום ${result.name}! ${habitCount > 0 ? `${habitCount} הרגלים נוצרו` : 'בוא נתחיל'} 🌱`);
+
+    // Show app tour after questionnaire
+    setShowTour(true);
   }, [createProfile, habitState, showToast]);
 
   const renderPage = () => {
@@ -258,6 +273,11 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
             onUrgeHelp={handleSOSClick}
             userName={profile?.name}
             userPhotoURL={user.photoURL}
+            mealData={{
+              todayCompletedCount: mealTracker.todayCompletedCount,
+              todayWater: mealTracker.todayWater,
+              waterGoal: mealTracker.waterGoal,
+            }}
           />
         );
       case 'habits':
@@ -319,6 +339,35 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
         );
       case 'innerspace':
         return <InnerSpacePage {...innerSpaceState} />;
+      case 'nutrition':
+        return (
+          <NutritionPage
+            todayMeals={mealTracker.todayMeals}
+            todayCompletedCount={mealTracker.todayCompletedCount}
+            todayWater={mealTracker.todayWater}
+            waterGoal={mealTracker.waterGoal}
+            streak={mealTracker.streak}
+            weekSummary={mealTracker.weekSummary}
+            toggleMeal={mealTracker.toggleMeal}
+            addWater={mealTracker.addWater}
+            removeWater={mealTracker.removeWater}
+            showToast={showToast}
+          />
+        );
+      case 'reminders':
+        return (
+          <RemindersPage
+            {...notifications}
+            showToast={showToast}
+          />
+        );
+      case 'tasks':
+        return (
+          <TasksPage
+            {...tasksState}
+            showToast={showToast}
+          />
+        );
       case 'dailyplan':
         return (
           <DailyPlan
@@ -327,6 +376,14 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
             onBack={() => setCurrentPage('dashboard')}
             moodEmoji={moodState.moodEmojis[moodState.currentMood]}
             moodLabel={moodState.moodLabels[moodState.currentMood]}
+          />
+        );
+      case 'calendar':
+        return (
+          <CalendarPage
+            habits={habitState.habits}
+            journalEntries={journalState.entries}
+            moodHistory={moodState.history}
           />
         );
     }
@@ -341,6 +398,16 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
       {/* Onboarding Questionnaire */}
       <AnimatePresence>
         {!hasProfile && <OnboardingQuestionnaire onComplete={handleOnboardingComplete} />}
+      </AnimatePresence>
+
+      {/* App Tour */}
+      <AnimatePresence>
+        {showTour && (
+          <AppTour
+            userName={profile?.name || ''}
+            onComplete={() => setShowTour(false)}
+          />
+        )}
       </AnimatePresence>
 
       {/* Mood check-in overlay */}

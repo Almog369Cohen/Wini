@@ -116,6 +116,7 @@ export function useMood() {
     latestEntry,
     weeklyMoodTrend,
     hardestHours,
+    history: state.history,
     setMood,
     moodLabels: MOOD_LABELS,
     moodEmojis: MOOD_EMOJIS,

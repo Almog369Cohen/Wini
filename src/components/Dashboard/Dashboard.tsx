@@ -21,9 +21,14 @@ interface DashboardProps {
   onUrgeHelp: () => void;
   userName?: string;
   userPhotoURL?: string | null;
+  mealData?: {
+    todayCompletedCount: number;
+    todayWater: number;
+    waterGoal: number;
+  };
 }
 
-export default function Dashboard({ habits, onNavigate, todaySummary, hardHours, dopamineCount, dopamineGoal, dopamineGoalProgress, moodState, onChangeMood, onUrgeHelp, userName, userPhotoURL }: DashboardProps) {
+export default function Dashboard({ habits, onNavigate, todaySummary, hardHours, dopamineCount, dopamineGoal, dopamineGoalProgress, moodState, onChangeMood, onUrgeHelp, userName, userPhotoURL, mealData }: DashboardProps) {
   const activeQuitHabits = habits.filter((h) => h.type === 'quit' && h.isActive);
   const activeBuildHabits = habits.filter((h) => h.type === 'build' && h.isActive);
   const quote = getDailyQuote();
@@ -216,8 +221,54 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
         </div>
       </button>
 
+      {/* Nutrition widget */}
+      {mealData && (
+        <button
+          onClick={() => onNavigate('nutrition')}
+          className="w-full bg-card rounded-2xl shadow-sm p-3.5 mb-4 flex items-center gap-3 text-right"
+        >
+          <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-lg">
+            🍽️
+          </div>
+          <div className="flex-1">
+            <p className="text-xs font-medium text-text">תזונה היום</p>
+            <div className="flex items-center gap-3 mt-1">
+              <span className="text-[11px] text-text-light">
+                🥄 {mealData.todayCompletedCount}/5 ארוחות
+              </span>
+              <span className="text-[11px] text-text-light">
+                💧 {mealData.todayWater}/{mealData.waterGoal} כוסות
+              </span>
+            </div>
+          </div>
+          <div className="text-text-light text-xs">←</div>
+        </button>
+      )}
+
       {/* Quick links */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
+      <div className="grid grid-cols-2 gap-3 mb-3">
+        <button
+          onClick={() => onNavigate('tasks')}
+          className="bg-gradient-to-l from-sage/10 to-sage/5 border border-sage/15 rounded-xl p-3 flex items-center gap-2 text-right"
+        >
+          <span className="text-lg">📋</span>
+          <div>
+            <p className="text-xs font-medium text-sage">משימות</p>
+            <p className="text-[9px] text-text-light">רשימת מטלות יומית</p>
+          </div>
+        </button>
+        <button
+          onClick={() => onNavigate('reminders')}
+          className="bg-gradient-to-l from-sand/10 to-sand/5 border border-sand/15 rounded-xl p-3 flex items-center gap-2 text-right"
+        >
+          <span className="text-lg">🔔</span>
+          <div>
+            <p className="text-xs font-medium text-sand">תזכורות</p>
+            <p className="text-[9px] text-text-light">ארוחות, שתייה ועוד</p>
+          </div>
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-3 mb-3">
         <button
           onClick={() => onNavigate('innerspace')}
           className="bg-gradient-to-l from-sage/10 to-sea/10 border border-sage/15 rounded-xl p-3 flex items-center gap-2 text-right"
@@ -236,6 +287,18 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
           <div>
             <p className="text-xs font-medium text-sand">הישגים</p>
             <p className="text-[9px] text-text-light">אבני דרך שלי</p>
+          </div>
+        </button>
+      </div>
+      <div className="grid grid-cols-1 gap-3 mb-4">
+        <button
+          onClick={() => onNavigate('calendar')}
+          className="bg-gradient-to-l from-sage/10 to-sand/5 border border-sage/15 rounded-xl p-3 flex items-center gap-2 text-right"
+        >
+          <span className="text-lg">📅</span>
+          <div>
+            <p className="text-xs font-medium text-sage">לוח שנה</p>
+            <p className="text-[9px] text-text-light">מעקב התקדמות</p>
           </div>
         </button>
       </div>

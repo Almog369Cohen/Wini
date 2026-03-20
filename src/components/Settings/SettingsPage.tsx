@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download, Upload, Trash2, Info, LogOut } from 'lucide-react';
+import { Download, Upload, Trash2, Info, LogOut, Moon, Sun } from 'lucide-react';
 import ConfirmDialog from '../ui/ConfirmDialog';
+import { useTheme } from '../../contexts/ThemeContext';
 
 interface SettingsPageProps {
   onExport: () => void;
@@ -25,6 +26,8 @@ export default function SettingsPage({
   showToast,
 }: SettingsPageProps) {
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
 
   const handleImport = () => {
     const input = document.createElement('input');
@@ -60,6 +63,49 @@ export default function SettingsPage({
       <h1 className="text-2xl font-bold text-text mb-5">הגדרות</h1>
 
       <div className="space-y-3">
+        {/* Dark mode toggle */}
+        <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-4">
+            <div className="flex items-center gap-3">
+              <div className="relative w-5 h-5">
+                <motion.div
+                  initial={false}
+                  animate={{ opacity: isDark ? 0 : 1, rotate: isDark ? -90 : 0, scale: isDark ? 0.5 : 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute inset-0"
+                >
+                  <Sun size={20} className="text-sand" />
+                </motion.div>
+                <motion.div
+                  initial={false}
+                  animate={{ opacity: isDark ? 1 : 0, rotate: isDark ? 0 : 90, scale: isDark ? 1 : 0.5 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute inset-0"
+                >
+                  <Moon size={20} className="text-sand" />
+                </motion.div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-medium text-text">מצב כהה</p>
+                <p className="text-[11px] text-text-light">{isDark ? 'מופעל' : 'כבוי'}</p>
+              </div>
+            </div>
+            <button
+              onClick={toggleTheme}
+              className="relative w-12 h-7 rounded-full transition-colors duration-300 focus:outline-none"
+              style={{ backgroundColor: isDark ? 'var(--color-sage)' : 'var(--color-cream-dark)' }}
+              aria-label="Toggle dark mode"
+            >
+              <motion.div
+                className="absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-md"
+                initial={false}
+                animate={{ left: isDark ? '2px' : '22px' }}
+                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              />
+            </button>
+          </div>
+        </div>
+
         {/* User account */}
         <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
           <div className="flex items-center gap-3 px-4 py-4">

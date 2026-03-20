@@ -364,7 +364,7 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
       </div>
 
       {/* Content area */}
-      <div className="flex-1 overflow-y-auto px-5 pb-4 max-w-md mx-auto w-full">
+      <div className="flex-1 overflow-y-auto px-5 pb-28 max-w-md mx-auto w-full">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={step}
@@ -381,8 +381,9 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
         </AnimatePresence>
       </div>
 
-      {/* Bottom navigation */}
-      <div className="px-5 pb-5 safe-area-bottom max-w-md mx-auto w-full">
+      {/* Bottom navigation - fixed at bottom */}
+      <div className="fixed bottom-0 left-0 right-0 z-[115] px-5 pb-6 pt-3 bg-gradient-to-t from-cream via-cream to-cream/0">
+        <div className="max-w-md mx-auto w-full">
         <div className="flex gap-3">
           {step > 0 && (
             <motion.button
@@ -426,6 +427,7 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
             כל הנתונים שלך נשמרים על המכשיר שלך בלבד
           </p>
         )}
+        </div>
       </div>
     </motion.div>
   );
