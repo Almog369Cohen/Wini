@@ -152,8 +152,8 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
             onClick={() => toggleSelection(selected, setSelected, opt.id)}
             className="relative text-right px-3 py-2.5 rounded-xl border-2 transition-all"
             style={{
-              borderColor: isSelected ? '#5b8a72' : '#e8e0d4',
-              backgroundColor: isSelected ? 'rgba(91, 138, 114, 0.08)' : '#ffffff',
+              borderColor: isSelected ? '#03b28c' : '#dceee9',
+              backgroundColor: isSelected ? 'rgba(3, 178, 140, 0.08)' : '#ffffff',
             }}
           >
             <div className="flex items-center gap-2">
@@ -168,7 +168,7 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs flex-shrink-0"
-                  style={{ backgroundColor: '#5b8a72' }}
+                  style={{ backgroundColor: '#03b28c' }}
                 >
                   ✓
                 </motion.div>
@@ -195,8 +195,8 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
             onClick={() => setSelected(opt.id)}
             className="text-right p-4 rounded-xl border-2 transition-all"
             style={{
-              borderColor: isSelected ? '#5b8a72' : '#e8e0d4',
-              backgroundColor: isSelected ? 'rgba(91, 138, 114, 0.08)' : '#ffffff',
+              borderColor: isSelected ? '#03b28c' : '#dceee9',
+              backgroundColor: isSelected ? 'rgba(3, 178, 140, 0.08)' : '#ffffff',
             }}
           >
             <div className="flex items-center gap-3">
@@ -349,12 +349,12 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
               <div
                 className="w-full h-1.5 rounded-full transition-all duration-300"
                 style={{
-                  backgroundColor: i <= step ? '#5b8a72' : '#e8e0d4',
+                  backgroundColor: i <= step ? '#03b28c' : '#dceee9',
                 }}
               />
               <span
                 className="text-[9px] transition-colors"
-                style={{ color: i <= step ? '#5b8a72' : '#b0a898' }}
+                style={{ color: i <= step ? '#03b28c' : '#8eb8ac' }}
               >
                 {label}
               </span>
@@ -404,7 +404,7 @@ export default function OnboardingQuestionnaire({ onComplete }: Props) {
             disabled={!canProceed()}
             className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-semibold text-base transition-all"
             style={{
-              backgroundColor: canProceed() ? '#5b8a72' : '#d4cfc7',
+              backgroundColor: canProceed() ? '#03b28c' : '#c0ddd6',
               cursor: canProceed() ? 'pointer' : 'not-allowed',
             }}
           >

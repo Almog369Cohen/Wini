@@ -452,7 +452,7 @@ export default function HabitList({
                                             <div className="relative">
                                               <div
                                                 className="w-2.5 h-2.5 rounded-full border-2 flex-shrink-0"
-                                                style={{ borderColor: '#5b8a72', backgroundColor: i === 0 ? '#5b8a72' : 'transparent' }}
+                                                style={{ borderColor: '#03b28c', backgroundColor: i === 0 ? '#03b28c' : 'transparent' }}
                                               />
                                               {i < goal.milestones.length - 1 && (
                                                 <div className="absolute top-2.5 right-[3.5px] w-0.5 h-4 bg-sage/20" />
@@ -642,7 +642,7 @@ export default function HabitList({
                                           <div className="space-y-1">
                                             {barrier.exercise.steps.map((step, i) => (
                                               <div key={i} className="flex items-start gap-1.5">
-                                                <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0" style={{ backgroundColor: '#5b8a72' }}>
+                                                <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0" style={{ backgroundColor: '#03b28c' }}>
                                                   {i + 1}
                                                 </span>
                                                 <p className="text-[10px] text-text leading-relaxed">{step}</p>
@@ -757,7 +757,7 @@ export default function HabitList({
                                           <div key={i} className="flex items-start gap-2">
                                             <span
                                               className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0 mt-0.5"
-                                              style={{ backgroundColor: tool.forType === 'quit' ? '#c97b63' : tool.forType === 'build' ? '#5b8a72' : '#6b7280' }}
+                                              style={{ backgroundColor: tool.forType === 'quit' ? '#e05c4d' : tool.forType === 'build' ? '#03b28c' : '#6b7280' }}
                                             >
                                               {i + 1}
                                             </span>

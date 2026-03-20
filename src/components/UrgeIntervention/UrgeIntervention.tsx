@@ -292,7 +292,7 @@ export default function UrgeIntervention({
                 {/* Outer glow */}
                 <motion.div
                   className="absolute rounded-full"
-                  style={{ width: 200, height: 200, backgroundColor: 'rgba(91,138,114,0.15)' }}
+                  style={{ width: 200, height: 200, backgroundColor: 'rgba(3,178,140,0.15)' }}
                   animate={{
                     scale: breathStarted ? breathScale * 1.15 : 1,
                     opacity: breathStarted ? 0.4 : 0.2,
@@ -305,8 +305,8 @@ export default function UrgeIntervention({
                   style={{
                     width: 160,
                     height: 160,
-                    backgroundColor: 'rgba(91,138,114,0.25)',
-                    border: '2px solid rgba(91,138,114,0.5)',
+                    backgroundColor: 'rgba(3,178,140,0.25)',
+                    border: '2px solid rgba(3,178,140,0.5)',
                   }}
                   animate={{
                     scale: breathStarted ? breathScale : 1,
@@ -334,7 +334,7 @@ export default function UrgeIntervention({
                           style={{
                             backgroundColor:
                               breathPhase === p
-                                ? 'rgba(91,138,114,1)'
+                                ? 'rgba(3,178,140,1)'
                                 : 'rgba(255,255,255,0.2)',
                           }}
                         />
@@ -392,7 +392,7 @@ export default function UrgeIntervention({
                           style={{
                             backgroundColor:
                               selectedHabitId === h.id
-                                ? 'rgba(91,138,114,0.8)'
+                                ? 'rgba(3,178,140,0.8)'
                                 : 'rgba(255,255,255,0.1)',
                             color:
                               selectedHabitId === h.id
@@ -400,7 +400,7 @@ export default function UrgeIntervention({
                                 : 'rgba(255,255,255,0.7)',
                             border:
                               selectedHabitId === h.id
-                                ? '2px solid rgba(91,138,114,1)'
+                                ? '2px solid rgba(3,178,140,1)'
                                 : '2px solid rgba(255,255,255,0.15)',
                           }}
                         >
@@ -466,11 +466,11 @@ export default function UrgeIntervention({
                       style={{
                         backgroundColor:
                           selectedTrigger === t.id
-                            ? 'rgba(91,138,114,0.7)'
+                            ? 'rgba(3,178,140,0.7)'
                             : 'rgba(255,255,255,0.08)',
                         border:
                           selectedTrigger === t.id
-                            ? '2px solid rgba(91,138,114,1)'
+                            ? '2px solid rgba(3,178,140,1)'
                             : '2px solid rgba(255,255,255,0.1)',
                         color: 'rgba(255,255,255,0.9)',
                       }}
@@ -493,7 +493,7 @@ export default function UrgeIntervention({
                 className="mt-auto mb-2 w-full py-3.5 rounded-xl font-semibold text-white flex items-center justify-center gap-2 disabled:cursor-not-allowed"
                 style={{
                   backgroundColor: selectedTrigger
-                    ? 'rgba(91,138,114,0.9)'
+                    ? 'rgba(3,178,140,0.9)'
                     : 'rgba(255,255,255,0.1)',
                 }}
               >
@@ -546,10 +546,10 @@ export default function UrgeIntervention({
                             className="flex items-center gap-2 p-3 rounded-xl text-sm text-right transition-all"
                             style={{
                               backgroundColor: isSelected
-                                ? 'rgba(91,138,114,0.6)'
+                                ? 'rgba(3,178,140,0.6)'
                                 : 'rgba(255,255,255,0.08)',
                               border: isSelected
-                                ? '2px solid rgba(91,138,114,1)'
+                                ? '2px solid rgba(3,178,140,1)'
                                 : '2px solid rgba(255,255,255,0.1)',
                               color: 'rgba(255,255,255,0.9)',
                             }}
@@ -576,7 +576,7 @@ export default function UrgeIntervention({
                       style={{
                         backgroundColor:
                           whatItGives.length > 0
-                            ? 'rgba(91,138,114,0.9)'
+                            ? 'rgba(3,178,140,0.9)'
                             : 'rgba(255,255,255,0.1)',
                       }}
                     >
@@ -643,7 +643,7 @@ export default function UrgeIntervention({
                       style={{
                         backgroundColor:
                           whatItCosts.length > 0
-                            ? 'rgba(91,138,114,0.9)'
+                            ? 'rgba(3,178,140,0.9)'
                             : 'rgba(255,255,255,0.1)',
                       }}
                     >
@@ -692,14 +692,14 @@ export default function UrgeIntervention({
                       className="flex items-center gap-2 p-3 rounded-xl text-sm text-right transition-all"
                       style={{
                         backgroundColor: isSelected
-                          ? 'rgba(91,138,114,0.6)'
+                          ? 'rgba(3,178,140,0.6)'
                           : 'rgba(255,255,255,0.08)',
                         border: isSelected
                           ? '2px solid rgba(139,195,155,0.8)'
                           : '2px solid rgba(255,255,255,0.1)',
                         color: 'rgba(255,255,255,0.9)',
                         boxShadow: isSelected
-                          ? '0 0 15px rgba(91,138,114,0.3)'
+                          ? '0 0 15px rgba(3,178,140,0.3)'
                           : 'none',
                       }}
                     >
@@ -719,7 +719,7 @@ export default function UrgeIntervention({
                 style={{
                   backgroundColor:
                     realNeed.length > 0
-                      ? 'rgba(91,138,114,0.9)'
+                      ? 'rgba(3,178,140,0.9)'
                       : 'rgba(255,255,255,0.1)',
                 }}
               >
@@ -795,7 +795,7 @@ export default function UrgeIntervention({
                   className="flex-1 rounded-2xl p-4 flex flex-col gap-3"
                   style={{
                     background:
-                      'linear-gradient(180deg, rgba(60,140,80,0.25) 0%, rgba(40,100,60,0.15) 100%)',
+                      'linear-gradient(180deg, rgba(2,154,121,0.25) 0%, rgba(40,100,60,0.15) 100%)',
                     border: '1px solid rgba(100,200,120,0.3)',
                   }}
                 >
@@ -816,7 +816,7 @@ export default function UrgeIntervention({
                         transition={{ delay: 0.5 + i * 0.15 }}
                         className="rounded-lg p-2.5"
                         style={{
-                          backgroundColor: 'rgba(60,140,80,0.2)',
+                          backgroundColor: 'rgba(2,154,121,0.2)',
                         }}
                       >
                         <p className="text-[10px] font-medium" style={{ color: '#86efac' }}>
@@ -836,7 +836,7 @@ export default function UrgeIntervention({
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setStep(5)}
                 className="mt-4 mb-2 w-full py-3.5 rounded-xl font-semibold text-white flex items-center justify-center gap-2"
-                style={{ backgroundColor: 'rgba(91,138,114,0.9)' }}
+                style={{ backgroundColor: 'rgba(3,178,140,0.9)' }}
               >
                 <span>אני מוכן לבחור</span>
                 <ArrowLeft size={18} />
@@ -860,7 +860,7 @@ export default function UrgeIntervention({
                     animate={{ scale: 1 }}
                     transition={{ type: 'spring', delay: 0.2 }}
                     className="w-20 h-20 rounded-full flex items-center justify-center mb-6"
-                    style={{ backgroundColor: 'rgba(91,138,114,0.2)' }}
+                    style={{ backgroundColor: 'rgba(3,178,140,0.2)' }}
                   >
                     <Shield size={36} className="text-white/80" />
                   </motion.div>
@@ -896,9 +896,9 @@ export default function UrgeIntervention({
                       className="w-full py-4 rounded-2xl font-bold text-lg text-white flex items-center justify-center gap-3"
                       style={{
                         background:
-                          'linear-gradient(135deg, rgba(60,140,80,0.8) 0%, rgba(91,138,114,0.9) 100%)',
+                          'linear-gradient(135deg, rgba(2,154,121,0.8) 0%, rgba(3,178,140,0.9) 100%)',
                         border: '2px solid rgba(100,200,120,0.4)',
-                        boxShadow: '0 4px 20px rgba(60,140,80,0.3)',
+                        boxShadow: '0 4px 20px rgba(2,154,121,0.3)',
                       }}
                     >
                       <span>🦁</span>
@@ -938,8 +938,8 @@ export default function UrgeIntervention({
                     className="w-24 h-24 rounded-full flex items-center justify-center mb-5"
                     style={{
                       background:
-                        'linear-gradient(135deg, rgba(60,140,80,0.6), rgba(91,138,114,0.7))',
-                      boxShadow: '0 0 40px rgba(60,140,80,0.4)',
+                        'linear-gradient(135deg, rgba(2,154,121,0.6), rgba(3,178,140,0.7))',
+                      boxShadow: '0 0 40px rgba(2,154,121,0.4)',
                     }}
                   >
                     <Trophy size={44} className="text-white" />
@@ -971,7 +971,7 @@ export default function UrgeIntervention({
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setStep(6)}
                     className="px-8 py-3.5 rounded-xl font-semibold text-white flex items-center justify-center gap-2"
-                    style={{ backgroundColor: 'rgba(91,138,114,0.9)' }}
+                    style={{ backgroundColor: 'rgba(3,178,140,0.9)' }}
                   >
                     <Sparkles size={18} />
                     <span>מה עכשיו?</span>
@@ -995,7 +995,7 @@ export default function UrgeIntervention({
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring' }}
                 className="w-16 h-16 rounded-full flex items-center justify-center mb-5"
-                style={{ backgroundColor: 'rgba(91,138,114,0.2)' }}
+                style={{ backgroundColor: 'rgba(3,178,140,0.2)' }}
               >
                 <Heart size={28} className="text-white/80" />
               </motion.div>
@@ -1021,8 +1021,8 @@ export default function UrgeIntervention({
                     animate={{ opacity: 1, y: 0 }}
                     className="w-full max-w-sm mb-5 rounded-2xl p-4"
                     style={{
-                      backgroundColor: 'rgba(212,165,116,0.15)',
-                      border: '1px solid rgba(212,165,116,0.3)',
+                      backgroundColor: 'rgba(5,156,192,0.15)',
+                      border: '1px solid rgba(5,156,192,0.3)',
                     }}
                   >
                     <p className="text-sm font-semibold text-white/90 mb-2 text-center">
@@ -1089,8 +1089,8 @@ export default function UrgeIntervention({
                 transition={{ delay: 0.6 }}
                 className="rounded-2xl p-4 mb-6 w-full max-w-sm text-center"
                 style={{
-                  backgroundColor: 'rgba(91,138,114,0.15)',
-                  border: '1px solid rgba(91,138,114,0.3)',
+                  backgroundColor: 'rgba(3,178,140,0.15)',
+                  border: '1px solid rgba(3,178,140,0.3)',
                 }}
               >
                 <Flame size={18} className="text-white/50 mx-auto mb-2" />
@@ -1107,7 +1107,7 @@ export default function UrgeIntervention({
                 whileTap={{ scale: 0.95 }}
                 onClick={onClose}
                 className="w-full max-w-sm py-3.5 rounded-xl font-semibold text-white flex items-center justify-center gap-2"
-                style={{ backgroundColor: 'rgba(91,138,114,0.9)' }}
+                style={{ backgroundColor: 'rgba(3,178,140,0.9)' }}
               >
                 <span>חזור לאפליקציה</span>
               </motion.button>
@@ -1126,9 +1126,9 @@ export default function UrgeIntervention({
               width: i === step ? 24 : 6,
               backgroundColor:
                 i === step
-                  ? 'rgba(91,138,114,1)'
+                  ? 'rgba(3,178,140,1)'
                   : i < step
-                  ? 'rgba(91,138,114,0.5)'
+                  ? 'rgba(3,178,140,0.5)'
                   : 'rgba(255,255,255,0.15)',
             }}
           />

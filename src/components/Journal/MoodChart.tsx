@@ -63,20 +63,20 @@ export default function MoodChart({ entries }: MoodChartProps) {
               key={v}
               x1="0" y1={chartH - v * chartH}
               x2={chartW} y2={chartH - v * chartH}
-              stroke="#e8e0d0" strokeWidth="0.5"
+              stroke="#dceee9" strokeWidth="0.5"
             />
           ))}
 
           {/* Victory line */}
           <polyline
-            fill="none" stroke="#5b8a72" strokeWidth="2"
+            fill="none" stroke="#03b28c" strokeWidth="2"
             strokeLinecap="round" strokeLinejoin="round"
             points={victoryPoints}
           />
 
           {/* Fall line */}
           <polyline
-            fill="none" stroke="#c97b63" strokeWidth="2"
+            fill="none" stroke="#e05c4d" strokeWidth="2"
             strokeLinecap="round" strokeLinejoin="round"
             strokeDasharray="4 2"
             points={fallPoints}
@@ -86,10 +86,10 @@ export default function MoodChart({ entries }: MoodChartProps) {
           {dailyData.map((d, i) => (
             <g key={i}>
               {d.victories > 0 && (
-                <circle cx={i * 40 + 20} cy={chartH - (d.victories / maxVal) * chartH} r="3" fill="#5b8a72" />
+                <circle cx={i * 40 + 20} cy={chartH - (d.victories / maxVal) * chartH} r="3" fill="#03b28c" />
               )}
               {d.falls > 0 && (
-                <circle cx={i * 40 + 20} cy={chartH - (d.falls / maxVal) * chartH} r="3" fill="#c97b63" />
+                <circle cx={i * 40 + 20} cy={chartH - (d.falls / maxVal) * chartH} r="3" fill="#e05c4d" />
               )}
               <text x={i * 40 + 20} y={chartH + 14} textAnchor="middle" fontSize="8" fill="#6b6b6b">
                 {format(d.date, 'd/M', { locale: he })}
@@ -106,7 +106,7 @@ export default function MoodChart({ entries }: MoodChartProps) {
           <span className="text-[9px] text-text-light">ניצחונות</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-4 h-0.5 bg-coral rounded" style={{ borderTop: '1px dashed #c97b63' }} />
+          <div className="w-4 h-0.5 bg-coral rounded" style={{ borderTop: '1px dashed #e05c4d' }} />
           <span className="text-[9px] text-text-light">נפילות</span>
         </div>
       </div>

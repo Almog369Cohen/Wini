@@ -49,7 +49,7 @@ export default function HourlyPattern({ stats, hardHours, strongHours }: HourlyP
                     className="w-[7px] rounded-t-sm transition-all"
                     style={{
                       height: fallH || 0,
-                      backgroundColor: isHard ? '#c97b63' : '#c97b6380',
+                      backgroundColor: isHard ? '#e05c4d' : '#e05c4d80',
                       minHeight: s.falls > 0 ? 3 : 0,
                     }}
                     title={`נפילות: ${s.falls}`}
@@ -59,7 +59,7 @@ export default function HourlyPattern({ stats, hardHours, strongHours }: HourlyP
                     className="w-[7px] rounded-t-sm transition-all"
                     style={{
                       height: victoryH || 0,
-                      backgroundColor: isStrong ? '#5b8a72' : '#5b8a7280',
+                      backgroundColor: isStrong ? '#03b28c' : '#03b28c80',
                       minHeight: s.victories > 0 ? 3 : 0,
                     }}
                     title={`ניצחונות: ${s.victories}`}

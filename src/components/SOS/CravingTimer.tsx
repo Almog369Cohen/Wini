@@ -48,7 +48,7 @@ export default function CravingTimer() {
             cy="50"
             r="45"
             fill="none"
-            stroke="#e8e0d0"
+            stroke="#dceee9"
             strokeWidth="4"
           />
           <motion.circle
@@ -56,7 +56,7 @@ export default function CravingTimer() {
             cy="50"
             r="45"
             fill="none"
-            stroke={isDone ? '#5b8a72' : '#d4a574'}
+            stroke={isDone ? '#03b28c' : '#059cc0'}
             strokeWidth="4"
             strokeLinecap="round"
             strokeDasharray={circumference}

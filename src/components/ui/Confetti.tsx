@@ -15,7 +15,7 @@ interface Particle {
   size: number;
 }
 
-const confettiColors = ['#5b8a72', '#8fbc8f', '#d4a574', '#c97b63', '#e0c09e', '#7ba894'];
+const confettiColors = ['#03b28c', '#059cc0', '#059cc0', '#e05c4d', '#3ab3cf', '#2cc9a5'];
 
 export default function Confetti({ active, onComplete }: ConfettiProps) {
   const [particles, setParticles] = useState<Particle[]>([]);

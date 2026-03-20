@@ -163,7 +163,7 @@ export default function MomentLogger({ onSubmit }: MomentLoggerProps) {
             <span
               className="text-sm font-bold"
               style={{
-                color: craving <= 3 ? '#5b8a72' : craving <= 6 ? '#d4a574' : '#c97b63',
+                color: craving <= 3 ? '#03b28c' : craving <= 6 ? '#059cc0' : '#e05c4d',
               }}
             >
               {craving}/10
@@ -177,7 +177,7 @@ export default function MomentLogger({ onSubmit }: MomentLoggerProps) {
             onChange={(e) => setCraving(Number(e.target.value))}
             className="w-full h-2 bg-cream-dark rounded-lg appearance-none cursor-pointer"
             style={{
-              accentColor: craving <= 3 ? '#5b8a72' : craving <= 6 ? '#d4a574' : '#c97b63',
+              accentColor: craving <= 3 ? '#03b28c' : craving <= 6 ? '#059cc0' : '#e05c4d',
             }}
           />
         </div>

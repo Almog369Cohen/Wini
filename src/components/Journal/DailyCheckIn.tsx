@@ -91,10 +91,10 @@ export default function DailyCheckIn({ onSubmit }: DailyCheckInProps) {
             style={{
               color:
                 craving <= 3
-                  ? '#5b8a72'
+                  ? '#03b28c'
                   : craving <= 6
-                    ? '#d4a574'
-                    : '#c97b63',
+                    ? '#059cc0'
+                    : '#e05c4d',
             }}
           >
             {craving}/10
@@ -110,10 +110,10 @@ export default function DailyCheckIn({ onSubmit }: DailyCheckInProps) {
           style={{
             accentColor:
               craving <= 3
-                ? '#5b8a72'
+                ? '#03b28c'
                 : craving <= 6
-                  ? '#d4a574'
-                  : '#c97b63',
+                  ? '#059cc0'
+                  : '#e05c4d',
           }}
         />
         <div className="flex justify-between text-[9px] text-text-light mt-1">

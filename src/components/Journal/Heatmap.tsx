@@ -49,13 +49,13 @@ export default function Heatmap({ entries, days = 90 }: HeatmapProps) {
 
   const getColor = (day: { falls: number; victories: number; total: number; key: string }) => {
     if (day.key.startsWith('pad-')) return 'transparent';
-    if (day.total === 0) return '#e8e0d0';
+    if (day.total === 0) return '#dceee9';
     const ratio = day.victories / day.total;
-    if (ratio >= 0.8) return '#5b8a72';      // mostly victories
-    if (ratio >= 0.6) return '#8fbc8f';
-    if (ratio >= 0.4) return '#e0c09e';      // mixed
-    if (ratio >= 0.2) return '#d4a574';
-    return '#c97b63';                         // mostly falls
+    if (ratio >= 0.8) return '#03b28c';      // mostly victories
+    if (ratio >= 0.6) return '#059cc0';
+    if (ratio >= 0.4) return '#3ab3cf';      // mixed
+    if (ratio >= 0.2) return '#059cc0';
+    return '#e05c4d';                         // mostly falls
   };
 
   const dayLabels = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'];
@@ -95,14 +95,14 @@ export default function Heatmap({ entries, days = 90 }: HeatmapProps) {
 
       <div className="flex items-center justify-center gap-1 mt-3">
         <span className="text-[9px] text-text-light">נפילות</span>
-        <div className="w-3 h-3 rounded-[2px]" style={{ backgroundColor: '#c97b63' }} />
-        <div className="w-3 h-3 rounded-[2px]" style={{ backgroundColor: '#d4a574' }} />
-        <div className="w-3 h-3 rounded-[2px]" style={{ backgroundColor: '#e0c09e' }} />
-        <div className="w-3 h-3 rounded-[2px]" style={{ backgroundColor: '#8fbc8f' }} />
-        <div className="w-3 h-3 rounded-[2px]" style={{ backgroundColor: '#5b8a72' }} />
+        <div className="w-3 h-3 rounded-[2px]" style={{ backgroundColor: '#e05c4d' }} />
+        <div className="w-3 h-3 rounded-[2px]" style={{ backgroundColor: '#059cc0' }} />
+        <div className="w-3 h-3 rounded-[2px]" style={{ backgroundColor: '#3ab3cf' }} />
+        <div className="w-3 h-3 rounded-[2px]" style={{ backgroundColor: '#059cc0' }} />
+        <div className="w-3 h-3 rounded-[2px]" style={{ backgroundColor: '#03b28c' }} />
         <span className="text-[9px] text-text-light">ניצחונות</span>
         <div className="w-px h-3 bg-cream-dark mx-1" />
-        <div className="w-3 h-3 rounded-[2px]" style={{ backgroundColor: '#e8e0d0' }} />
+        <div className="w-3 h-3 rounded-[2px]" style={{ backgroundColor: '#dceee9' }} />
         <span className="text-[9px] text-text-light">ריק</span>
       </div>
     </div>

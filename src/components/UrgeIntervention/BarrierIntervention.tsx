@@ -78,7 +78,7 @@ export default function BarrierIntervention({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[100] flex flex-col"
-      style={{ backgroundColor: '#2d4a3e' }}
+      style={{ backgroundColor: '#0a3d30' }}
       dir="rtl"
     >
       {/* Header */}
@@ -115,7 +115,7 @@ export default function BarrierIntervention({
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring' }}
                 className="w-16 h-16 rounded-full flex items-center justify-center mb-5"
-                style={{ backgroundColor: 'rgba(91,138,114,0.3)' }}
+                style={{ backgroundColor: 'rgba(3,178,140,0.3)' }}
               >
                 <Shield size={28} className="text-white/80" />
               </motion.div>
@@ -139,9 +139,9 @@ export default function BarrierIntervention({
                         onClick={() => setSelectedHabitId(h.id)}
                         className="p-3 rounded-xl text-sm font-medium transition-all text-right"
                         style={{
-                          backgroundColor: selectedHabitId === h.id ? 'rgba(91,138,114,0.5)' : 'rgba(255,255,255,0.08)',
+                          backgroundColor: selectedHabitId === h.id ? 'rgba(3,178,140,0.5)' : 'rgba(255,255,255,0.08)',
                           color: selectedHabitId === h.id ? 'white' : 'rgba(255,255,255,0.7)',
-                          border: selectedHabitId === h.id ? '1px solid rgba(91,138,114,0.8)' : '1px solid rgba(255,255,255,0.1)',
+                          border: selectedHabitId === h.id ? '1px solid rgba(3,178,140,0.8)' : '1px solid rgba(255,255,255,0.1)',
                         }}
                       >
                         {h.name}
@@ -192,8 +192,8 @@ export default function BarrierIntervention({
                     onClick={() => setSelectedExcuse(excuse.id)}
                     className="p-3 rounded-xl text-right transition-all"
                     style={{
-                      backgroundColor: selectedExcuse === excuse.id ? 'rgba(212,165,116,0.3)' : 'rgba(255,255,255,0.08)',
-                      border: selectedExcuse === excuse.id ? '1px solid rgba(212,165,116,0.6)' : '1px solid rgba(255,255,255,0.1)',
+                      backgroundColor: selectedExcuse === excuse.id ? 'rgba(5,156,192,0.3)' : 'rgba(255,255,255,0.08)',
+                      border: selectedExcuse === excuse.id ? '1px solid rgba(5,156,192,0.6)' : '1px solid rgba(255,255,255,0.1)',
                     }}
                   >
                     <span className="text-lg">{excuse.emoji}</span>
@@ -219,8 +219,8 @@ export default function BarrierIntervention({
                 animate={{ scale: 1, opacity: 1 }}
                 className="w-full rounded-2xl p-4 mb-4 text-center"
                 style={{
-                  backgroundColor: 'rgba(212,165,116,0.15)',
-                  border: '1px solid rgba(212,165,116,0.3)',
+                  backgroundColor: 'rgba(5,156,192,0.15)',
+                  border: '1px solid rgba(5,156,192,0.3)',
                 }}
               >
                 <p className="text-white/90 text-sm font-medium mb-1">
@@ -246,8 +246,8 @@ export default function BarrierIntervention({
                   transition={{ delay: 0.2 }}
                   className="w-full rounded-2xl p-4 mb-4"
                   style={{
-                    backgroundColor: 'rgba(91,138,114,0.15)',
-                    border: '1px solid rgba(91,138,114,0.3)',
+                    backgroundColor: 'rgba(3,178,140,0.15)',
+                    border: '1px solid rgba(3,178,140,0.3)',
                   }}
                 >
                   <p className="text-sm font-semibold text-white/90 mb-2 flex items-center gap-1.5">
@@ -273,8 +273,8 @@ export default function BarrierIntervention({
                   transition={{ delay: 0.4 }}
                   className="w-full rounded-2xl p-5 mb-4 text-center"
                   style={{
-                    backgroundColor: 'rgba(91,138,114,0.25)',
-                    border: '2px solid rgba(91,138,114,0.5)',
+                    backgroundColor: 'rgba(3,178,140,0.25)',
+                    border: '2px solid rgba(3,178,140,0.5)',
                   }}
                 >
                   <p className="text-xs text-white/50 mb-1">🎯 הגרסה הקטנה שלך:</p>
@@ -329,8 +329,8 @@ export default function BarrierIntervention({
                 onClick={() => onComplete({ habitId: selectedHabitId, didIt: true })}
                 className="w-full rounded-2xl p-5 mb-3 text-center"
                 style={{
-                  backgroundColor: 'rgba(91,138,114,0.3)',
-                  border: '2px solid rgba(91,138,114,0.6)',
+                  backgroundColor: 'rgba(3,178,140,0.3)',
+                  border: '2px solid rgba(3,178,140,0.6)',
                 }}
               >
                 <Trophy size={28} className="text-white mx-auto mb-2" />
@@ -392,7 +392,7 @@ export default function BarrierIntervention({
               backgroundColor:
                 (step === 0 && !selectedHabitId) || (step === 1 && !selectedExcuse)
                   ? 'rgba(255,255,255,0.1)'
-                  : 'rgba(91,138,114,0.6)',
+                  : 'rgba(3,178,140,0.6)',
               cursor:
                 (step === 0 && !selectedHabitId) || (step === 1 && !selectedExcuse)
                   ? 'not-allowed'

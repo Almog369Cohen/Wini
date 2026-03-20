@@ -27,11 +27,11 @@ export default function GrowingTree({ daysSinceStart }: GrowingTreeProps) {
         transition={{ duration: 0.8, ease: 'easeOut' }}
       >
         {/* Ground */}
-        <ellipse cx="100" cy="175" rx="60" ry="8" fill="#8fbc8f" opacity="0.3" />
+        <ellipse cx="100" cy="175" rx="60" ry="8" fill="#059cc0" opacity="0.3" />
 
         {stage === 'seed' && (
           <motion.g initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3 }}>
-            <circle cx="100" cy="168" r="6" fill="#d4a574" />
+            <circle cx="100" cy="168" r="6" fill="#059cc0" />
             <text x="100" y="150" textAnchor="middle" fontSize="12" fill="#6b6b6b">
               זרע חדש
             </text>
@@ -40,20 +40,20 @@ export default function GrowingTree({ daysSinceStart }: GrowingTreeProps) {
 
         {stage === 'sprout' && (
           <motion.g initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} style={{ originY: '100%', transformOrigin: '100px 170px' }}>
-            <line x1="100" y1="170" x2="100" y2="145" stroke="#5b8a72" strokeWidth="3" strokeLinecap="round" />
-            <ellipse cx="93" cy="142" rx="8" ry="5" fill="#8fbc8f" transform="rotate(-20 93 142)" />
-            <ellipse cx="107" cy="142" rx="8" ry="5" fill="#8fbc8f" transform="rotate(20 107 142)" />
+            <line x1="100" y1="170" x2="100" y2="145" stroke="#03b28c" strokeWidth="3" strokeLinecap="round" />
+            <ellipse cx="93" cy="142" rx="8" ry="5" fill="#059cc0" transform="rotate(-20 93 142)" />
+            <ellipse cx="107" cy="142" rx="8" ry="5" fill="#059cc0" transform="rotate(20 107 142)" />
           </motion.g>
         )}
 
         {stage === 'sapling' && (
           <motion.g initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} style={{ originY: '100%', transformOrigin: '100px 170px' }}>
-            <line x1="100" y1="170" x2="100" y2="115" stroke="#5b8a72" strokeWidth="4" strokeLinecap="round" />
-            <line x1="100" y1="140" x2="80" y2="125" stroke="#5b8a72" strokeWidth="2.5" strokeLinecap="round" />
-            <line x1="100" y1="130" x2="120" y2="118" stroke="#5b8a72" strokeWidth="2.5" strokeLinecap="round" />
-            <circle cx="75" cy="120" r="12" fill="#8fbc8f" opacity="0.8" />
-            <circle cx="125" cy="113" r="10" fill="#8fbc8f" opacity="0.8" />
-            <circle cx="100" cy="108" r="14" fill="#5b8a72" opacity="0.6" />
+            <line x1="100" y1="170" x2="100" y2="115" stroke="#03b28c" strokeWidth="4" strokeLinecap="round" />
+            <line x1="100" y1="140" x2="80" y2="125" stroke="#03b28c" strokeWidth="2.5" strokeLinecap="round" />
+            <line x1="100" y1="130" x2="120" y2="118" stroke="#03b28c" strokeWidth="2.5" strokeLinecap="round" />
+            <circle cx="75" cy="120" r="12" fill="#059cc0" opacity="0.8" />
+            <circle cx="125" cy="113" r="10" fill="#059cc0" opacity="0.8" />
+            <circle cx="100" cy="108" r="14" fill="#03b28c" opacity="0.6" />
           </motion.g>
         )}
 
@@ -63,11 +63,11 @@ export default function GrowingTree({ daysSinceStart }: GrowingTreeProps) {
             <line x1="100" y1="140" x2="70" y2="115" stroke="#8B7355" strokeWidth="3" strokeLinecap="round" />
             <line x1="100" y1="125" x2="130" y2="100" stroke="#8B7355" strokeWidth="3" strokeLinecap="round" />
             <line x1="100" y1="110" x2="78" y2="88" stroke="#8B7355" strokeWidth="2.5" strokeLinecap="round" />
-            <circle cx="65" cy="108" r="16" fill="#8fbc8f" opacity="0.7" />
-            <circle cx="135" cy="93" r="14" fill="#5b8a72" opacity="0.7" />
-            <circle cx="73" cy="82" r="13" fill="#8fbc8f" opacity="0.6" />
-            <circle cx="100" cy="78" r="18" fill="#5b8a72" opacity="0.6" />
-            <circle cx="115" cy="70" r="12" fill="#8fbc8f" opacity="0.7" />
+            <circle cx="65" cy="108" r="16" fill="#059cc0" opacity="0.7" />
+            <circle cx="135" cy="93" r="14" fill="#03b28c" opacity="0.7" />
+            <circle cx="73" cy="82" r="13" fill="#059cc0" opacity="0.6" />
+            <circle cx="100" cy="78" r="18" fill="#03b28c" opacity="0.6" />
+            <circle cx="115" cy="70" r="12" fill="#059cc0" opacity="0.7" />
           </motion.g>
         )}
 
@@ -82,18 +82,18 @@ export default function GrowingTree({ daysSinceStart }: GrowingTreeProps) {
             <line x1="95" y1="105" x2="65" y2="75" stroke="#8B7355" strokeWidth="3" strokeLinecap="round" />
             <line x1="105" y1="100" x2="130" y2="70" stroke="#8B7355" strokeWidth="3" strokeLinecap="round" />
             {/* Foliage */}
-            <circle cx="55" cy="92" r="18" fill="#5b8a72" opacity="0.7" />
-            <circle cx="145" cy="88" r="16" fill="#8fbc8f" opacity="0.7" />
-            <circle cx="60" cy="70" r="16" fill="#8fbc8f" opacity="0.6" />
-            <circle cx="135" cy="63" r="15" fill="#5b8a72" opacity="0.7" />
-            <circle cx="100" cy="65" r="22" fill="#5b8a72" opacity="0.65" />
-            <circle cx="80" cy="55" r="18" fill="#8fbc8f" opacity="0.6" />
-            <circle cx="120" cy="52" r="17" fill="#5b8a72" opacity="0.65" />
-            <circle cx="100" cy="45" r="16" fill="#8fbc8f" opacity="0.5" />
+            <circle cx="55" cy="92" r="18" fill="#03b28c" opacity="0.7" />
+            <circle cx="145" cy="88" r="16" fill="#059cc0" opacity="0.7" />
+            <circle cx="60" cy="70" r="16" fill="#059cc0" opacity="0.6" />
+            <circle cx="135" cy="63" r="15" fill="#03b28c" opacity="0.7" />
+            <circle cx="100" cy="65" r="22" fill="#03b28c" opacity="0.65" />
+            <circle cx="80" cy="55" r="18" fill="#059cc0" opacity="0.6" />
+            <circle cx="120" cy="52" r="17" fill="#03b28c" opacity="0.65" />
+            <circle cx="100" cy="45" r="16" fill="#059cc0" opacity="0.5" />
             {/* Flowers/fruits */}
-            <circle cx="70" cy="65" r="3" fill="#d4a574" opacity="0.8" />
-            <circle cx="125" cy="55" r="3" fill="#d4a574" opacity="0.8" />
-            <circle cx="95" cy="50" r="3" fill="#c97b63" opacity="0.7" />
+            <circle cx="70" cy="65" r="3" fill="#059cc0" opacity="0.8" />
+            <circle cx="125" cy="55" r="3" fill="#059cc0" opacity="0.8" />
+            <circle cx="95" cy="50" r="3" fill="#e05c4d" opacity="0.7" />
           </motion.g>
         )}
       </motion.svg>

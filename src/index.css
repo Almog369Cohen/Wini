@@ -1,36 +1,37 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #f5f0e8;
-  --color-cream-dark: #e8e0d0;
-  --color-sage: #5b8a72;
-  --color-sage-light: #7ba894;
-  --color-sage-dark: #4a7260;
-  --color-sea: #8fbc8f;
-  --color-sand: #d4a574;
-  --color-sand-light: #e0c09e;
-  --color-coral: #c97b63;
-  --color-coral-light: #d99a86;
-  --color-text: #3d3d3d;
-  --color-text-light: #6b6b6b;
+  /* Brand colors: Green #03b28c + White #ffffff dominant */
+  --color-cream: #f0f7f5;
+  --color-cream-dark: #dceee9;
+  --color-sage: #03b28c;
+  --color-sage-light: #2cc9a5;
+  --color-sage-dark: #029a79;
+  --color-sea: #059cc0;
+  --color-sand: #059cc0;
+  --color-sand-light: #3ab3cf;
+  --color-coral: #e05c4d;
+  --color-coral-light: #e87a6e;
+  --color-text: #1f1f21;
+  --color-text-light: #5a5a5e;
   --color-card: #ffffff;
 }
 
 /* Dark mode color overrides via CSS custom properties */
 html.dark {
-  --color-cream: #1a1a2e;
-  --color-cream-dark: #151526;
-  --color-sage: #6b9e84;
-  --color-sage-light: #88b8a0;
-  --color-sage-dark: #5a8d73;
-  --color-sea: #7aad7a;
-  --color-sand: #d4a574;
-  --color-sand-light: #c49468;
-  --color-coral: #d48b75;
-  --color-coral-light: #e0a08c;
-  --color-text: #e8e8e8;
-  --color-text-light: #a0a0b0;
-  --color-card: #242438;
+  --color-cream: #1f1f21;
+  --color-cream-dark: #171718;
+  --color-sage: #03b28c;
+  --color-sage-light: #2cc9a5;
+  --color-sage-dark: #029a79;
+  --color-sea: #059cc0;
+  --color-sand: #059cc0;
+  --color-sand-light: #3ab3cf;
+  --color-coral: #e87a6e;
+  --color-coral-light: #f09488;
+  --color-text: #f0f0f0;
+  --color-text-light: #9a9aa0;
+  --color-card: #2a2a2d;
 }
 
 * {
