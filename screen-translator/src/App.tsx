@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import Overlay from './components/Overlay';
 import ResultPopup from './components/ResultPopup';
+import Settings from './components/Settings';
+import PermissionPrompt from './components/PermissionPrompt';
 
-type Route = 'overlay' | 'result' | 'idle';
+type Route = 'overlay' | 'result' | 'settings' | 'permission' | 'idle';
 
 function getRoute(): Route {
   const hash = window.location.hash;
   if (hash.includes('/overlay')) return 'overlay';
   if (hash.includes('/result')) return 'result';
+  if (hash.includes('/settings')) return 'settings';
+  if (hash.includes('/permission')) return 'permission';
   return 'idle';
 }
 
@@ -20,8 +24,16 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
-  if (route === 'overlay') return <Overlay />;
-  if (route === 'result') return <ResultPopup />;
-
-  return null;
+  switch (route) {
+    case 'overlay':
+      return <Overlay />;
+    case 'result':
+      return <ResultPopup />;
+    case 'settings':
+      return <Settings />;
+    case 'permission':
+      return <PermissionPrompt />;
+    default:
+      return null;
+  }
 }

@@ -20,6 +20,7 @@ export default function Overlay() {
     isDragging: false,
   });
   const [isProcessing, setIsProcessing] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
   const getRegion = useCallback((): Region => {
@@ -42,6 +43,7 @@ export default function Overlay() {
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
       if (!selection.isDragging) return;
       setSelection((prev) => ({
         ...prev,
@@ -59,7 +61,6 @@ export default function Overlay() {
 
     const region = getRegion();
 
-    // Ignore tiny selections (accidental clicks)
     if (region.width < 10 || region.height < 10) {
       window.electronAPI.cancelOverlay();
       return;
@@ -68,20 +69,24 @@ export default function Overlay() {
     setIsProcessing(true);
 
     try {
-      // Capture the selected region
       const result = await window.electronAPI.regionSelected(region);
 
       if (result.error || !result.imageDataUrl) {
-        console.error('Capture failed:', result.error);
         window.electronAPI.cancelOverlay();
         return;
       }
 
-      // Run OCR on the captured image
+      // Get target language from settings
+      let targetLang = 'en';
+      try {
+        targetLang = await window.electronAPI.getTargetLang();
+      } catch {
+        // fallback to english
+      }
+
       const ocrResult = await extractText(result.imageDataUrl);
 
       if (!ocrResult.text.trim()) {
-        // No text found - show result with message
         window.electronAPI.showResult({
           x: region.x + region.width,
           y: region.y,
@@ -91,8 +96,7 @@ export default function Overlay() {
         return;
       }
 
-      // Translate the extracted text
-      const translation = await translateText(ocrResult.text, 'en');
+      const translation = await translateText(ocrResult.text, targetLang);
 
       window.electronAPI.showResult({
         x: region.x + region.width,
@@ -111,7 +115,6 @@ export default function Overlay() {
     }
   }, [selection.isDragging, getRegion]);
 
-  // Handle Escape key to cancel
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -123,43 +126,108 @@ export default function Overlay() {
   }, []);
 
   const region = getRegion();
+  const showSelection = selection.isDragging && region.width > 2 && region.height > 2;
 
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 cursor-crosshair select-none"
-      style={{ background: 'rgba(0, 0, 0, 0.3)' }}
+      className="fixed inset-0 select-none"
+      style={{ cursor: 'crosshair' }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      {/* Selection rectangle */}
-      {selection.isDragging && region.width > 0 && region.height > 0 && (
+      {/* Dimmed background with cutout for selected region */}
+      {showSelection ? (
+        <svg className="absolute inset-0 w-full h-full">
+          <defs>
+            <mask id="region-mask">
+              <rect x="0" y="0" width="100%" height="100%" fill="white" />
+              <rect
+                x={region.x}
+                y={region.y}
+                width={region.width}
+                height={region.height}
+                fill="black"
+              />
+            </mask>
+          </defs>
+          {/* Dimmed area */}
+          <rect
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            fill="rgba(0,0,0,0.4)"
+            mask="url(#region-mask)"
+          />
+          {/* Selection border */}
+          <rect
+            x={region.x}
+            y={region.y}
+            width={region.width}
+            height={region.height}
+            fill="none"
+            stroke="#3b82f6"
+            strokeWidth="2"
+            strokeDasharray="6 3"
+          />
+        </svg>
+      ) : (
+        <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.3)' }} />
+      )}
+
+      {/* Dimension label */}
+      {showSelection && (
         <div
-          className="absolute border-2 border-blue-400 bg-blue-400/10"
+          className="absolute z-10 pointer-events-none"
           style={{
-            left: region.x,
-            top: region.y,
-            width: region.width,
-            height: region.height,
+            left: region.x + region.width / 2,
+            top: region.y - 28,
+            transform: 'translateX(-50%)',
           }}
-        />
+        >
+          <div className="rounded-md bg-blue-500 px-2 py-0.5 text-white text-[10px] font-mono whitespace-nowrap shadow-sm">
+            {Math.round(region.width)} × {Math.round(region.height)}
+          </div>
+        </div>
+      )}
+
+      {/* Crosshair guides (when not dragging) */}
+      {!selection.isDragging && !isProcessing && (
+        <>
+          <div
+            className="absolute w-px bg-white/30 pointer-events-none"
+            style={{ left: mousePos.x, top: 0, height: '100%' }}
+          />
+          <div
+            className="absolute h-px bg-white/30 pointer-events-none"
+            style={{ top: mousePos.y, left: 0, width: '100%' }}
+          />
+        </>
       )}
 
       {/* Processing indicator */}
       {isProcessing && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="rounded-xl bg-black/70 px-6 py-3 text-white text-sm font-medium">
-            Processing...
+        <div className="absolute inset-0 flex items-center justify-center z-20">
+          <div className="rounded-2xl bg-black/80 backdrop-blur-sm px-8 py-4 flex flex-col items-center gap-3">
+            <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <span className="text-white text-sm font-medium">Translating...</span>
           </div>
         </div>
       )}
 
       {/* Help text */}
       {!selection.isDragging && !isProcessing && (
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-          <div className="rounded-xl bg-black/70 px-5 py-2.5 text-white text-sm font-medium">
-            Drag to select area · Press Esc to cancel
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
+          <div className="rounded-xl bg-black/80 backdrop-blur-sm px-6 py-3 flex items-center gap-4">
+            <span className="text-white text-sm font-medium">
+              Drag to select area
+            </span>
+            <span className="text-white/40 text-sm">|</span>
+            <span className="text-white/60 text-xs">
+              Press <kbd className="inline-block rounded bg-white/20 px-1.5 py-0.5 text-white/80 text-[10px] font-mono">Esc</kbd> to cancel
+            </span>
           </div>
         </div>
       )}
