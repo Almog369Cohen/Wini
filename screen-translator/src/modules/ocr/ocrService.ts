@@ -29,7 +29,13 @@ const LANG_MAP: Record<string, string> = {
 
 async function createWorker(langs: string) {
   const Tesseract = await import('tesseract.js');
-  const worker = await Tesseract.createWorker(langs);
+  const worker = await Tesseract.createWorker(langs, undefined, {
+    logger: (m: { status: string; progress: number }) => {
+      if (m.status === 'loading tesseract core' || m.status === 'loading language traineddata') {
+        console.log(`OCR: ${m.status} (${Math.round(m.progress * 100)}%)`);
+      }
+    },
+  });
   return worker;
 }
 

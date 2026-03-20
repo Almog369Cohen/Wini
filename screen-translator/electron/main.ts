@@ -311,10 +311,14 @@ function createTrayIcon() {
 
 function triggerCapture() {
   if (process.platform === 'darwin') {
-    const status = systemPreferences.getMediaAccessStatus('screen');
-    if (status !== 'granted') {
-      createPermissionWindow();
-      return;
+    try {
+      const status = systemPreferences.getMediaAccessStatus('screen');
+      if (status !== 'granted') {
+        createPermissionWindow();
+        return;
+      }
+    } catch (err) {
+      console.warn('Could not check screen permission:', err);
     }
   }
 

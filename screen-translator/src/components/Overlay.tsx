@@ -57,16 +57,21 @@ export default function Overlay() {
 
     try {
       // Step 1: Capture
-      setProcessingStep('Capturing...');
+      setProcessingStep('Capturing screen...');
       const result = await window.electronAPI.regionSelected(region);
 
       if (result.error || !result.imageDataUrl) {
-        window.electronAPI.cancelOverlay();
+        window.electronAPI.showResult({
+          x: region.x + region.width,
+          y: region.y,
+          originalText: '',
+          translatedText: result.error || 'Failed to capture screen. Check screen recording permissions.',
+        });
         return;
       }
 
       // Step 2: OCR with preprocessing
-      setProcessingStep('Reading text...');
+      setProcessingStep('Loading OCR engine...');
       const ocrResult = await extractText(result.imageDataUrl, true);
 
       if (!ocrResult.text.trim()) {
@@ -74,7 +79,7 @@ export default function Overlay() {
           x: region.x + region.width,
           y: region.y,
           originalText: '',
-          translatedText: 'No text detected in selected area.',
+          translatedText: 'No text detected in selected area. Try selecting a larger region with clearer text.',
         });
         return;
       }
@@ -118,11 +123,12 @@ export default function Overlay() {
       });
     } catch (err) {
       console.error('Processing failed:', err);
+      const message = err instanceof Error ? err.message : 'Unknown error';
       window.electronAPI.showResult({
         x: region.x + region.width,
         y: region.y,
         originalText: '',
-        translatedText: 'Translation failed. Please try again.',
+        translatedText: `Translation failed: ${message}. Please try again.`,
       });
     }
   }, [selection.isDragging, getRegion]);

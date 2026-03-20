@@ -1,18 +1,20 @@
 {
   "name": "screen-translator",
   "version": "0.1.0",
-  "description": "Instant screen-region translation for macOS",
+  "description": "Instant screen-region translation",
+  "author": "Screen Translator Team <info@screentranslator.app>",
+  "homepage": "https://github.com/screentranslator/screen-translator",
   "main": "dist/electron/main.js",
   "private": true,
   "scripts": {
     "dev": "concurrently \"npm run dev:renderer\" \"npm run dev:electron\"",
     "dev:renderer": "vite",
     "dev:electron": "wait-on http://localhost:5173 && tsc -p tsconfig.electron.json && electron .",
-    "build": "tsc -p tsconfig.electron.json && vite build && electron-builder",
+    "build": "tsc -p tsconfig.electron.json && vite build && electron-builder --config electron-builder.config.js",
     "build:renderer": "vite build",
     "build:electron": "tsc -p tsconfig.electron.json",
     "start": "electron .",
-    "lint": "eslint src/"
+    "lint": "tsc --noEmit"
   },
   "dependencies": {
     "react": "^19.2.4",

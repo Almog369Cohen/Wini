@@ -13,7 +13,7 @@ module.exports = {
   mac: {
     category: 'public.app-category.productivity',
     target: ['dmg'],
-    icon: 'build/icon.icns',
+    icon: 'build/icon.png',
     hardenedRuntime: true,
     entitlements: 'build/entitlements.mac.plist',
     entitlementsInherit: 'build/entitlements.mac.plist',
@@ -21,5 +21,14 @@ module.exports = {
       NSScreenCaptureUsageDescription:
         'Screen Translator needs screen recording access to capture and translate text from your screen.',
     },
+  },
+  linux: {
+    target: ['AppImage', 'deb'],
+    icon: 'build/icon.png',
+    category: 'Utility',
+  },
+  win: {
+    target: ['nsis'],
+    icon: 'build/icon.png',
   },
 };
