@@ -9,15 +9,19 @@ import {
   Tray,
   Menu,
   shell,
+  nativeImage,
 } from 'electron';
 import path from 'path';
 import fs from 'fs';
+import crypto from 'crypto';
 
 // ─── State ───────────────────────────────────────────────────────────────────
 
 let overlayWindow: BrowserWindow | null = null;
 let resultWindow: BrowserWindow | null = null;
 let settingsWindow: BrowserWindow | null = null;
+let historyWindow: BrowserWindow | null = null;
+let onboardingWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 
 const isDev = !app.isPackaged;
@@ -30,14 +34,17 @@ const RENDERER_URL = isDev
 interface AppSettings {
   targetLang: string;
   shortcut: string;
+  onboardingDone: boolean;
 }
 
 const SETTINGS_PATH = path.join(app.getPath('userData'), 'settings.json');
+const HISTORY_PATH = path.join(app.getPath('userData'), 'history.json');
 
 function loadSettings(): AppSettings {
   const defaults: AppSettings = {
     targetLang: 'en',
     shortcut: 'CommandOrControl+Shift+T',
+    onboardingDone: false,
   };
   try {
     if (fs.existsSync(SETTINGS_PATH)) {
@@ -50,11 +57,40 @@ function loadSettings(): AppSettings {
   return defaults;
 }
 
-function saveSettings(settings: AppSettings) {
-  fs.writeFileSync(SETTINGS_PATH, JSON.stringify(settings, null, 2));
+function saveSettings(s: AppSettings) {
+  fs.writeFileSync(SETTINGS_PATH, JSON.stringify(s, null, 2));
 }
 
 let settings = loadSettings();
+
+// ─── History persistence ─────────────────────────────────────────────────────
+
+interface HistoryEntry {
+  id: string;
+  timestamp: number;
+  originalText: string;
+  translatedText: string;
+  sourceLang: string;
+  targetLang: string;
+  confidence: number;
+}
+
+function loadHistory(): HistoryEntry[] {
+  try {
+    if (fs.existsSync(HISTORY_PATH)) {
+      return JSON.parse(fs.readFileSync(HISTORY_PATH, 'utf-8'));
+    }
+  } catch {
+    // ignore
+  }
+  return [];
+}
+
+function saveHistory(entries: HistoryEntry[]) {
+  fs.writeFileSync(HISTORY_PATH, JSON.stringify(entries, null, 2));
+}
+
+let history: HistoryEntry[] = loadHistory();
 
 // ─── Windows ─────────────────────────────────────────────────────────────────
 
@@ -94,10 +130,10 @@ function createOverlayWindow() {
 function createResultWindow(
   x: number,
   y: number,
-  data: { originalText: string; translatedText: string }
+  data: { originalText: string; translatedText: string; sourceLang?: string; confidence?: number }
 ) {
   const POPUP_WIDTH = 400;
-  const POPUP_HEIGHT = 300;
+  const POPUP_HEIGHT = 320;
 
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenW, height: screenH } = primaryDisplay.size;
@@ -167,13 +203,72 @@ function createSettingsWindow() {
   });
 }
 
+function createHistoryWindow() {
+  if (historyWindow) {
+    historyWindow.focus();
+    return;
+  }
+
+  historyWindow = new BrowserWindow({
+    width: 480,
+    height: 560,
+    frame: false,
+    transparent: true,
+    resizable: true,
+    titleBarStyle: 'hidden',
+    minWidth: 360,
+    minHeight: 400,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
+  });
+
+  historyWindow.loadURL(`${RENDERER_URL}#/history`);
+
+  historyWindow.on('closed', () => {
+    historyWindow = null;
+  });
+}
+
+function createOnboardingWindow() {
+  if (onboardingWindow) {
+    onboardingWindow.focus();
+    return;
+  }
+
+  onboardingWindow = new BrowserWindow({
+    width: 520,
+    height: 600,
+    frame: false,
+    transparent: true,
+    resizable: false,
+    titleBarStyle: 'hidden',
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
+  });
+
+  onboardingWindow.loadURL(`${RENDERER_URL}#/onboarding`);
+
+  onboardingWindow.on('closed', () => {
+    onboardingWindow = null;
+  });
+}
+
 // ─── Tray ────────────────────────────────────────────────────────────────────
 
 function createTray() {
-  // Use a simple text-based tray icon (on macOS it shows in menu bar)
-  // In production you'd use a proper icon file
   tray = new Tray(createTrayIcon());
   tray.setToolTip('Screen Translator');
+  updateTrayMenu();
+}
+
+function updateTrayMenu() {
+  if (!tray) return;
 
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -183,15 +278,17 @@ function createTray() {
     },
     { type: 'separator' },
     {
+      label: 'History',
+      click: createHistoryWindow,
+    },
+    {
       label: 'Settings',
       click: createSettingsWindow,
     },
     { type: 'separator' },
     {
       label: 'Quit',
-      click: () => {
-        app.quit();
-      },
+      click: () => app.quit(),
     },
   ]);
 
@@ -199,15 +296,12 @@ function createTray() {
 }
 
 function createTrayIcon() {
-  // Create a simple 16x16 tray icon programmatically
-  const { nativeImage } = require('electron');
-  // Simple "T" icon as a data URL
   const size = 16;
-  const canvas = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
     <rect x="2" y="2" width="12" height="3" rx="1" fill="black"/>
     <rect x="6" y="2" width="4" height="12" rx="1" fill="black"/>
   </svg>`;
-  const base64 = Buffer.from(canvas).toString('base64');
+  const base64 = Buffer.from(svg).toString('base64');
   const icon = nativeImage.createFromDataURL(`data:image/svg+xml;base64,${base64}`);
   icon.setTemplateImage(true);
   return icon;
@@ -216,7 +310,6 @@ function createTrayIcon() {
 // ─── Capture logic ───────────────────────────────────────────────────────────
 
 function triggerCapture() {
-  // Check permission first on macOS
   if (process.platform === 'darwin') {
     const status = systemPreferences.getMediaAccessStatus('screen');
     if (status !== 'granted') {
@@ -271,12 +364,9 @@ async function captureScreen(region: {
     },
   });
 
-  if (sources.length === 0) {
-    return null;
-  }
+  if (sources.length === 0) return null;
 
-  const source = sources[0];
-  const fullImage = source.thumbnail;
+  const fullImage = sources[0].thumbnail;
 
   const cropped = fullImage.crop({
     x: Math.round(region.x * scaleFactor),
@@ -291,13 +381,15 @@ async function captureScreen(region: {
 // ─── App lifecycle ───────────────────────────────────────────────────────────
 
 app.whenReady().then(() => {
-  // Register global shortcut
   globalShortcut.register(settings.shortcut, triggerCapture);
-
-  // Create tray
   createTray();
 
-  // ─── IPC handlers ───────────────────────────────────────────────────────
+  // Show onboarding on first launch
+  if (!settings.onboardingDone) {
+    createOnboardingWindow();
+  }
+
+  // ─── IPC: Capture ─────────────────────────────────────────────────────
 
   ipcMain.handle('region-selected', async (_event, region) => {
     if (overlayWindow) {
@@ -306,11 +398,7 @@ app.whenReady().then(() => {
     }
 
     const imageDataUrl = await captureScreen(region);
-
-    if (!imageDataUrl) {
-      return { error: 'Failed to capture screen' };
-    }
-
+    if (!imageDataUrl) return { error: 'Failed to capture screen' };
     return { imageDataUrl };
   });
 
@@ -318,6 +406,8 @@ app.whenReady().then(() => {
     createResultWindow(data.x, data.y, {
       originalText: data.originalText,
       translatedText: data.translatedText,
+      sourceLang: data.sourceLang,
+      confidence: data.confidence,
     });
   });
 
@@ -335,23 +425,60 @@ app.whenReady().then(() => {
     }
   });
 
-  // Settings IPC
+  // ─── IPC: Settings ────────────────────────────────────────────────────
+
   ipcMain.handle('get-settings', () => settings);
 
   ipcMain.handle('save-settings', (_event, newSettings: Partial<AppSettings>) => {
     settings = { ...settings, ...newSettings };
     saveSettings(settings);
 
-    // Re-register shortcut if changed
     globalShortcut.unregisterAll();
     globalShortcut.register(settings.shortcut, triggerCapture);
+    updateTrayMenu();
 
     return settings;
   });
 
   ipcMain.handle('get-target-lang', () => settings.targetLang);
 
-  // Permission IPC
+  // ─── IPC: History ─────────────────────────────────────────────────────
+
+  ipcMain.handle('get-history', () => history);
+
+  ipcMain.handle('add-history-entry', (_event, entry: {
+    originalText: string;
+    translatedText: string;
+    sourceLang: string;
+    targetLang: string;
+    confidence: number;
+  }) => {
+    const newEntry: HistoryEntry = {
+      id: crypto.randomUUID(),
+      timestamp: Date.now(),
+      ...entry,
+    };
+    history.unshift(newEntry);
+    // Keep max 200 entries
+    if (history.length > 200) {
+      history = history.slice(0, 200);
+    }
+    saveHistory(history);
+    return newEntry;
+  });
+
+  ipcMain.handle('clear-history', () => {
+    history = [];
+    saveHistory(history);
+  });
+
+  ipcMain.handle('delete-history-entry', (_event, id: string) => {
+    history = history.filter((e) => e.id !== id);
+    saveHistory(history);
+  });
+
+  // ─── IPC: Permissions ─────────────────────────────────────────────────
+
   ipcMain.handle('check-screen-permission', () => {
     if (process.platform === 'darwin') {
       return systemPreferences.getMediaAccessStatus('screen');
@@ -367,9 +494,15 @@ app.whenReady().then(() => {
     }
   });
 
+  // ─── IPC: Window ──────────────────────────────────────────────────────
+
   ipcMain.on('close-window', (event) => {
     const win = BrowserWindow.fromWebContents(event.sender);
     win?.close();
+  });
+
+  ipcMain.on('open-history', () => {
+    createHistoryWindow();
   });
 });
 

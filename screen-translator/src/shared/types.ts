@@ -8,6 +8,7 @@ export interface Region {
 export interface OcrResult {
   text: string;
   confidence: number;
+  detectedLang?: string;
 }
 
 export interface TranslationResult {
@@ -19,6 +20,17 @@ export interface TranslationResult {
 export interface AppSettings {
   targetLang: string;
   shortcut: string;
+  onboardingDone: boolean;
+}
+
+export interface HistoryEntry {
+  id: string;
+  timestamp: number;
+  originalText: string;
+  translatedText: string;
+  sourceLang: string;
+  targetLang: string;
+  confidence: number;
 }
 
 export interface ElectronAPI {
@@ -29,10 +41,17 @@ export interface ElectronAPI {
     y: number;
     originalText: string;
     translatedText: string;
+    sourceLang?: string;
+    confidence?: number;
   }) => void;
   cancelOverlay: () => void;
   closeResult: () => void;
-  onResultData: (callback: (data: { originalText: string; translatedText: string }) => void) => void;
+  onResultData: (callback: (data: {
+    originalText: string;
+    translatedText: string;
+    sourceLang?: string;
+    confidence?: number;
+  }) => void) => void;
 
   // Clipboard
   copyToClipboard: (text: string) => void;
@@ -43,12 +62,19 @@ export interface ElectronAPI {
   getTargetLang: () => Promise<string>;
   onSettingsData: (callback: (data: AppSettings) => void) => void;
 
+  // History
+  getHistory: () => Promise<HistoryEntry[]>;
+  addHistoryEntry: (entry: Omit<HistoryEntry, 'id' | 'timestamp'>) => Promise<HistoryEntry>;
+  clearHistory: () => Promise<void>;
+  deleteHistoryEntry: (id: string) => Promise<void>;
+
   // Permissions
   checkScreenPermission: () => Promise<string>;
   openPrivacySettings: () => void;
 
   // Window
   closeWindow: () => void;
+  openHistory: () => void;
 }
 
 declare global {
