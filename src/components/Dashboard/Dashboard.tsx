@@ -9,6 +9,7 @@ import ScoreGauge from './ScoreGauge';
 import MiniRing from './MiniRing';
 import WeekSparkline from './WeekSparkline';
 import ChallengeWidget from '../Challenges/ChallengeWidget';
+import DailyVictoryCounter from './DailyVictoryCounter';
 import type { useMood } from '../../hooks/useMood';
 
 interface DashboardProps {
@@ -29,9 +30,10 @@ interface DashboardProps {
     todayWater: number;
     waterGoal: number;
   };
+  victoryCount?: number;
 }
 
-export default function Dashboard({ habits, onNavigate, todaySummary, hardHours, dopamineCount, dopamineGoal, dopamineGoalProgress, moodState, onChangeMood, onUrgeHelp, userName, userPhotoURL, mealData }: DashboardProps) {
+export default function Dashboard({ habits, onNavigate, todaySummary, hardHours, dopamineCount, dopamineGoal, dopamineGoalProgress, moodState, onChangeMood, onUrgeHelp, userName, userPhotoURL, mealData, victoryCount = 0 }: DashboardProps) {
   const [showMore, setShowMore] = useState(false);
   const activeQuitHabits = habits.filter((h) => h.type === 'quit' && h.isActive);
   const activeBuildHabits = habits.filter((h) => h.type === 'build' && h.isActive);
@@ -263,6 +265,13 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
           emoji="⚡"
           onClick={() => onNavigate('sos')}
         />
+      </div>
+
+      {/* ══════════════════════════════════════════════
+          VICTORY COUNTER
+          ══════════════════════════════════════════════ */}
+      <div className="mb-3">
+        <DailyVictoryCounter count={victoryCount} goal={5} />
       </div>
 
       {/* ══════════════════════════════════════════════

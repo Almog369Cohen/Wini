@@ -11,6 +11,7 @@ import { useUserProfile } from './hooks/useUserProfile';
 import { useFeedback } from './hooks/useFeedback';
 import { useUrgeLog } from './hooks/useUrgeLog';
 import { useToast } from './hooks/useToast';
+import { useVictoryRewards } from './hooks/useVictoryRewards';
 import Layout from './components/Layout';
 import Dashboard from './components/Dashboard/Dashboard';
 import HabitList from './components/Habits/HabitList';
@@ -40,6 +41,7 @@ import UrgeIntervention from './components/UrgeIntervention/UrgeIntervention';
 import BarrierIntervention from './components/UrgeIntervention/BarrierIntervention';
 import Toast from './components/ui/Toast';
 import Confetti from './components/ui/Confetti';
+import VictoryBurst from './components/ui/VictoryBurst';
 import { useAuth } from './contexts/AuthContext';
 import LoginScreen from './components/Auth/LoginScreen';
 import SplashScreen from './components/SplashScreen';
@@ -91,6 +93,7 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
   const notifications = useNotifications();
   const tasksState = useTasks();
   const { toasts, show: showToast, dismiss: dismissToast } = useToast();
+  const victoryRewards = useVictoryRewards();
 
   // Show mood check-in on first open if not checked in today
   const shouldShowMoodCheckIn = !moodState.hasCheckedInToday && habitState.habits.length > 0 && hasProfile;
@@ -149,16 +152,16 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
       habitState.checkIn(habitId);
       const habit = habitState.habits.find((h) => h.id === habitId);
       if (habit) {
+        victoryRewards.celebrateCheckIn(habit.name, habit.currentStreak);
         const newStreak = habit.currentStreak + 1;
         if ([7, 14, 30, 60, 90, 180, 365].includes(newStreak)) {
-          setShowConfetti(true);
           showToast(`streak של ${newStreak} ימים! מדהים!`);
         } else {
           showToast('צ\'ק-אין נשמר');
         }
       }
     },
-    [habitState, showToast]
+    [habitState, showToast, victoryRewards]
   );
 
   const handleAddHabit = useCallback(
@@ -197,17 +200,17 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
     urgeLogState.logUrge(result);
     setShowUrgeIntervention(false);
     if (result.overcame) {
-      setShowConfetti(true);
+      const habit = result.habitId ? habitState.habits.find(h => h.id === result.habitId) : null;
+      victoryRewards.celebrateUrgeOvercome(habit?.name || 'דחף');
       showToast('גיבור! התגברת על הדחף 🦁');
     }
-  }, [urgeLogState, showToast]);
+  }, [urgeLogState, showToast, habitState.habits, victoryRewards]);
 
   const handleBarrierComplete = useCallback((result: { habitId: string; didIt: boolean }) => {
     setShowBarrierIntervention(false);
     if (result.didIt) {
-      setShowConfetti(true);
       showToast('גיבור! בחרת לעשות למרות הקושי 💪');
-      // Auto check-in the habit
+      // Auto check-in the habit (this will trigger its own victory)
       handleCheckIn(result.habitId);
     } else {
       showToast('דילוג מודע. מחר תנסה שוב 🌱');
@@ -286,6 +289,7 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
               todayWater: mealTracker.todayWater,
               waterGoal: mealTracker.waterGoal,
             }}
+            victoryCount={victoryRewards.todayCount}
           />
         );
       case 'habits':
@@ -417,6 +421,19 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
       <AnimatePresence mode="wait">{renderPage()}</AnimatePresence>
       <Toast toasts={toasts} onDismiss={dismissToast} />
       <Confetti active={showConfetti} onComplete={() => setShowConfetti(false)} />
+
+      {/* Victory Burst overlay */}
+      <AnimatePresence>
+        {victoryRewards.currentVictory && (
+          <VictoryBurst
+            tier={victoryRewards.currentVictory.tier}
+            message={victoryRewards.currentVictory.message}
+            subMessage={victoryRewards.currentVictory.subMessage}
+            emoji={victoryRewards.currentVictory.emoji}
+            onComplete={victoryRewards.dismissVictory}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Onboarding Questionnaire */}
       <AnimatePresence>
