@@ -4,7 +4,7 @@ import {
   ListChecks,
   AlertCircle,
   BookOpen,
-  Trophy,
+  CalendarCheck,
 } from 'lucide-react';
 import type { Page } from '../types';
 
@@ -18,8 +18,8 @@ const navItems: { page: Page; label: string; Icon: typeof Home }[] = [
   { page: 'dashboard', label: 'הגן שלי', Icon: Home },
   { page: 'habits', label: 'הרגלים', Icon: ListChecks },
   { page: 'sos', label: 'SOS', Icon: AlertCircle },
+  { page: 'routines', label: 'שגרות', Icon: CalendarCheck },
   { page: 'journal', label: 'יומן', Icon: BookOpen },
-  { page: 'milestones', label: 'הישגים', Icon: Trophy },
 ];
 
 export default function Layout({ currentPage, onNavigate, children }: LayoutProps) {

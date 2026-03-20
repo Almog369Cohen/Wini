@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Plus } from 'lucide-react';
 import type { HabitType, HabitCategory } from '../../types';
+import { HABIT_CATEGORIES } from '../../data/habitTemplates';
 
 interface AddHabitProps {
   onAdd: (data: {
@@ -15,21 +16,6 @@ interface AddHabitProps {
   onClose: () => void;
 }
 
-const categories: { value: HabitCategory; label: string; emoji: string }[] = [
-  { value: 'smoking', label: 'עישון', emoji: '🚬' },
-  { value: 'alcohol', label: 'אלכוהול', emoji: '🍷' },
-  { value: 'sugar', label: 'סוכר', emoji: '🍬' },
-  { value: 'caffeine', label: 'קפאין', emoji: '☕' },
-  { value: 'screens', label: 'מסכים', emoji: '📱' },
-  { value: 'junkfood', label: 'ג\'אנק פוד', emoji: '🍔' },
-  { value: 'exercise', label: 'ספורט', emoji: '🏃' },
-  { value: 'meditation', label: 'מדיטציה', emoji: '🧘' },
-  { value: 'reading', label: 'קריאה', emoji: '📖' },
-  { value: 'water', label: 'שתיית מים', emoji: '💧' },
-  { value: 'sleep', label: 'שינה', emoji: '😴' },
-  { value: 'other', label: 'אחר', emoji: '✨' },
-];
-
 export default function AddHabit({ onAdd, onClose }: AddHabitProps) {
   const [type, setType] = useState<HabitType>('quit');
   const [name, setName] = useState('');
@@ -40,11 +26,9 @@ export default function AddHabit({ onAdd, onClose }: AddHabitProps) {
   const [triggerInput, setTriggerInput] = useState('');
   const [triggers, setTriggers] = useState<string[]>([]);
 
-  const filteredCategories = categories.filter((c) => {
-    const quitCats: HabitCategory[] = ['smoking', 'alcohol', 'sugar', 'caffeine', 'screens', 'junkfood', 'other'];
-    const buildCats: HabitCategory[] = ['exercise', 'meditation', 'reading', 'water', 'sleep', 'other'];
-    return type === 'quit' ? quitCats.includes(c.value) : buildCats.includes(c.value);
-  });
+  const filteredCategories = Object.entries(HABIT_CATEGORIES)
+    .filter(([, config]) => config.type === 'both' || config.type === type)
+    .map(([value, config]) => ({ value: value as HabitCategory, label: config.label, emoji: config.emoji }));
 
   const addReason = () => {
     if (reasonInput.trim()) {

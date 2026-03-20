@@ -18,9 +18,11 @@ interface DashboardProps {
   dopamineGoalProgress: number;
   moodState: ReturnType<typeof useMood>;
   onChangeMood: () => void;
+  onUrgeHelp: () => void;
+  userName?: string;
 }
 
-export default function Dashboard({ habits, onNavigate, todaySummary, hardHours, dopamineCount, dopamineGoal, dopamineGoalProgress, moodState, onChangeMood }: DashboardProps) {
+export default function Dashboard({ habits, onNavigate, todaySummary, hardHours, dopamineCount, dopamineGoal, dopamineGoalProgress, moodState, onChangeMood, onUrgeHelp, userName }: DashboardProps) {
   const activeQuitHabits = habits.filter((h) => h.type === 'quit' && h.isActive);
   const activeBuildHabits = habits.filter((h) => h.type === 'build' && h.isActive);
   const quote = getDailyQuote();
@@ -59,7 +61,7 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
         >
           <Settings size={16} />
         </button>
-        <h1 className="text-2xl font-bold text-text">הגן שלי</h1>
+        <h1 className="text-2xl font-bold text-text">{userName ? `הגן של ${userName}` : 'הגן שלי'}</h1>
         <div className="w-8" />
       </div>
 
@@ -209,33 +211,43 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
         </div>
       </button>
 
-      {/* Inner Space entry */}
-      <button
-        onClick={() => onNavigate('innerspace')}
-        className="w-full bg-gradient-to-l from-sage/10 to-sea/10 border border-sage/15 rounded-xl p-4 mb-4 flex items-center gap-3 hover:from-sage/15 hover:to-sea/15 transition-all text-right"
-      >
-        <div className="w-10 h-10 rounded-full bg-sage/15 flex items-center justify-center flex-shrink-0">
+      {/* Quick links */}
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        <button
+          onClick={() => onNavigate('innerspace')}
+          className="bg-gradient-to-l from-sage/10 to-sea/10 border border-sage/15 rounded-xl p-3 flex items-center gap-2 text-right"
+        >
           <span className="text-lg">🌙</span>
-        </div>
-        <div>
-          <p className="text-sm font-medium text-sage">המרחב שלי</p>
-          <p className="text-[10px] text-text-light">הבנה עצמית, שיקוף, ומסע פנימי</p>
-        </div>
-      </button>
+          <div>
+            <p className="text-xs font-medium text-sage">המרחב שלי</p>
+            <p className="text-[9px] text-text-light">שיקוף ומסע פנימי</p>
+          </div>
+        </button>
+        <button
+          onClick={() => onNavigate('milestones')}
+          className="bg-gradient-to-l from-sand/10 to-sand/5 border border-sand/15 rounded-xl p-3 flex items-center gap-2 text-right"
+        >
+          <span className="text-lg">🏆</span>
+          <div>
+            <p className="text-xs font-medium text-sand">הישגים</p>
+            <p className="text-[9px] text-text-light">אבני דרך שלי</p>
+          </div>
+        </button>
+      </div>
 
       {/* Quote */}
       <div className="bg-sage/10 rounded-xl p-4 mb-4 text-center">
         <p className="text-sm text-sage-dark leading-relaxed italic">"{quote}"</p>
       </div>
 
-      {/* SOS button */}
+      {/* Urge help button */}
       {hasHabits && (
         <button
-          onClick={() => onNavigate('sos')}
-          className="w-full bg-coral/10 border border-coral/20 rounded-xl p-3 flex items-center justify-center gap-2 text-coral hover:bg-coral/20 transition-colors mb-6"
+          onClick={onUrgeHelp}
+          className="w-full bg-coral/10 border border-coral/20 rounded-xl p-4 flex items-center justify-center gap-2 text-coral hover:bg-coral/20 transition-colors mb-6"
         >
-          <AlertCircle size={18} />
-          <span className="text-sm font-medium">מרגיש דחף? לחץ כאן לעזרה</span>
+          <AlertCircle size={20} />
+          <span className="font-semibold">מרגיש דחף? בוא נתמודד ביחד</span>
         </button>
       )}
     </motion.div>

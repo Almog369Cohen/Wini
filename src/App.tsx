@@ -6,6 +6,10 @@ import { useJournal } from './hooks/useJournal';
 import { useInnerSpace } from './hooks/useInnerSpace';
 import { useDopamine } from './hooks/useDopamine';
 import { useMood } from './hooks/useMood';
+import { useRoutines } from './hooks/useRoutines';
+import { useUserProfile } from './hooks/useUserProfile';
+import { useFeedback } from './hooks/useFeedback';
+import { useUrgeLog } from './hooks/useUrgeLog';
 import { useToast } from './hooks/useToast';
 import Layout from './components/Layout';
 import Dashboard from './components/Dashboard/Dashboard';
@@ -17,6 +21,10 @@ import SettingsPage from './components/Settings/SettingsPage';
 import InnerSpacePage from './components/InnerSpace/InnerSpacePage';
 import MoodCheckIn from './components/MoodCheckIn/MoodCheckIn';
 import DailyPlan from './components/MoodCheckIn/DailyPlan';
+import RoutinesPage from './components/Routines/RoutinesPage';
+import WelcomeScreen from './components/Onboarding/WelcomeScreen';
+import FeedbackButton from './components/Feedback/FeedbackButton';
+import UrgeIntervention from './components/UrgeIntervention/UrgeIntervention';
 import Toast from './components/ui/Toast';
 import Confetti from './components/ui/Confetti';
 
@@ -24,15 +32,20 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
   const [showConfetti, setShowConfetti] = useState(false);
   const [showMoodCheckIn, setShowMoodCheckIn] = useState(false);
+  const [showUrgeIntervention, setShowUrgeIntervention] = useState(false);
   const habitState = useHabits();
   const journalState = useJournal();
   const innerSpaceState = useInnerSpace();
   const dopamineState = useDopamine();
   const moodState = useMood();
+  const routinesState = useRoutines();
+  const { profile, hasProfile, createProfile } = useUserProfile();
+  const feedbackState = useFeedback();
+  const urgeLogState = useUrgeLog();
   const { toasts, show: showToast, dismiss: dismissToast } = useToast();
 
   // Show mood check-in on first open if not checked in today
-  const shouldShowMoodCheckIn = !moodState.hasCheckedInToday && habitState.habits.length > 0;
+  const shouldShowMoodCheckIn = !moodState.hasCheckedInToday && habitState.habits.length > 0 && hasProfile;
 
   const handleMoodComplete = useCallback((mood: MoodType, energy: number, note?: string, secondaryMoods?: MoodType[]) => {
     moodState.setMood(mood, energy, note, secondaryMoods);
@@ -124,6 +137,28 @@ export default function App() {
     [journalState, showToast]
   );
 
+  const handleUrgeComplete = useCallback((result: {
+    habitId?: string;
+    overcame: boolean;
+    urgeIntensity: number;
+    trigger: string;
+    whatItGives: string[];
+    whatItCosts: string[];
+    realNeed: string[];
+  }) => {
+    urgeLogState.logUrge(result);
+    setShowUrgeIntervention(false);
+    if (result.overcame) {
+      setShowConfetti(true);
+      showToast('גיבור! התגברת על הדחף 🦁');
+    }
+  }, [urgeLogState, showToast]);
+
+  const handleWelcomeComplete = useCallback((name: string) => {
+    createProfile(name);
+    showToast(`שלום ${name}! ברוך הבא 🌱`);
+  }, [createProfile, showToast]);
+
   const renderPage = () => {
     switch (currentPage) {
       case 'dashboard':
@@ -138,6 +173,8 @@ export default function App() {
             dopamineGoalProgress={dopamineState.goalProgress}
             moodState={moodState}
             onChangeMood={() => setShowMoodCheckIn(true)}
+            onUrgeHelp={() => setShowUrgeIntervention(true)}
+            userName={profile?.name}
           />
         );
       case 'habits':
@@ -185,6 +222,14 @@ export default function App() {
             showToast={showToast}
           />
         );
+      case 'routines':
+        return (
+          <RoutinesPage
+            {...routinesState}
+            showToast={showToast}
+            onNavigate={setCurrentPage}
+          />
+        );
       case 'innerspace':
         return <InnerSpacePage {...innerSpaceState} />;
       case 'dailyplan':
@@ -206,6 +251,11 @@ export default function App() {
       <Toast toasts={toasts} onDismiss={dismissToast} />
       <Confetti active={showConfetti} onComplete={() => setShowConfetti(false)} />
 
+      {/* Welcome / Onboarding */}
+      <AnimatePresence>
+        {!hasProfile && <WelcomeScreen onComplete={handleWelcomeComplete} />}
+      </AnimatePresence>
+
       {/* Mood check-in overlay */}
       <AnimatePresence>
         {(shouldShowMoodCheckIn || showMoodCheckIn) && (
@@ -215,6 +265,28 @@ export default function App() {
           />
         )}
       </AnimatePresence>
+
+      {/* Urge intervention overlay */}
+      <AnimatePresence>
+        {showUrgeIntervention && (
+          <UrgeIntervention
+            habits={habitState.habits}
+            onComplete={handleUrgeComplete}
+            onClose={() => setShowUrgeIntervention(false)}
+            onNavigate={setCurrentPage}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Feedback floating button */}
+      {hasProfile && profile && (
+        <FeedbackButton
+          userName={profile.name}
+          userId={profile.id}
+          onSubmit={feedbackState.submitFeedback}
+          showToast={showToast}
+        />
+      )}
     </Layout>
   );
 }

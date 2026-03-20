@@ -7,11 +7,29 @@ export type HabitCategory =
   | 'caffeine'
   | 'screens'
   | 'junkfood'
+  | 'social_media'
+  | 'dating_apps'
+  | 'porn'
+  | 'gambling'
+  | 'nail_biting'
+  | 'procrastination'
+  | 'shopping'
+  | 'negativity'
   | 'exercise'
   | 'meditation'
   | 'reading'
   | 'water'
   | 'sleep'
+  | 'gratitude'
+  | 'journaling'
+  | 'cooking'
+  | 'socializing'
+  | 'learning'
+  | 'nature'
+  | 'creativity'
+  | 'hygiene'
+  | 'finance'
+  | 'volunteering'
   | 'other';
 
 export interface Habit {
@@ -191,4 +209,40 @@ export interface ReinforcementItem {
   dateAdded: string;
 }
 
-export type Page = 'dashboard' | 'habits' | 'sos' | 'journal' | 'milestones' | 'settings' | 'innerspace' | 'mood' | 'dailyplan';
+// Routines System
+export type RoutineType = 'morning' | 'night' | 'crisis' | 'motivation' | 'energy' | 'calm' | 'focus' | 'social' | 'growth' | 'body' | 'custom';
+
+export interface RoutineStep {
+  id: string;
+  title: string;
+  emoji: string;
+  duration?: string; // e.g. "2 דקות"
+  note?: string;
+}
+
+export interface Routine {
+  id: string;
+  name: string;
+  type: RoutineType;
+  emoji: string;
+  steps: RoutineStep[];
+  createdAt: string;
+  isTemplate?: boolean;
+}
+
+export interface RoutineCompletion {
+  routineId: string;
+  date: string; // YYYY-MM-DD
+  completedSteps: string[]; // step IDs
+  completedAt?: string; // ISO timestamp
+}
+
+export interface RoutineReflection {
+  id: string;
+  date: string;
+  whatWorks: string;
+  whatToChange: string;
+  newIdea?: string;
+}
+
+export type Page = 'dashboard' | 'habits' | 'sos' | 'journal' | 'milestones' | 'settings' | 'innerspace' | 'mood' | 'dailyplan' | 'routines';

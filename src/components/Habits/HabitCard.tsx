@@ -11,19 +11,10 @@ interface HabitCardProps {
   onDelete: (id: string) => void;
 }
 
-const categoryEmojis: Record<string, string> = {
-  smoking: '🚬',
-  alcohol: '🍷',
-  sugar: '🍬',
-  caffeine: '☕',
-  screens: '📱',
-  junkfood: '🍔',
-  exercise: '🏃',
-  meditation: '🧘',
-  reading: '📖',
-  water: '💧',
-  sleep: '😴',
-  other: '✨',
+import { HABIT_CATEGORIES } from '../../data/habitTemplates';
+
+const getCategoryEmoji = (category: string) => {
+  return HABIT_CATEGORIES[category]?.emoji || '✨';
 };
 
 export default function HabitCard({
@@ -50,7 +41,7 @@ export default function HabitCard({
     >
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-xl">{categoryEmojis[habit.category] || '✨'}</span>
+          <span className="text-xl">{getCategoryEmoji(habit.category)}</span>
           <div>
             <h3 className="text-sm font-semibold text-text">{habit.name}</h3>
             <p className="text-xs text-text-light">
