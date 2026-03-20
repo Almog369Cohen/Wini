@@ -1,0 +1,8 @@
+node_modules/
+dist/
+out/
+# build/ - keep build/ for entitlements and icons
+*.dmg
+*.app
+*.zip
+.DS_Store
