@@ -1,10 +1,11 @@
 import { useState, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import type { Page } from './types';
+import type { Page, MoodType } from './types';
 import { useHabits } from './hooks/useHabits';
 import { useJournal } from './hooks/useJournal';
 import { useInnerSpace } from './hooks/useInnerSpace';
 import { useDopamine } from './hooks/useDopamine';
+import { useMood } from './hooks/useMood';
 import { useToast } from './hooks/useToast';
 import Layout from './components/Layout';
 import Dashboard from './components/Dashboard/Dashboard';
@@ -14,17 +15,30 @@ import JournalPage from './components/Journal/JournalPage';
 import MilestonesPage from './components/Milestones/MilestonesPage';
 import SettingsPage from './components/Settings/SettingsPage';
 import InnerSpacePage from './components/InnerSpace/InnerSpacePage';
+import MoodCheckIn from './components/MoodCheckIn/MoodCheckIn';
+import DailyPlan from './components/MoodCheckIn/DailyPlan';
 import Toast from './components/ui/Toast';
 import Confetti from './components/ui/Confetti';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showMoodCheckIn, setShowMoodCheckIn] = useState(false);
   const habitState = useHabits();
   const journalState = useJournal();
   const innerSpaceState = useInnerSpace();
   const dopamineState = useDopamine();
+  const moodState = useMood();
   const { toasts, show: showToast, dismiss: dismissToast } = useToast();
+
+  // Show mood check-in on first open if not checked in today
+  const shouldShowMoodCheckIn = !moodState.hasCheckedInToday && habitState.habits.length > 0;
+
+  const handleMoodComplete = useCallback((mood: MoodType, energy: number, note?: string, secondaryMoods?: MoodType[]) => {
+    moodState.setMood(mood, energy, note, secondaryMoods);
+    setShowMoodCheckIn(false);
+    showToast('מצב הרוח נשמר! הנה התוכנית שלך 💪');
+  }, [moodState, showToast]);
 
   const handleExport = useCallback(() => {
     const data = {
@@ -64,6 +78,8 @@ export default function App() {
   const handleReset = useCallback(() => {
     localStorage.removeItem('wini-habits');
     localStorage.removeItem('wini-journal');
+    localStorage.removeItem('wini-mood');
+    localStorage.removeItem('wini-reinforcement');
     window.location.reload();
   }, []);
 
@@ -120,6 +136,8 @@ export default function App() {
             dopamineCount={dopamineState.todayCount}
             dopamineGoal={dopamineState.dailyGoal}
             dopamineGoalProgress={dopamineState.goalProgress}
+            moodState={moodState}
+            onChangeMood={() => setShowMoodCheckIn(true)}
           />
         );
       case 'habits':
@@ -169,6 +187,16 @@ export default function App() {
         );
       case 'innerspace':
         return <InnerSpacePage {...innerSpaceState} />;
+      case 'dailyplan':
+        return (
+          <DailyPlan
+            mood={moodState.currentMood}
+            energy={moodState.currentEnergy}
+            onBack={() => setCurrentPage('dashboard')}
+            moodEmoji={moodState.moodEmojis[moodState.currentMood]}
+            moodLabel={moodState.moodLabels[moodState.currentMood]}
+          />
+        );
     }
   };
 
@@ -177,6 +205,16 @@ export default function App() {
       <AnimatePresence mode="wait">{renderPage()}</AnimatePresence>
       <Toast toasts={toasts} onDismiss={dismissToast} />
       <Confetti active={showConfetti} onComplete={() => setShowConfetti(false)} />
+
+      {/* Mood check-in overlay */}
+      <AnimatePresence>
+        {(shouldShowMoodCheckIn || showMoodCheckIn) && (
+          <MoodCheckIn
+            onComplete={handleMoodComplete}
+            isUpdate={showMoodCheckIn && moodState.hasCheckedInToday}
+          />
+        )}
+      </AnimatePresence>
     </Layout>
   );
 }

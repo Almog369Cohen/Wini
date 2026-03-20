@@ -6,10 +6,18 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:ghpages": "DEPLOY_TARGET=ghpages tsc -b && DEPLOY_TARGET=ghpages vite build",
+    "build:ios": "vite build && npx cap sync ios",
+    "open:ios": "npx cap open ios",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor/cli": "^8.2.0",
+    "@capacitor/core": "^8.2.0",
+    "@capacitor/ios": "^8.2.0",
+    "@capacitor/splash-screen": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.1",
     "@tailwindcss/vite": "^4.2.2",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.38.0",

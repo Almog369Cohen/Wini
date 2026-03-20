@@ -122,4 +122,73 @@ export interface AppData {
   onboardingDone: boolean;
 }
 
-export type Page = 'dashboard' | 'habits' | 'sos' | 'journal' | 'milestones' | 'settings' | 'innerspace';
+// Mood System
+export type MoodType =
+  | 'sad'
+  | 'tired'
+  | 'exhausted'
+  | 'anxious'
+  | 'irritable'
+  | 'energetic'
+  | 'happy'
+  | 'calm'
+  | 'frustrated'
+  | 'lonely'
+  | 'hopeful'
+  | 'neutral';
+
+export interface MoodEntry {
+  id: string;
+  mood: MoodType;
+  secondaryMoods?: MoodType[];
+  energy: number; // 1-5
+  timestamp: string; // ISO
+  note?: string;
+}
+
+export interface MoodState {
+  currentMood: MoodType;
+  currentMoods: MoodType[]; // all selected moods
+  currentEnergy: number;
+  todayEntries: MoodEntry[];
+  history: MoodEntry[];
+}
+
+export interface DailyRoutineSuggestion {
+  id: string;
+  title: string;
+  description: string;
+  duration: string; // e.g. "10 שניות", "5 דקות"
+  difficulty: 'easy' | 'medium' | 'hard';
+  icon: string;
+  category: 'body' | 'mind' | 'soul' | 'social' | 'creative';
+  completed?: boolean;
+}
+
+export interface MotivationalQuote {
+  id: number;
+  text: string;
+  category: QuoteCategory;
+}
+
+export type QuoteCategory =
+  | 'morning'
+  | 'afternoon'
+  | 'evening'
+  | 'breaking'
+  | 'victory'
+  | 'motivation'
+  | 'self_compassion'
+  | 'growth'
+  | 'strength'
+  | 'new_beginning';
+
+export interface ReinforcementItem {
+  id: string;
+  type: 'quote' | 'image';
+  content: string; // quote text or image data URL
+  category: 'why' | 'strength' | 'future' | 'love';
+  dateAdded: string;
+}
+
+export type Page = 'dashboard' | 'habits' | 'sos' | 'journal' | 'milestones' | 'settings' | 'innerspace' | 'mood' | 'dailyplan';

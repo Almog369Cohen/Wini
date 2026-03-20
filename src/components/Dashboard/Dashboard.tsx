@@ -5,6 +5,8 @@ import type { Habit, Page } from '../../types';
 import { getDailyQuote } from '../../data/quotes';
 import GrowingTree from './GrowingTree';
 import LiveTimer from './LiveTimer';
+import MoodWidget from '../MoodCheckIn/MoodWidget';
+import type { useMood } from '../../hooks/useMood';
 
 interface DashboardProps {
   habits: Habit[];
@@ -14,9 +16,11 @@ interface DashboardProps {
   dopamineCount: number;
   dopamineGoal: number;
   dopamineGoalProgress: number;
+  moodState: ReturnType<typeof useMood>;
+  onChangeMood: () => void;
 }
 
-export default function Dashboard({ habits, onNavigate, todaySummary, hardHours, dopamineCount, dopamineGoal, dopamineGoalProgress }: DashboardProps) {
+export default function Dashboard({ habits, onNavigate, todaySummary, hardHours, dopamineCount, dopamineGoal, dopamineGoalProgress, moodState, onChangeMood }: DashboardProps) {
   const activeQuitHabits = habits.filter((h) => h.type === 'quit' && h.isActive);
   const activeBuildHabits = habits.filter((h) => h.type === 'build' && h.isActive);
   const quote = getDailyQuote();
@@ -83,6 +87,22 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
           >
             בואו נתחיל
           </button>
+        </div>
+      )}
+
+      {/* Mood Widget */}
+      {hasHabits && moodState.hasCheckedInToday && (
+        <div className="mb-4">
+          <MoodWidget
+            currentMood={moodState.currentMood}
+            currentMoods={moodState.currentMoods}
+            currentEnergy={moodState.currentEnergy}
+            todayEntries={moodState.todayEntries}
+            moodEmojis={moodState.moodEmojis}
+            moodLabels={moodState.moodLabels}
+            onChangeMood={onChangeMood}
+            onViewPlan={() => onNavigate('dailyplan')}
+          />
         </div>
       )}
 

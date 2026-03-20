@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Wind, Timer, Heart, Zap, Plus, Check } from 'lucide-react';
+import { Wind, Timer, Heart, Zap, Plus, Check, Shield } from 'lucide-react';
 import type { Habit, DopamineLog } from '../../types';
 import { alternativeActivities } from '../../data/activities';
 import BreathingExercise from './BreathingExercise';
 import CravingTimer from './CravingTimer';
+import ReinforcementGallery from '../Reinforcement/ReinforcementGallery';
 import { format } from 'date-fns';
 import { he } from 'date-fns/locale';
 
-type SOSTab = 'breathe' | 'timer' | 'reasons' | 'dopamine';
+type SOSTab = 'breathe' | 'timer' | 'reasons' | 'dopamine' | 'reinforcement';
 
 interface SOSPageProps {
   habits: Habit[];
@@ -42,6 +43,7 @@ export default function SOSPage({
 
   const tabs: { id: SOSTab; label: string; Icon: typeof Wind }[] = [
     { id: 'dopamine', label: 'דופמין בריא', Icon: Zap },
+    { id: 'reinforcement', label: 'חיזוקים', Icon: Shield },
     { id: 'breathe', label: 'נשימה', Icon: Wind },
     { id: 'timer', label: 'טיימר', Icon: Timer },
     { id: 'reasons', label: 'סיבות', Icon: Heart },
@@ -99,6 +101,7 @@ export default function SOSPage({
       <div className="bg-card rounded-2xl p-5 shadow-sm min-h-[300px]">
         {activeTab === 'breathe' && <BreathingExercise />}
         {activeTab === 'timer' && <CravingTimer />}
+        {activeTab === 'reinforcement' && <ReinforcementGallery />}
 
         {activeTab === 'reasons' && (
           <div>
