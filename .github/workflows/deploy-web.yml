@@ -2,7 +2,7 @@ name: Deploy Web Pilot to GitHub Pages
 
 on:
   push:
-    branches: [main, claude/setup-new-project-ZGMpi]
+    branches: [master]
 
 permissions:
   contents: read
