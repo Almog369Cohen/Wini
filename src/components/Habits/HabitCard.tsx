@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
-import { Check, RotateCcw, Trash2, Flame } from 'lucide-react';
+import { Check, RotateCcw, Trash2, Flame, Repeat, Lightbulb } from 'lucide-react';
 import { differenceInDays } from 'date-fns';
 import type { Habit } from '../../types';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { HABIT_CATEGORIES, HABIT_TEMPLATES } from '../../data/habitTemplates';
 
 interface HabitCardProps {
   habit: Habit;
@@ -10,8 +11,6 @@ interface HabitCardProps {
   onRelapse: (id: string, note?: string, trigger?: string) => void;
   onDelete: (id: string) => void;
 }
-
-import { HABIT_CATEGORIES } from '../../data/habitTemplates';
 
 const getCategoryEmoji = (category: string) => {
   return HABIT_CATEGORIES[category]?.emoji || '✨';
@@ -24,6 +23,7 @@ export default function HabitCard({
   onDelete,
 }: HabitCardProps) {
   const [showRelapse, setShowRelapse] = useState(false);
+  const [showReplacements, setShowReplacements] = useState(false);
   const [relapseNote, setRelapseNote] = useState('');
   const days = differenceInDays(new Date(), new Date(habit.startDate));
   const isQuit = habit.type === 'quit';
@@ -31,6 +31,15 @@ export default function HabitCard({
   const todayChecked =
     habit.lastCheckIn &&
     new Date(habit.lastCheckIn).toDateString() === new Date().toDateString();
+
+  // Find matching template for replacement data
+  const template = useMemo(() => {
+    return HABIT_TEMPLATES.find(t =>
+      t.name === habit.name || (t.category === habit.category && t.type === habit.type)
+    );
+  }, [habit.name, habit.category, habit.type]);
+
+  const hasReplacements = isQuit && (template?.replacementBehavior || template?.tinyVersion);
 
   return (
     <motion.div
@@ -83,10 +92,27 @@ export default function HabitCard({
         </div>
       </div>
 
+      {/* Tiny version tip - always visible for quit habits */}
+      {isQuit && template?.tinyVersion && (
+        <div className="flex items-start gap-1.5 mt-2 mb-1 px-2 py-1.5 bg-sage/5 rounded-lg">
+          <Lightbulb size={12} className="text-sage mt-0.5 flex-shrink-0" />
+          <span className="text-[11px] text-sage leading-tight">{template.tinyVersion}</span>
+        </div>
+      )}
+
       {/* Actions */}
       <div className="flex items-center gap-2 mt-3">
         {isQuit ? (
           <>
+            {hasReplacements && (
+              <button
+                onClick={() => setShowReplacements(!showReplacements)}
+                className="flex items-center gap-1 text-xs text-sage/70 hover:text-sage px-2 py-1.5 rounded-lg hover:bg-sage/10 transition-colors"
+              >
+                <Repeat size={13} />
+                <span>מה במקום?</span>
+              </button>
+            )}
             <button
               onClick={() => setShowRelapse(!showRelapse)}
               className="flex items-center gap-1 text-xs text-coral/70 hover:text-coral px-2 py-1.5 rounded-lg hover:bg-coral/10 transition-colors"
@@ -117,6 +143,37 @@ export default function HabitCard({
           <Trash2 size={14} />
         </button>
       </div>
+
+      {/* Replacement behaviors */}
+      {showReplacements && template?.replacementBehavior && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          className="mt-3 pt-3 border-t border-sage/20"
+        >
+          <p className="text-xs font-semibold text-sage mb-2">💡 מה לעשות במקום?</p>
+          <div className="flex flex-wrap gap-1.5">
+            {template.replacementBehavior.split(',').map((item, i) => (
+              <span
+                key={i}
+                className="text-[11px] bg-sage/10 text-sage px-2.5 py-1 rounded-full"
+              >
+                {item.trim()}
+              </span>
+            ))}
+          </div>
+          {template.tips && template.tips.length > 0 && (
+            <div className="mt-2 space-y-1">
+              {template.tips.slice(0, 2).map((tip, i) => (
+                <p key={i} className="text-[11px] text-text-light flex items-start gap-1">
+                  <span className="text-sage">•</span>
+                  <span>{tip}</span>
+                </p>
+              ))}
+            </div>
+          )}
+        </motion.div>
+      )}
 
       {/* Relapse form */}
       {showRelapse && (

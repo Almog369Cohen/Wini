@@ -10,8 +10,6 @@ import {
   Sun,
   Shield,
   Trash2,
-  ChevronLeft,
-  ChevronRight,
 } from 'lucide-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import type { ReinforcementItem } from '../../types';

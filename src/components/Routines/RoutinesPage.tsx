@@ -38,7 +38,7 @@ export default function RoutinesPage({
   addReflection,
   reflections,
   showToast,
-  onNavigate,
+  onNavigate: _onNavigate,
 }: RoutinesPageProps) {
   const [activeTab, setActiveTab] = useState<'my' | 'templates' | 'reflect'>('my');
   const [expandedRoutine, setExpandedRoutine] = useState<string | null>(null);

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { Page, MoodType } from './types';
 import { useHabits } from './hooks/useHabits';
 import { useJournal } from './hooks/useJournal';
@@ -22,9 +22,12 @@ import InnerSpacePage from './components/InnerSpace/InnerSpacePage';
 import MoodCheckIn from './components/MoodCheckIn/MoodCheckIn';
 import DailyPlan from './components/MoodCheckIn/DailyPlan';
 import RoutinesPage from './components/Routines/RoutinesPage';
-import WelcomeScreen from './components/Onboarding/WelcomeScreen';
+import OnboardingQuestionnaire from './components/Onboarding/OnboardingQuestionnaire';
+import type { OnboardingResult } from './components/Onboarding/OnboardingQuestionnaire';
+import { HABIT_TEMPLATES } from './data/habitTemplates';
 import FeedbackButton from './components/Feedback/FeedbackButton';
 import UrgeIntervention from './components/UrgeIntervention/UrgeIntervention';
+import BarrierIntervention from './components/UrgeIntervention/BarrierIntervention';
 import Toast from './components/ui/Toast';
 import Confetti from './components/ui/Confetti';
 
@@ -33,6 +36,8 @@ export default function App() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [showMoodCheckIn, setShowMoodCheckIn] = useState(false);
   const [showUrgeIntervention, setShowUrgeIntervention] = useState(false);
+  const [showBarrierIntervention, setShowBarrierIntervention] = useState(false);
+  const [showSOSChoice, setShowSOSChoice] = useState(false);
   const habitState = useHabits();
   const journalState = useJournal();
   const innerSpaceState = useInnerSpace();
@@ -154,10 +159,64 @@ export default function App() {
     }
   }, [urgeLogState, showToast]);
 
-  const handleWelcomeComplete = useCallback((name: string) => {
-    createProfile(name);
-    showToast(`שלום ${name}! ברוך הבא 🌱`);
-  }, [createProfile, showToast]);
+  const handleBarrierComplete = useCallback((result: { habitId: string; didIt: boolean }) => {
+    setShowBarrierIntervention(false);
+    if (result.didIt) {
+      setShowConfetti(true);
+      showToast('גיבור! בחרת לעשות למרות הקושי 💪');
+      // Auto check-in the habit
+      handleCheckIn(result.habitId);
+    } else {
+      showToast('דילוג מודע. מחר תנסה שוב 🌱');
+    }
+  }, [showToast, handleCheckIn]);
+
+  const handleSOSClick = useCallback(() => {
+    const hasQuitHabits = habitState.habits.some(h => h.type === 'quit' && h.isActive);
+    const hasBuildHabits = habitState.habits.some(h => h.type === 'build' && h.isActive);
+
+    if (hasQuitHabits && hasBuildHabits) {
+      setShowSOSChoice(true);
+    } else if (hasQuitHabits) {
+      setShowUrgeIntervention(true);
+    } else if (hasBuildHabits) {
+      setShowBarrierIntervention(true);
+    } else {
+      setShowUrgeIntervention(true);
+    }
+  }, [habitState.habits]);
+
+  const handleOnboardingComplete = useCallback((result: OnboardingResult) => {
+    // Create user profile with all onboarding data
+    createProfile({
+      name: result.name,
+      painPoints: result.painPoints,
+      quitHabits: result.quitHabits,
+      buildHabits: result.buildHabits,
+      goals: result.goals,
+      barriers: result.barriers,
+      motivationLevel: result.motivationLevel,
+    });
+
+    // Auto-create habits from selected templates
+    const allSelectedIds = [...result.quitHabits, ...result.buildHabits];
+    for (const templateId of allSelectedIds) {
+      const template = HABIT_TEMPLATES.find(t => t.id === templateId);
+      if (template) {
+        habitState.addHabit({
+          name: template.name,
+          type: template.type,
+          category: template.category,
+          dailyCost: template.dailyCost,
+          triggers: template.commonTriggers.slice(0, 3),
+          reasons: template.suggestedReasons.slice(0, 3),
+        });
+      }
+    }
+
+    const habitCount = allSelectedIds.length;
+    showToast(`שלום ${result.name}! ${habitCount > 0 ? `${habitCount} הרגלים נוצרו` : 'בוא נתחיל'} 🌱`);
+  }, [createProfile, habitState, showToast]);
 
   const renderPage = () => {
     switch (currentPage) {
@@ -173,7 +232,7 @@ export default function App() {
             dopamineGoalProgress={dopamineState.goalProgress}
             moodState={moodState}
             onChangeMood={() => setShowMoodCheckIn(true)}
-            onUrgeHelp={() => setShowUrgeIntervention(true)}
+            onUrgeHelp={handleSOSClick}
             userName={profile?.name}
           />
         );
@@ -251,9 +310,9 @@ export default function App() {
       <Toast toasts={toasts} onDismiss={dismissToast} />
       <Confetti active={showConfetti} onComplete={() => setShowConfetti(false)} />
 
-      {/* Welcome / Onboarding */}
+      {/* Onboarding Questionnaire */}
       <AnimatePresence>
-        {!hasProfile && <WelcomeScreen onComplete={handleWelcomeComplete} />}
+        {!hasProfile && <OnboardingQuestionnaire onComplete={handleOnboardingComplete} />}
       </AnimatePresence>
 
       {/* Mood check-in overlay */}
@@ -275,6 +334,70 @@ export default function App() {
             onClose={() => setShowUrgeIntervention(false)}
             onNavigate={setCurrentPage}
           />
+        )}
+      </AnimatePresence>
+
+      {/* Barrier intervention overlay */}
+      <AnimatePresence>
+        {showBarrierIntervention && (
+          <BarrierIntervention
+            habits={habitState.habits}
+            onComplete={handleBarrierComplete}
+            onClose={() => setShowBarrierIntervention(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* SOS choice modal */}
+      <AnimatePresence>
+        {showSOSChoice && (
+          <motion.div
+            key="sos-choice"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            onClick={() => setShowSOSChoice(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-card rounded-2xl p-6 max-w-sm w-full shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="text-lg font-bold text-text text-center mb-2">מה קורה עכשיו?</h2>
+              <p className="text-xs text-text-light text-center mb-5">בחר את המצב שמתאר אותך</p>
+              <div className="space-y-3">
+                <button
+                  onClick={() => {
+                    setShowSOSChoice(false);
+                    setShowUrgeIntervention(true);
+                  }}
+                  className="w-full flex items-center gap-3 bg-coral/10 hover:bg-coral/20 text-right rounded-xl p-4 transition-colors"
+                >
+                  <span className="text-2xl">🔥</span>
+                  <div>
+                    <p className="text-sm font-semibold text-coral">דחף להרגל רע</p>
+                    <p className="text-[11px] text-text-light">אני מרגיש דחף ורוצה עזרה להתגבר</p>
+                  </div>
+                </button>
+                <button
+                  onClick={() => {
+                    setShowSOSChoice(false);
+                    setShowBarrierIntervention(true);
+                  }}
+                  className="w-full flex items-center gap-3 bg-sage/10 hover:bg-sage/20 text-right rounded-xl p-4 transition-colors"
+                >
+                  <span className="text-2xl">🧱</span>
+                  <div>
+                    <p className="text-sm font-semibold text-sage">קושי בהרגל חיובי</p>
+                    <p className="text-[11px] text-text-light">אני עומד לוותר ורוצה כוח להמשיך</p>
+                  </div>
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 

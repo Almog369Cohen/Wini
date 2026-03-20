@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Wind, Timer, Heart, Zap, Plus, Check, Shield } from 'lucide-react';
+import { Wind, Timer, Heart, Zap, Plus, Check, Shield, Repeat } from 'lucide-react';
 import type { Habit, DopamineLog } from '../../types';
 import { alternativeActivities } from '../../data/activities';
+import { HABIT_TEMPLATES } from '../../data/habitTemplates';
 import BreathingExercise from './BreathingExercise';
 import CravingTimer from './CravingTimer';
 import ReinforcementGallery from '../Reinforcement/ReinforcementGallery';
 import { format } from 'date-fns';
-import { he } from 'date-fns/locale';
 
 type SOSTab = 'breathe' | 'timer' | 'reasons' | 'dopamine' | 'reinforcement';
 
@@ -105,7 +105,63 @@ export default function SOSPage({
 
         {activeTab === 'reasons' && (
           <div>
-            <h2 className="text-sm font-semibold text-text mb-3 text-center">
+            {/* Replacements per habit */}
+            {(() => {
+              const quitHabits = habits.filter(h => h.type === 'quit' && h.isActive);
+              const habitsWithReplacements = quitHabits.map(h => {
+                const template = HABIT_TEMPLATES.find(t =>
+                  t.name === h.name || (t.category === h.category && t.type === h.type)
+                );
+                return { habit: h, template };
+              }).filter(({ template }) => template?.replacementBehavior);
+
+              if (habitsWithReplacements.length > 0) {
+                return (
+                  <div className="mb-5">
+                    <h2 className="text-sm font-semibold text-text mb-3 flex items-center gap-1.5 justify-center">
+                      <Repeat size={14} className="text-sage" />
+                      מה לעשות במקום?
+                    </h2>
+                    <div className="space-y-3">
+                      {habitsWithReplacements.map(({ habit: h, template }, i) => (
+                        <motion.div
+                          key={h.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.1 }}
+                          className="bg-sage/5 rounded-xl p-3"
+                        >
+                          <p className="text-xs font-semibold text-sage mb-2">
+                            {template!.emoji} במקום {h.name}:
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {template!.replacementBehavior!.split(',').map((item, j) => (
+                              <span
+                                key={j}
+                                className="text-[11px] bg-sage/10 text-sage px-2.5 py-1 rounded-full"
+                              >
+                                {item.trim()}
+                              </span>
+                            ))}
+                          </div>
+                          {template!.tinyVersion && (
+                            <p className="text-[11px] text-text-light mt-2 flex items-start gap-1">
+                              <span>💡</span>
+                              <span className="italic">{template!.tinyVersion}</span>
+                            </p>
+                          )}
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })()}
+
+            {/* Reasons */}
+            <h2 className="text-sm font-semibold text-text mb-3 flex items-center gap-1.5 justify-center">
+              <Heart size={14} className="text-coral" />
               למה אתה עושה את זה
             </h2>
             {allReasons.length > 0 ? (
@@ -116,7 +172,7 @@ export default function SOSPage({
                     initial={{ opacity: 0, x: 10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="flex items-start gap-2 bg-sage/5 rounded-xl p-3"
+                    className="flex items-start gap-2 bg-coral/5 rounded-xl p-3"
                   >
                     <Heart size={14} className="text-coral mt-0.5 flex-shrink-0" />
                     <div>

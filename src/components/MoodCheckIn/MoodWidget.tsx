@@ -14,7 +14,6 @@ interface MoodWidgetProps {
 }
 
 export default function MoodWidget({
-  currentMood,
   currentMoods,
   currentEnergy,
   todayEntries,
@@ -66,7 +65,7 @@ export default function MoodWidget({
       {/* Today's mood timeline */}
       {todayEntries.length > 1 && (
         <div className="flex gap-1 mb-3 overflow-x-auto pb-1">
-          {todayEntries.map((entry, i) => (
+          {todayEntries.map((entry) => (
             <div
               key={entry.id}
               className="flex flex-col items-center gap-0.5 flex-shrink-0"

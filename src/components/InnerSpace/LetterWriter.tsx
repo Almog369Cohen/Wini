@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Lock, Mail } from 'lucide-react';
+import { Send, Mail } from 'lucide-react';
 import { format } from 'date-fns';
 import { he } from 'date-fns/locale';
 import type { LetterToSelf } from '../../types';

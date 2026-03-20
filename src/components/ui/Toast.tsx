@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, X, AlertCircle, Info } from 'lucide-react';
+import { Check, X, Info } from 'lucide-react';
 
 export interface ToastMessage {
   id: string;

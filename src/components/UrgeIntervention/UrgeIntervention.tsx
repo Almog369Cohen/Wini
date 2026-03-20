@@ -15,6 +15,7 @@ import {
   ArrowLeft,
 } from 'lucide-react';
 import type { Habit } from '../../types';
+import { HABIT_TEMPLATES } from '../../data/habitTemplates';
 import Confetti from '../ui/Confetti';
 
 // ─── Types ───────────────────────────────────────────────────
@@ -1002,9 +1003,53 @@ export default function UrgeIntervention({
               <h1 className="text-2xl font-bold text-white mb-1 text-center">
                 מה עכשיו?
               </h1>
-              <p className="text-white/60 text-sm mb-6 text-center">
+              <p className="text-white/60 text-sm mb-4 text-center">
                 תעשה משהו טוב לעצמך במקום
               </p>
+
+              {/* Habit-specific replacements */}
+              {(() => {
+                const selectedHabit = habits.find(h => h.id === selectedHabitId);
+                const template = selectedHabit && HABIT_TEMPLATES.find(t =>
+                  t.name === selectedHabit.name || (t.category === selectedHabit.category && t.type === selectedHabit.type)
+                );
+                if (!template?.replacementBehavior) return null;
+                const replacements = template.replacementBehavior.split(',').map(s => s.trim());
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="w-full max-w-sm mb-5 rounded-2xl p-4"
+                    style={{
+                      backgroundColor: 'rgba(212,165,116,0.15)',
+                      border: '1px solid rgba(212,165,116,0.3)',
+                    }}
+                  >
+                    <p className="text-sm font-semibold text-white/90 mb-2 text-center">
+                      🔄 תחליפים ל{selectedHabit?.name}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 justify-center">
+                      {replacements.map((r, i) => (
+                        <span
+                          key={i}
+                          className="text-xs px-3 py-1.5 rounded-full font-medium"
+                          style={{
+                            backgroundColor: 'rgba(255,255,255,0.12)',
+                            color: 'rgba(255,255,255,0.85)',
+                          }}
+                        >
+                          {r}
+                        </span>
+                      ))}
+                    </div>
+                    {template.tinyVersion && (
+                      <p className="text-[11px] text-white/50 text-center mt-2 italic">
+                        💡 {template.tinyVersion}
+                      </p>
+                    )}
+                  </motion.div>
+                );
+              })()}
 
               {/* Alternative activities */}
               <div className="grid grid-cols-2 gap-3 w-full max-w-sm mb-6">

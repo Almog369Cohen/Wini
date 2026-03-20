@@ -3,9 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   CheckCircle2,
   Circle,
-  RefreshCw,
   ArrowRight,
-  Sparkles,
   Clock,
   Flame,
   Trophy,

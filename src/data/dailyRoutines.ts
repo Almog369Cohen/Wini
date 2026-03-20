@@ -2415,9 +2415,9 @@ export function getRoutineSuggestions(mood: MoodType, energy: number): DailyRout
   const medNeeded = difficultyWeights.medium;
   const hardNeeded = difficultyWeights.hard;
 
-  let easyPicked = pickFrom(byDifficulty.easy, easyNeeded);
-  let medPicked = pickFrom(byDifficulty.medium, medNeeded);
-  let hardPicked = pickFrom(byDifficulty.hard, hardNeeded);
+  pickFrom(byDifficulty.easy, easyNeeded);
+  pickFrom(byDifficulty.medium, medNeeded);
+  pickFrom(byDifficulty.hard, hardNeeded);
 
   // Fill remaining slots from other difficulties or fallback
   const totalNeeded = 20;
