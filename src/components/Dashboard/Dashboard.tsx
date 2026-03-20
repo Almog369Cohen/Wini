@@ -20,9 +20,10 @@ interface DashboardProps {
   onChangeMood: () => void;
   onUrgeHelp: () => void;
   userName?: string;
+  userPhotoURL?: string | null;
 }
 
-export default function Dashboard({ habits, onNavigate, todaySummary, hardHours, dopamineCount, dopamineGoal, dopamineGoalProgress, moodState, onChangeMood, onUrgeHelp, userName }: DashboardProps) {
+export default function Dashboard({ habits, onNavigate, todaySummary, hardHours, dopamineCount, dopamineGoal, dopamineGoalProgress, moodState, onChangeMood, onUrgeHelp, userName, userPhotoURL }: DashboardProps) {
   const activeQuitHabits = habits.filter((h) => h.type === 'quit' && h.isActive);
   const activeBuildHabits = habits.filter((h) => h.type === 'build' && h.isActive);
   const quote = getDailyQuote();
@@ -62,7 +63,11 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
           <Settings size={16} />
         </button>
         <h1 className="text-2xl font-bold text-text">{userName ? `הגן של ${userName}` : 'הגן שלי'}</h1>
-        <div className="w-8" />
+        {userPhotoURL ? (
+          <img src={userPhotoURL} alt="" className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" />
+        ) : (
+          <div className="w-8" />
+        )}
       </div>
 
       {/* Tree visualization */}

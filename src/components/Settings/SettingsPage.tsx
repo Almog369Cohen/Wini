@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download, Upload, Trash2, Info } from 'lucide-react';
+import { Download, Upload, Trash2, Info, LogOut } from 'lucide-react';
 import ConfirmDialog from '../ui/ConfirmDialog';
 
 interface SettingsPageProps {
   onExport: () => void;
   onImport: (data: string) => void;
   onReset: () => void;
+  onSignOut: () => Promise<void>;
+  userPhotoURL?: string | null;
+  userDisplayName?: string | null;
+  userEmail?: string | null;
   showToast: (text: string, type?: 'success' | 'error' | 'info') => void;
 }
 
@@ -14,6 +18,10 @@ export default function SettingsPage({
   onExport,
   onImport,
   onReset,
+  onSignOut,
+  userPhotoURL,
+  userDisplayName,
+  userEmail,
   showToast,
 }: SettingsPageProps) {
   const [showResetConfirm, setShowResetConfirm] = useState(false);
@@ -52,6 +60,31 @@ export default function SettingsPage({
       <h1 className="text-2xl font-bold text-text mb-5">הגדרות</h1>
 
       <div className="space-y-3">
+        {/* User account */}
+        <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
+          <div className="flex items-center gap-3 px-4 py-4">
+            {userPhotoURL ? (
+              <img src={userPhotoURL} alt="" className="w-10 h-10 rounded-full object-cover" referrerPolicy="no-referrer" />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-sage/20 flex items-center justify-center text-sage font-bold">
+                {userDisplayName?.[0] || '?'}
+              </div>
+            )}
+            <div className="text-right flex-1">
+              <p className="text-sm font-medium text-text">{userDisplayName || 'משתמש'}</p>
+              <p className="text-[11px] text-text-light">{userEmail}</p>
+            </div>
+          </div>
+          <div className="h-px bg-cream-dark mx-4" />
+          <button
+            onClick={onSignOut}
+            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-coral/5 transition-colors"
+          >
+            <LogOut size={16} className="text-coral" />
+            <span className="text-sm text-coral">התנתק</span>
+          </button>
+        </div>
+
         {/* Data management */}
         <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
           <h2 className="text-xs font-semibold text-text-light px-4 pt-4 pb-2">

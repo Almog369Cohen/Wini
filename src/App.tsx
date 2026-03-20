@@ -30,8 +30,31 @@ import UrgeIntervention from './components/UrgeIntervention/UrgeIntervention';
 import BarrierIntervention from './components/UrgeIntervention/BarrierIntervention';
 import Toast from './components/ui/Toast';
 import Confetti from './components/ui/Confetti';
+import { useAuth } from './contexts/AuthContext';
+import LoginScreen from './components/Auth/LoginScreen';
 
 export default function App() {
+  const { user, loading, signOut } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-cream">
+        <div className="text-center">
+          <div className="text-4xl mb-3">🌱</div>
+          <div className="w-6 h-6 border-2 border-sage border-t-transparent rounded-full animate-spin mx-auto" />
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <LoginScreen />;
+  }
+
+  return <AuthenticatedApp user={user} signOut={signOut} />;
+}
+
+function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').User; signOut: () => Promise<void> }) {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
   const [showConfetti, setShowConfetti] = useState(false);
   const [showMoodCheckIn, setShowMoodCheckIn] = useState(false);
@@ -234,6 +257,7 @@ export default function App() {
             onChangeMood={() => setShowMoodCheckIn(true)}
             onUrgeHelp={handleSOSClick}
             userName={profile?.name}
+            userPhotoURL={user.photoURL}
           />
         );
       case 'habits':
@@ -278,6 +302,10 @@ export default function App() {
             onExport={handleExport}
             onImport={handleImport}
             onReset={handleReset}
+            onSignOut={signOut}
+            userPhotoURL={user.photoURL}
+            userDisplayName={user.displayName}
+            userEmail={user.email}
             showToast={showToast}
           />
         );
