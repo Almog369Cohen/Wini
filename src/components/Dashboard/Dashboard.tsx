@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
-import { AlertCircle, TrendingUp, Settings, Trophy, ThumbsDown, Zap } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Settings, ChevronDown, ChevronUp } from 'lucide-react';
 import { differenceInDays, differenceInMinutes } from 'date-fns';
 import type { Habit, Page } from '../../types';
 import { getDailyQuote } from '../../data/quotes';
@@ -30,11 +31,11 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ habits, onNavigate, todaySummary, hardHours, dopamineCount, dopamineGoal, dopamineGoalProgress, moodState, onChangeMood, onUrgeHelp, userName, userPhotoURL, mealData }: DashboardProps) {
+  const [showMore, setShowMore] = useState(false);
   const activeQuitHabits = habits.filter((h) => h.type === 'quit' && h.isActive);
   const activeBuildHabits = habits.filter((h) => h.type === 'build' && h.isActive);
   const quote = getDailyQuote();
 
-  // Find the primary quit habit (longest running)
   const primaryHabit = activeQuitHabits.sort(
     (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
   )[0];
@@ -43,7 +44,6 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
     ? differenceInDays(new Date(), new Date(primaryHabit.startDate))
     : 0;
 
-  // Calculate total money saved
   const totalSaved = activeQuitHabits.reduce((sum, h) => {
     if (!h.dailyCost) return sum;
     const minutes = differenceInMinutes(new Date(), new Date(h.startDate));
@@ -52,58 +52,99 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
 
   const hasHabits = habits.length > 0;
 
+  // Hard hour check
+  const now = new Date().getHours();
+  const nextHardHour = hasHabits && hardHours.length > 0
+    ? (hardHours.find((h) => h > now) ?? hardHours[0])
+    : null;
+
   return (
     <motion.div
       key="dashboard"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      className="px-4 pt-6 max-w-lg mx-auto"
+      className="px-4 pt-6 pb-24 max-w-lg mx-auto"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      {/* ── Header ── */}
+      <div className="flex items-center justify-between mb-5">
         <button
           onClick={() => onNavigate('settings')}
-          className="w-8 h-8 rounded-full bg-card shadow-sm flex items-center justify-center text-text-light hover:text-sage transition-colors"
+          className="w-9 h-9 rounded-full bg-card shadow-sm flex items-center justify-center text-text-light hover:text-sage transition-colors"
         >
           <Settings size={16} />
         </button>
-        <h1 className="text-2xl font-bold text-text">{userName ? `הגן של ${userName}` : 'הגן שלי'}</h1>
+        <h1 className="text-xl font-bold text-text">{userName ? `הגן של ${userName}` : 'הגן שלי'}</h1>
         {userPhotoURL ? (
-          <img src={userPhotoURL} alt="" className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" />
+          <img src={userPhotoURL} alt="" className="w-9 h-9 rounded-full object-cover ring-2 ring-sage/20" referrerPolicy="no-referrer" />
         ) : (
-          <div className="w-8" />
+          <div className="w-9" />
         )}
       </div>
 
-      {/* Tree visualization */}
+      {/* ── HERO: Tree + Timer ── */}
       {hasHabits ? (
-        <div className="bg-card rounded-2xl p-4 shadow-sm mb-4">
+        <div className="bg-card rounded-2xl p-5 shadow-sm mb-4">
           <GrowingTree daysSinceStart={daysSinceStart} />
           {primaryHabit && (
-            <LiveTimer
-              startDate={primaryHabit.startDate}
-              label={`ללא ${primaryHabit.name}`}
-            />
+            <LiveTimer startDate={primaryHabit.startDate} label={`ללא ${primaryHabit.name}`} />
           )}
+
+          {/* Inline stats row */}
+          <div className="flex items-center justify-around mt-4 pt-3 border-t border-cream-dark/50">
+            {totalSaved > 0 && (
+              <div className="text-center">
+                <p className="text-lg font-bold text-sage">{totalSaved.toFixed(0)}₪</p>
+                <p className="text-[10px] text-text-light">נחסך</p>
+              </div>
+            )}
+            <div className="text-center">
+              <p className="text-lg font-bold text-text">{activeQuitHabits.length + activeBuildHabits.length}</p>
+              <p className="text-[10px] text-text-light">הרגלים</p>
+            </div>
+            {todaySummary.victories > 0 && (
+              <div className="text-center">
+                <p className="text-lg font-bold text-sage">{todaySummary.victories}</p>
+                <p className="text-[10px] text-text-light">ניצחונות</p>
+              </div>
+            )}
+            {todaySummary.falls > 0 && (
+              <div className="text-center">
+                <p className="text-lg font-bold text-coral">{todaySummary.falls}</p>
+                <p className="text-[10px] text-text-light">נפילות</p>
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         <div className="bg-card rounded-2xl p-8 shadow-sm mb-4 text-center">
           <div className="text-4xl mb-3">🌱</div>
           <h2 className="text-lg font-semibold text-text mb-2">ברוך הבא ל-Wini</h2>
-          <p className="text-sm text-text-light mb-4">
-            הוסף את ההרגל הראשון שלך כדי להתחיל את המסע
-          </p>
+          <p className="text-sm text-text-light mb-4">הוסף את ההרגל הראשון שלך כדי להתחיל</p>
           <button
             onClick={() => onNavigate('habits')}
-            className="bg-sage text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-sage-dark transition-colors"
+            className="bg-sage text-white px-6 py-2.5 rounded-xl text-sm font-medium"
           >
             בואו נתחיל
           </button>
         </div>
       )}
 
-      {/* Mood Widget */}
+      {/* ── Hard hour warning ── */}
+      {nextHardHour !== null && (
+        <div className="bg-coral/8 border border-coral/15 rounded-xl px-4 py-3 mb-4 flex items-center gap-3">
+          <span className="text-xl">⚡</span>
+          <div className="flex-1">
+            <p className="text-xs font-semibold text-coral">שעת סיכון: {nextHardHour}:00</p>
+            <p className="text-[10px] text-text-light">הכן תרגיל נשימה או הליכה קצרה</p>
+          </div>
+          <button onClick={onUrgeHelp} className="bg-coral text-white text-[10px] font-bold px-3 py-1.5 rounded-lg">
+            SOS
+          </button>
+        </div>
+      )}
+
+      {/* ── Mood ── */}
       {hasHabits && moodState.hasCheckedInToday && (
         <div className="mb-4">
           <MoodWidget
@@ -119,217 +160,82 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
         </div>
       )}
 
-      {/* Stats cards */}
-      {hasHabits && (
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          {totalSaved > 0 && (
-            <div className="bg-card rounded-xl p-3 shadow-sm">
-              <div className="flex items-center gap-1.5 mb-1">
-                <TrendingUp size={14} className="text-sage" />
-                <span className="text-xs text-text-light">נחסך</span>
-              </div>
-              <p className="text-lg font-bold text-sage">
-                {totalSaved.toFixed(0)} ₪
-              </p>
-            </div>
-          )}
-          <div className="bg-card rounded-xl p-3 shadow-sm">
-            <div className="flex items-center gap-1.5 mb-1">
-              <span className="text-xs text-text-light">הרגלים פעילים</span>
-            </div>
-            <p className="text-lg font-bold text-text">
-              <span className="text-coral">{activeQuitHabits.length}</span>
-              {' / '}
-              <span className="text-sage">{activeBuildHabits.length}</span>
-            </p>
-            <p className="text-[10px] text-text-light">גומל / בונה</p>
-          </div>
-        </div>
-      )}
-
-      {/* Today's moments */}
-      {todaySummary.total > 0 && (
-        <div className="bg-card rounded-xl p-3 shadow-sm mb-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-text-light">הרגעים שלי היום</span>
-            <span className="text-[10px] text-text-light">{todaySummary.total} רגעים</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              <Trophy size={14} className="text-sage" />
-              <span className="text-sm font-bold text-sage">{todaySummary.victories}</span>
-              <span className="text-[10px] text-text-light">ניצחונות</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <ThumbsDown size={14} className="text-coral" />
-              <span className="text-sm font-bold text-coral">{todaySummary.falls}</span>
-              <span className="text-[10px] text-text-light">נפילות</span>
-            </div>
-          </div>
-          {todaySummary.total > 0 && (
-            <div className="mt-2 h-1.5 bg-cream-dark rounded-full overflow-hidden flex">
-              <div
-                className="h-full bg-sage rounded-r-full"
-                style={{
-                  width: `${(todaySummary.victories / todaySummary.total) * 100}%`,
-                }}
-              />
-              <div
-                className="h-full bg-coral rounded-l-full"
-                style={{
-                  width: `${(todaySummary.falls / todaySummary.total) * 100}%`,
-                }}
-              />
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Hard hour warning */}
-      {hasHabits && hardHours.length > 0 && (() => {
-        const now = new Date().getHours();
-        const nextHard = hardHours.find((h) => h > now) ?? hardHours[0];
-        return (
-          <div className="bg-sand/10 border border-sand/20 rounded-xl p-3 mb-4 flex items-center gap-2">
-            <span className="text-lg">⚠️</span>
-            <div>
-              <p className="text-xs font-medium text-sand">שעת סיכון קרובה: {nextHard}:00</p>
-              <p className="text-[10px] text-text-light">הכן את עצמך - תרגיל נשימה או הליכה קצרה</p>
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* Dopamine tracker shortcut */}
-      <button
-        onClick={() => onNavigate('sos')}
-        className="w-full bg-card rounded-xl p-3 shadow-sm mb-4 flex items-center gap-3 text-right"
-      >
-        <div className="w-9 h-9 rounded-full bg-sage/15 flex items-center justify-center flex-shrink-0">
-          <Zap size={18} className="text-sage" />
-        </div>
-        <div className="flex-1">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-xs font-medium text-text">דופמין בריא</span>
-            <span className="text-xs font-bold text-sage">{dopamineCount}/{dopamineGoal}</span>
-          </div>
-          <div className="h-1.5 bg-cream-dark rounded-full overflow-hidden">
-            <div
-              className="h-full bg-sage rounded-full transition-all duration-500"
-              style={{ width: `${dopamineGoalProgress * 100}%` }}
-            />
-          </div>
-        </div>
-      </button>
-
-      {/* Nutrition widget */}
-      {mealData && (
-        <button
-          onClick={() => onNavigate('nutrition')}
-          className="w-full bg-card rounded-2xl shadow-sm p-3.5 mb-4 flex items-center gap-3 text-right"
-        >
-          <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-lg">
-            🍽️
-          </div>
-          <div className="flex-1">
-            <p className="text-xs font-medium text-text">תזונה היום</p>
-            <div className="flex items-center gap-3 mt-1">
-              <span className="text-[11px] text-text-light">
-                🥄 {mealData.todayCompletedCount}/5 ארוחות
-              </span>
-              <span className="text-[11px] text-text-light">
-                💧 {mealData.todayWater}/{mealData.waterGoal} כוסות
-              </span>
-            </div>
-          </div>
-          <div className="text-text-light text-xs">←</div>
-        </button>
-      )}
-
-      {/* Daily Challenges Widget */}
+      {/* ── Daily challenge ── */}
       <ChallengeWidget onNavigate={onNavigate} />
 
-      {/* Quick links */}
-      <div className="grid grid-cols-2 gap-3 mb-3">
-        <button
-          onClick={() => onNavigate('tasks')}
-          className="bg-gradient-to-l from-sage/10 to-sage/5 border border-sage/15 rounded-xl p-3 flex items-center gap-2 text-right"
-        >
-          <span className="text-lg">📋</span>
-          <div>
-            <p className="text-xs font-medium text-sage">משימות</p>
-            <p className="text-[9px] text-text-light">רשימת מטלות יומית</p>
-          </div>
-        </button>
-        <button
-          onClick={() => onNavigate('reminders')}
-          className="bg-gradient-to-l from-sand/10 to-sand/5 border border-sand/15 rounded-xl p-3 flex items-center gap-2 text-right"
-        >
-          <span className="text-lg">🔔</span>
-          <div>
-            <p className="text-xs font-medium text-sand">תזכורות</p>
-            <p className="text-[9px] text-text-light">ארוחות, שתייה ועוד</p>
-          </div>
-        </button>
-      </div>
-      <div className="grid grid-cols-2 gap-3 mb-3">
-        <button
-          onClick={() => onNavigate('innerspace')}
-          className="bg-gradient-to-l from-sage/10 to-sea/10 border border-sage/15 rounded-xl p-3 flex items-center gap-2 text-right"
-        >
-          <span className="text-lg">🌙</span>
-          <div>
-            <p className="text-xs font-medium text-sage">המרחב שלי</p>
-            <p className="text-[9px] text-text-light">שיקוף ומסע פנימי</p>
-          </div>
-        </button>
-        <button
-          onClick={() => onNavigate('milestones')}
-          className="bg-gradient-to-l from-sand/10 to-sand/5 border border-sand/15 rounded-xl p-3 flex items-center gap-2 text-right"
-        >
-          <span className="text-lg">🏆</span>
-          <div>
-            <p className="text-xs font-medium text-sand">הישגים</p>
-            <p className="text-[9px] text-text-light">אבני דרך שלי</p>
-          </div>
-        </button>
-      </div>
-      <div className="grid grid-cols-2 gap-3 mb-4">
-        <button
-          onClick={() => onNavigate('calendar')}
-          className="bg-gradient-to-l from-sage/10 to-sand/5 border border-sage/15 rounded-xl p-3 flex items-center gap-2 text-right"
-        >
-          <span className="text-lg">📅</span>
-          <div>
-            <p className="text-xs font-medium text-sage">לוח שנה</p>
-            <p className="text-[9px] text-text-light">מעקב התקדמות</p>
-          </div>
-        </button>
-        <button
-          onClick={() => onNavigate('partner')}
-          className="bg-gradient-to-l from-sage/10 to-sea/5 border border-sage/15 rounded-xl p-3 flex items-center gap-2 text-right"
-        >
-          <span className="text-lg">👥</span>
-          <div>
-            <p className="text-xs font-medium text-sage">שותף לאחריות</p>
-            <p className="text-[9px] text-text-light">שתף ובקש תמיכה</p>
-          </div>
-        </button>
+      {/* ── Quick actions: 4 main buttons ── */}
+      <div className="grid grid-cols-4 gap-2 mb-4">
+        {[
+          { page: 'nutrition' as Page, emoji: '🍽️', label: 'תזונה', stat: mealData ? `${mealData.todayCompletedCount}/5` : undefined },
+          { page: 'tasks' as Page, emoji: '📋', label: 'משימות' },
+          { page: 'calendar' as Page, emoji: '📅', label: 'לוח שנה' },
+          { page: 'sos' as Page, emoji: '⚡', label: 'דופמין', stat: `${dopamineCount}/${dopamineGoal}` },
+        ].map((item) => (
+          <button
+            key={item.page}
+            onClick={() => onNavigate(item.page)}
+            className="bg-card rounded-xl p-3 shadow-sm flex flex-col items-center gap-1.5 hover:shadow-md transition-shadow"
+          >
+            <span className="text-xl">{item.emoji}</span>
+            <span className="text-[10px] font-medium text-text">{item.label}</span>
+            {item.stat && <span className="text-[9px] font-bold text-sage">{item.stat}</span>}
+          </button>
+        ))}
       </div>
 
-      {/* Quote */}
-      <div className="bg-sage/10 rounded-xl p-4 mb-4 text-center">
-        <p className="text-sm text-sage-dark leading-relaxed italic">"{quote}"</p>
+      {/* ── Quote ── */}
+      <div className="bg-sage/8 rounded-xl px-4 py-3 mb-4 text-center">
+        <p className="text-xs text-sage-dark leading-relaxed italic">"{quote}"</p>
       </div>
 
-      {/* Urge help button */}
+      {/* ── More section (collapsed) ── */}
+      <button
+        onClick={() => setShowMore(!showMore)}
+        className="w-full flex items-center justify-center gap-1.5 text-text-light text-xs py-2 mb-2"
+      >
+        <span>{showMore ? 'הסתר' : 'עוד כלים'}</span>
+        {showMore ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+      </button>
+
+      <AnimatePresence>
+        {showMore && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden"
+          >
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {[
+                { page: 'reminders' as Page, emoji: '🔔', label: 'תזכורות' },
+                { page: 'innerspace' as Page, emoji: '🌙', label: 'המרחב שלי' },
+                { page: 'milestones' as Page, emoji: '🏆', label: 'הישגים' },
+                { page: 'partner' as Page, emoji: '👥', label: 'שותף' },
+                { page: 'routines' as Page, emoji: '🔄', label: 'שגרות' },
+                { page: 'journal' as Page, emoji: '📓', label: 'יומן' },
+              ].map((item) => (
+                <button
+                  key={item.page}
+                  onClick={() => onNavigate(item.page)}
+                  className="bg-card rounded-xl p-3 shadow-sm flex flex-col items-center gap-1 hover:shadow-md transition-shadow"
+                >
+                  <span className="text-lg">{item.emoji}</span>
+                  <span className="text-[10px] font-medium text-text">{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── SOS bar ── */}
       {hasHabits && (
         <button
           onClick={onUrgeHelp}
-          className="w-full bg-coral/10 border border-coral/20 rounded-xl p-4 flex items-center justify-center gap-2 text-coral hover:bg-coral/20 transition-colors mb-6"
+          className="w-full bg-coral text-white rounded-xl py-3.5 flex items-center justify-center gap-2 font-semibold text-sm shadow-sm mb-4 active:scale-[0.98] transition-transform"
         >
-          <AlertCircle size={20} />
-          <span className="font-semibold">מרגיש דחף? בוא נתמודד ביחד</span>
+          🆘 מרגיש דחף? בוא נתמודד ביחד
         </button>
       )}
     </motion.div>
