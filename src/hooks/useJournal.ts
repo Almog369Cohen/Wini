@@ -35,8 +35,8 @@ export function useJournal() {
   );
 
   const getTodayEntries = useCallback(() => {
-    const today = new Date().toDateString();
-    return entries.filter((e) => new Date(e.date).toDateString() === today);
+    const today = new Date().toISOString().split('T')[0];
+    return entries.filter((e) => e.date.split('T')[0] === today);
   }, [entries]);
 
   const getRecentEntries = useCallback(

@@ -245,4 +245,58 @@ export interface RoutineReflection {
   newIdea?: string;
 }
 
-export type Page = 'dashboard' | 'habits' | 'sos' | 'journal' | 'milestones' | 'settings' | 'innerspace' | 'mood' | 'dailyplan' | 'routines' | 'nutrition' | 'reminders' | 'tasks' | 'calendar' | 'partner' | 'challenges';
+// Victory Preferences - Personal Celebration System
+export type CelebrationVisual = 'confetti' | 'fireworks' | 'glow' | 'stars' | 'nature';
+export type CelebrationSound = 'ding' | 'cheer' | 'nature' | 'gentle' | 'silent';
+export type CelebrationIntensity = 'subtle' | 'medium' | 'epic';
+
+export interface PersonalVictory {
+  id: string;
+  label: string;
+  emoji: string;
+  description: string;
+  isCustom?: boolean;
+}
+
+export interface VictoryPreferences {
+  personalVictories: PersonalVictory[];
+  mantra: string; // personal victory phrase
+  celebrationVisual: CelebrationVisual;
+  celebrationSound: CelebrationSound;
+  celebrationIntensity: CelebrationIntensity;
+  dailyGoal: number; // how many victories per day
+  setupDone: boolean;
+}
+
+// Farewell Letter - Guided goodbye to a habit
+export interface FarewellMoment {
+  id: string;
+  description: string; // user's memory
+  feeling: string;     // what they felt
+  realNeed: string;    // the underlying need
+}
+
+export interface FarewellLetter {
+  id: string;
+  habitId: string;
+  habitName: string;
+  createdAt: string;
+  completedAt?: string;
+  // Phase 1: Recognition - moments the habit "helped"
+  moments: FarewellMoment[];
+  // Phase 2: Real needs identified
+  needs: string[];
+  // Phase 3: Thank you note
+  thankYou: string;
+  // Phase 4: The cost - what it really took
+  costs: string[];
+  missedMoments: string;
+  // Phase 5: The farewell letter text
+  letterText: string;
+  // Phase 6: New commitment
+  newResponses: { trigger: string; response: string }[];
+  mantra: string;
+  isComplete: boolean;
+}
+
+export type Page = 'dashboard' | 'habits' | 'sos' | 'journal' | 'milestones' | 'settings' | 'innerspace' | 'mood' | 'dailyplan' | 'routines' | 'nutrition' | 'reminders' | 'tasks' | 'calendar' | 'partner' | 'challenges' | 'victory-setup' | 'farewell';

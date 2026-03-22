@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon, Heart, ChevronLeft, ChevronRight, Sparkles, Check } from 'lucide-react';
+import { useTheme } from '../../contexts/ThemeContext';
 import type { MoodType } from '../../types';
 
 interface MoodCheckInProps {
@@ -8,27 +9,27 @@ interface MoodCheckInProps {
   isUpdate?: boolean;
 }
 
-const MOODS: { type: MoodType; emoji: string; label: string; bg: string; border: string }[] = [
-  { type: 'happy', emoji: '😊', label: 'שמח', bg: '#fef9c3', border: '#fde047' },
-  { type: 'calm', emoji: '🧘', label: 'רגוע', bg: '#dcfce7', border: '#86efac' },
-  { type: 'energetic', emoji: '⚡', label: 'אנרגטי', bg: '#ffedd5', border: '#fdba74' },
-  { type: 'hopeful', emoji: '🌅', label: 'מלא תקווה', bg: '#f3e8ff', border: '#c084fc' },
-  { type: 'neutral', emoji: '😐', label: 'ניטרלי', bg: '#f3f4f6', border: '#d1d5db' },
-  { type: 'tired', emoji: '😴', label: 'עייף', bg: '#dbeafe', border: '#93c5fd' },
-  { type: 'sad', emoji: '😢', label: 'עצוב', bg: '#e0e7ff', border: '#a5b4fc' },
-  { type: 'anxious', emoji: '😰', label: 'חרד', bg: '#fee2e2', border: '#fca5a5' },
-  { type: 'frustrated', emoji: '😣', label: 'מתוסכל', bg: '#ffe4e6', border: '#fda4af' },
-  { type: 'irritable', emoji: '😤', label: 'עצבני', bg: '#fef3c7', border: '#fcd34d' },
-  { type: 'lonely', emoji: '🫂', label: 'בודד', bg: '#ccfbf1', border: '#5eead4' },
-  { type: 'exhausted', emoji: '🥱', label: 'תשוש', bg: '#f1f5f9', border: '#cbd5e1' },
+const MOODS: { type: MoodType; emoji: string; label: string; lightBg: string; darkBg: string; border: string }[] = [
+  { type: 'happy', emoji: '😊', label: 'שמח', lightBg: '#fef9c3', darkBg: 'rgba(253,224,71,0.15)', border: '#fde047' },
+  { type: 'calm', emoji: '🧘', label: 'רגוע', lightBg: '#dcfce7', darkBg: 'rgba(134,239,172,0.15)', border: '#86efac' },
+  { type: 'energetic', emoji: '⚡', label: 'אנרגטי', lightBg: '#ffedd5', darkBg: 'rgba(253,186,116,0.15)', border: '#fdba74' },
+  { type: 'hopeful', emoji: '🌅', label: 'מלא תקווה', lightBg: '#f3e8ff', darkBg: 'rgba(192,132,252,0.15)', border: '#c084fc' },
+  { type: 'neutral', emoji: '😐', label: 'ניטרלי', lightBg: '#f3f4f6', darkBg: 'rgba(209,213,219,0.12)', border: '#d1d5db' },
+  { type: 'tired', emoji: '😴', label: 'עייף', lightBg: '#dbeafe', darkBg: 'rgba(147,197,253,0.15)', border: '#93c5fd' },
+  { type: 'sad', emoji: '😢', label: 'עצוב', lightBg: '#e0e7ff', darkBg: 'rgba(165,180,252,0.15)', border: '#a5b4fc' },
+  { type: 'anxious', emoji: '😰', label: 'חרד', lightBg: '#fee2e2', darkBg: 'rgba(252,165,165,0.15)', border: '#fca5a5' },
+  { type: 'frustrated', emoji: '😣', label: 'מתוסכל', lightBg: '#ffe4e6', darkBg: 'rgba(253,164,175,0.15)', border: '#fda4af' },
+  { type: 'irritable', emoji: '😤', label: 'עצבני', lightBg: '#fef3c7', darkBg: 'rgba(252,211,77,0.15)', border: '#fcd34d' },
+  { type: 'lonely', emoji: '🫂', label: 'בודד', lightBg: '#ccfbf1', darkBg: 'rgba(94,234,212,0.15)', border: '#5eead4' },
+  { type: 'exhausted', emoji: '🥱', label: 'תשוש', lightBg: '#f1f5f9', darkBg: 'rgba(203,213,225,0.12)', border: '#cbd5e1' },
 ];
 
 const ENERGY_LEVELS = [
-  { level: 1, label: 'ריק לגמרי', emoji: '🪫', bg: '#fee2e2', border: '#fca5a5' },
-  { level: 2, label: 'נמוך', emoji: '🔋', bg: '#ffedd5', border: '#fdba74' },
-  { level: 3, label: 'בינוני', emoji: '⚡', bg: '#fef9c3', border: '#fde047' },
-  { level: 4, label: 'טוב', emoji: '💪', bg: '#dcfce7', border: '#86efac' },
-  { level: 5, label: 'מלא אנרגיה', emoji: '🚀', bg: '#d1fae5', border: '#6ee7b7' },
+  { level: 1, label: 'ריק לגמרי', emoji: '🪫', lightBg: '#fee2e2', darkBg: 'rgba(252,165,165,0.15)', border: '#fca5a5' },
+  { level: 2, label: 'נמוך', emoji: '🔋', lightBg: '#ffedd5', darkBg: 'rgba(253,186,116,0.15)', border: '#fdba74' },
+  { level: 3, label: 'בינוני', emoji: '⚡', lightBg: '#fef9c3', darkBg: 'rgba(253,224,71,0.15)', border: '#fde047' },
+  { level: 4, label: 'טוב', emoji: '💪', lightBg: '#dcfce7', darkBg: 'rgba(134,239,172,0.15)', border: '#86efac' },
+  { level: 5, label: 'מלא אנרגיה', emoji: '🚀', lightBg: '#d1fae5', darkBg: 'rgba(110,231,183,0.15)', border: '#6ee7b7' },
 ];
 
 const GREETING = () => {
@@ -44,6 +45,8 @@ export default function MoodCheckIn({ onComplete, isUpdate = false }: MoodCheckI
   const [selectedMoods, setSelectedMoods] = useState<Set<MoodType>>(new Set());
   const [energy, setEnergy] = useState<number | null>(null);
   const [note, setNote] = useState('');
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
 
   const greeting = GREETING();
   const GreetingIcon = greeting.icon;
@@ -68,7 +71,7 @@ export default function MoodCheckIn({ onComplete, isUpdate = false }: MoodCheckI
   const selectedMoodEmojis = Array.from(selectedMoods).map(m => MOODS.find(mood => mood.type === m)?.emoji).join(' ');
 
   return (
-    <div className="fixed inset-0 bg-cream z-[100] flex flex-col overflow-y-auto">
+    <div className="fixed inset-0 bg-cream z-[100] flex flex-col overflow-y-auto" dir="rtl">
       <AnimatePresence mode="wait">
         {/* Step 0: Select moods */}
         {step === 0 && (
@@ -103,9 +106,9 @@ export default function MoodCheckIn({ onComplete, isUpdate = false }: MoodCheckI
                     transition={{ delay: 0.05 + i * 0.02 }}
                     onClick={() => toggleMood(mood.type)}
                     style={{
-                      backgroundColor: mood.bg,
-                      borderColor: mood.border,
-                      boxShadow: isSelected ? `0 0 0 3px ${mood.border}, 0 2px 8px ${mood.border}66` : 'none',
+                      backgroundColor: isDark ? mood.darkBg : mood.lightBg,
+                      borderColor: isDark ? `${mood.border}60` : mood.border,
+                      boxShadow: isSelected ? `0 0 0 3px ${mood.border}${isDark ? '80' : ''}, 0 2px 8px ${mood.border}66` : 'none',
                     }}
                     className="border-2 rounded-xl p-2 flex flex-col items-center gap-0.5 transition-all active:scale-95 relative"
                   >
@@ -171,9 +174,9 @@ export default function MoodCheckIn({ onComplete, isUpdate = false }: MoodCheckI
                     transition={{ delay: 0.1 + i * 0.05 }}
                     onClick={() => setEnergy(e.level)}
                     style={{
-                      backgroundColor: e.bg,
-                      borderColor: e.border,
-                      boxShadow: isSelected ? `0 0 0 3px ${e.border}` : 'none',
+                      backgroundColor: isDark ? e.darkBg : e.lightBg,
+                      borderColor: isDark ? `${e.border}60` : e.border,
+                      boxShadow: isSelected ? `0 0 0 3px ${e.border}${isDark ? '80' : ''}` : 'none',
                     }}
                     className="border-2 rounded-xl p-3.5 flex items-center gap-3 transition-all active:scale-95"
                   >

@@ -7,6 +7,7 @@ import {
   CalendarCheck,
 } from 'lucide-react';
 import type { Page } from '../types';
+import { haptic } from '../lib/haptics';
 
 interface LayoutProps {
   currentPage: Page;
@@ -35,7 +36,7 @@ export default function Layout({ currentPage, onNavigate, children }: LayoutProp
             return (
               <button
                 key={page}
-                onClick={() => onNavigate(page)}
+                onClick={() => { haptic(isSOS ? 'heavy' : 'select'); onNavigate(page); }}
                 className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all duration-200 ${
                   isSOS
                     ? 'relative -mt-4'

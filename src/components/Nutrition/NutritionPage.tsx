@@ -83,10 +83,10 @@ export default function NutritionPage({
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="flex items-center gap-1.5 bg-orange-50 border border-orange-200 px-3 py-1.5 rounded-full"
+            className="flex items-center gap-1.5 bg-coral/10 border border-coral/30 px-3 py-1.5 rounded-full"
           >
-            <Flame size={14} className="text-orange-500" />
-            <span className="text-xs font-bold text-orange-600">{streak} ימים רצופים</span>
+            <Flame size={14} className="text-coral" />
+            <span className="text-xs font-bold text-coral">{streak} ימים רצופים</span>
           </motion.div>
         )}
       </div>
@@ -114,16 +114,16 @@ export default function NutritionPage({
           {/* Water progress */}
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <Droplets size={14} className="text-blue-500" />
+              <Droplets size={14} className="text-sea" />
               <span className="text-xs font-medium text-text-light">מים</span>
-              <span className="text-xs font-bold text-blue-500 mr-auto">{todayWater}/{waterGoal}</span>
+              <span className="text-xs font-bold text-sea mr-auto">{todayWater}/{waterGoal}</span>
             </div>
-            <div className="h-2 bg-blue-50 rounded-full overflow-hidden">
+            <div className="h-2 bg-sea/10 rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${waterPercent}%` }}
                 transition={{ duration: 0.5, ease: 'easeOut' }}
-                className="h-full bg-blue-400 rounded-full"
+                className="h-full bg-sea rounded-full"
               />
             </div>
           </div>
@@ -188,7 +188,7 @@ export default function NutritionPage({
       <div className="bg-card rounded-2xl shadow-sm p-4 mb-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Droplets size={16} className="text-blue-500" />
+            <Droplets size={16} className="text-sea" />
             <h2 className="text-sm font-semibold text-text">מעקב מים</h2>
           </div>
           <span className="text-xs text-text-light">
@@ -208,15 +208,15 @@ export default function NutritionPage({
               }}
               className={`w-7 h-9 rounded-b-lg rounded-t-sm border-2 flex items-center justify-end flex-col overflow-hidden ${
                 i < todayWater
-                  ? 'border-blue-400'
-                  : 'border-blue-200'
+                  ? 'border-sea'
+                  : 'border-sea/30'
               }`}
             >
               <motion.div
                 initial={false}
                 animate={{ height: i < todayWater ? '100%' : '0%' }}
                 transition={{ duration: 0.3, delay: i * 0.05 }}
-                className="w-full bg-blue-400/30"
+                className="w-full bg-sea/30"
               />
             </motion.div>
           ))}
@@ -228,11 +228,11 @@ export default function NutritionPage({
             whileTap={{ scale: 0.9 }}
             onClick={removeWater}
             disabled={todayWater === 0}
-            className="w-10 h-10 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-500 disabled:opacity-30"
+            className="w-10 h-10 rounded-full bg-sea/10 border border-sea/30 flex items-center justify-center text-sea disabled:opacity-30"
           >
             <Minus size={18} />
           </motion.button>
-          <span className="text-2xl font-bold text-blue-500 w-12 text-center">{todayWater}</span>
+          <span className="text-2xl font-bold text-sea w-12 text-center">{todayWater}</span>
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => {
@@ -241,7 +241,7 @@ export default function NutritionPage({
                 showToast('🎉 עמדת ביעד המים להיום!');
               }
             }}
-            className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white shadow-sm"
+            className="w-10 h-10 rounded-full bg-sea flex items-center justify-center text-white shadow-sm"
           >
             <Plus size={18} />
           </motion.button>

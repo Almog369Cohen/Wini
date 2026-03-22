@@ -241,18 +241,18 @@ export default function CalendarPage({ habits, journalEntries, moodHistory }: Ca
               <div className="flex items-center justify-between mb-4">
                 <button
                   onClick={() => navigateMonth(1)}
-                  className="w-8 h-8 rounded-full bg-cream flex items-center justify-center text-text-light hover:text-sage transition-colors"
+                  className="w-11 h-11 rounded-full bg-cream flex items-center justify-center text-text-light hover:text-sage transition-colors"
                 >
-                  <ChevronRight size={18} />
+                  <ChevronRight size={20} />
                 </button>
                 <h2 className="text-lg font-bold text-text">
                   {HEBREW_MONTHS[currentMonth]} {currentYear}
                 </h2>
                 <button
                   onClick={() => navigateMonth(-1)}
-                  className="w-8 h-8 rounded-full bg-cream flex items-center justify-center text-text-light hover:text-sage transition-colors"
+                  className="w-11 h-11 rounded-full bg-cream flex items-center justify-center text-text-light hover:text-sage transition-colors"
                 >
-                  <ChevronLeft size={18} />
+                  <ChevronLeft size={20} />
                 </button>
               </div>
 
@@ -324,7 +324,7 @@ export default function CalendarPage({ habits, journalEntries, moodHistory }: Ca
                             <div className="w-1 h-1 rounded-full bg-coral" />
                           )}
                           {data.journalEntries.length > 0 && (
-                            <div className="w-1 h-1 rounded-full bg-blue-400" />
+                            <div className="w-1 h-1 rounded-full bg-sea" />
                           )}
                           {data.moods.length > 0 && (
                             <div className="w-1 h-1 rounded-full bg-sand" />
@@ -347,7 +347,7 @@ export default function CalendarPage({ habits, journalEntries, moodHistory }: Ca
                   <span className="text-[9px] text-text-light">נפילה</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-blue-400" />
+                  <div className="w-2 h-2 rounded-full bg-sea" />
                   <span className="text-[9px] text-text-light">יומן</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -469,10 +469,10 @@ export default function CalendarPage({ habits, journalEntries, moodHistory }: Ca
 
                         {/* Journal entries */}
                         {selectedDayData.journalEntries.length > 0 && (
-                          <div className="bg-blue-50 rounded-xl p-3">
+                          <div className="bg-sea/10 rounded-xl p-3">
                             <div className="flex items-center gap-1.5 mb-2">
-                              <div className="w-2 h-2 rounded-full bg-blue-400" />
-                              <span className="text-xs font-semibold text-blue-600">
+                              <div className="w-2 h-2 rounded-full bg-sea" />
+                              <span className="text-xs font-semibold text-sea">
                                 יומן ({selectedDayData.journalEntries.length})
                               </span>
                             </div>

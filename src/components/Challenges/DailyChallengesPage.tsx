@@ -144,7 +144,7 @@ export default function DailyChallengesPage({ showToast }: DailyChallengesPagePr
         </div>
         <div className="flex justify-between mt-2">
           <div className="flex items-center gap-1">
-            <Star size={12} className="text-amber-500" />
+            <Star size={12} className="text-sage" />
             <span className="text-[11px] text-text-light">{xpEarned} XP</span>
           </div>
           {streak > 0 && (
@@ -214,7 +214,7 @@ export default function DailyChallengesPage({ showToast }: DailyChallengesPagePr
                       <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${meta.color}`}>
                         {meta.emoji} {meta.label}
                       </span>
-                      <span className="text-[10px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-full font-medium">
+                      <span className="text-[10px] text-sage bg-sage/10 px-1.5 py-0.5 rounded-full font-medium">
                         +{challenge.xpReward} XP
                       </span>
                     </div>

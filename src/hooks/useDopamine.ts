@@ -21,8 +21,8 @@ export function useDopamine() {
   );
 
   const todayLogs = useMemo(() => {
-    const today = new Date().toDateString();
-    return logs.filter((l) => new Date(l.date).toDateString() === today);
+    const today = new Date().toISOString().split('T')[0];
+    return logs.filter((l) => l.date.split('T')[0] === today);
   }, [logs]);
 
   const todayCount = todayLogs.length;
@@ -34,8 +34,8 @@ export function useDopamine() {
     for (let i = 0; i < 365; i++) {
       const checkDate = new Date(now);
       checkDate.setDate(checkDate.getDate() - i);
-      const dateStr = checkDate.toDateString();
-      const hasLog = logs.some((l) => new Date(l.date).toDateString() === dateStr);
+      const dateStr = checkDate.toISOString().split('T')[0];
+      const hasLog = logs.some((l) => l.date.split('T')[0] === dateStr);
       if (hasLog) count++;
       else if (i > 0) break; // allow today to be empty
     }
@@ -48,8 +48,8 @@ export function useDopamine() {
     for (let i = 6; i >= 0; i--) {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
-      const key = d.toDateString();
-      stats[key] = logs.filter((l) => new Date(l.date).toDateString() === key).length;
+      const key = d.toISOString().split('T')[0];
+      stats[key] = logs.filter((l) => l.date.split('T')[0] === key).length;
     }
     return stats;
   }, [logs]);

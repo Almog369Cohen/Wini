@@ -104,6 +104,7 @@ export default function PartnerPage({ habits, userName = '', todayVictories, sho
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       className="px-4 pt-6 pb-8 max-w-lg mx-auto"
+      dir="rtl"
     >
       {/* Header */}
       <div className="text-center mb-6">

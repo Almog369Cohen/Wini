@@ -20,8 +20,8 @@ interface RemindersPageProps extends NotificationsState {
 }
 
 const CATEGORY_CONFIG = {
-  meal: { label: 'ארוחות', emoji: '🍽️', color: 'text-orange-500', bg: 'bg-orange-50', Icon: UtensilsCrossed },
-  water: { label: 'שתייה', emoji: '💧', color: 'text-blue-500', bg: 'bg-blue-50', Icon: Droplets },
+  meal: { label: 'ארוחות', emoji: '🍽️', color: 'text-coral', bg: 'bg-coral/10', Icon: UtensilsCrossed },
+  water: { label: 'שתייה', emoji: '💧', color: 'text-sea', bg: 'bg-sea/10', Icon: Droplets },
   habit: { label: 'הרגלים', emoji: '🎯', color: 'text-sage', bg: 'bg-sage/10', Icon: Target },
   custom: { label: 'מותאם', emoji: '✨', color: 'text-sand', bg: 'bg-sand/10', Icon: Sparkles },
 };

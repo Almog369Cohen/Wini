@@ -28,9 +28,9 @@ const CATEGORY_LABELS: Record<string, { label: string; emoji: string }> = {
 };
 
 const DIFFICULTY_LABELS = {
-  easy: { label: 'קל', color: 'bg-green-100 text-green-700' },
-  medium: { label: 'בינוני', color: 'bg-yellow-100 text-yellow-700' },
-  hard: { label: 'מאתגר', color: 'bg-orange-100 text-orange-700' },
+  easy: { label: 'קל', color: 'bg-sage/15 text-sage' },
+  medium: { label: 'בינוני', color: 'bg-sage/15 text-sage-dark' },
+  hard: { label: 'מאתגר', color: 'bg-coral/15 text-coral' },
 };
 
 export default function DailyPlan({ mood, energy, onBack, moodEmoji, moodLabel }: DailyPlanProps) {
@@ -64,7 +64,7 @@ export default function DailyPlan({ mood, energy, onBack, moodEmoji, moodLabel }
   }, [completedCount]);
 
   return (
-    <div className="min-h-dvh bg-cream pb-24">
+    <div className="min-h-dvh bg-cream pb-24" dir="rtl">
       {/* Header */}
       <div className="bg-sage/5 p-4 pt-6">
         <div className="flex items-center justify-between mb-4">

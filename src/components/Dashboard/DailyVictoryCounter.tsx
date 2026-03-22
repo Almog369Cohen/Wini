@@ -4,13 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface DailyVictoryCounterProps {
   count: number;
   goal?: number;
+  onClick?: () => void;
 }
 
 const RING_DOTS = 20;
 const DOT_SIZE = 5;
 const RING_RADIUS = 36;
 
-export default function DailyVictoryCounter({ count, goal = 5 }: DailyVictoryCounterProps) {
+export default function DailyVictoryCounter({ count, goal = 5, onClick }: DailyVictoryCounterProps) {
   const [displayCount, setDisplayCount] = useState(count);
   const [pulse, setPulse] = useState(false);
   const prevCount = useRef(count);
@@ -32,9 +33,10 @@ export default function DailyVictoryCounter({ count, goal = 5 }: DailyVictoryCou
   }, [count]);
 
   return (
-    <motion.div
-      className={`bg-card rounded-2xl shadow-sm p-4 flex items-center gap-4 transition-colors duration-500 ${
-        goalReached ? 'ring-2 ring-amber-400/50 bg-amber-50/30' : ''
+    <motion.button
+      onClick={onClick}
+      className={`w-full bg-card rounded-2xl shadow-sm p-4 flex items-center gap-4 transition-colors duration-500 text-right ${
+        goalReached ? 'ring-2 ring-sage/40' : ''
       }`}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -60,10 +62,10 @@ export default function DailyVictoryCounter({ count, goal = 5 }: DailyVictoryCou
                 cx={cx}
                 cy={cy}
                 r={DOT_SIZE / 2}
-                fill={filled ? (goalReached ? '#f59e0b' : '#03b28c') : '#e5e7eb'}
+                fill={filled ? (goalReached ? 'var(--color-sage)' : '#03b28c') : 'var(--color-cream-dark)'}
                 initial={false}
                 animate={{
-                  fill: filled ? (goalReached ? '#f59e0b' : '#03b28c') : '#e5e7eb',
+                  fill: filled ? (goalReached ? 'var(--color-sage)' : '#03b28c') : 'var(--color-cream-dark)',
                   scale: filled ? 1 : 0.7,
                 }}
                 transition={{ duration: 0.3, delay: filled ? i * 0.02 : 0 }}
@@ -77,7 +79,7 @@ export default function DailyVictoryCounter({ count, goal = 5 }: DailyVictoryCou
           <AnimatePresence mode="wait">
             <motion.span
               key={displayCount}
-              className={`text-2xl font-black ${goalReached ? 'text-amber-500' : 'text-sage'}`}
+              className={`text-2xl font-black ${goalReached ? 'text-sage' : 'text-sage'}`}
               initial={pulse ? { scale: 1.8, opacity: 0 } : { scale: 1, opacity: 1 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
@@ -113,7 +115,7 @@ export default function DailyVictoryCounter({ count, goal = 5 }: DailyVictoryCou
         <div className="flex items-center gap-2 mt-0.5">
           <div className="flex-1 h-1.5 bg-cream-dark rounded-full overflow-hidden">
             <motion.div
-              className={`h-full rounded-full ${goalReached ? 'bg-amber-400' : 'bg-sage'}`}
+              className={`h-full rounded-full ${goalReached ? 'bg-sage' : 'bg-sage'}`}
               initial={false}
               animate={{ width: `${progress * 100}%` }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -125,7 +127,7 @@ export default function DailyVictoryCounter({ count, goal = 5 }: DailyVictoryCou
         </div>
         {goalReached && (
           <motion.p
-            className="text-[11px] font-semibold text-amber-500 mt-0.5"
+            className="text-[11px] font-semibold text-sage mt-0.5"
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
@@ -134,6 +136,6 @@ export default function DailyVictoryCounter({ count, goal = 5 }: DailyVictoryCou
           </motion.p>
         )}
       </div>
-    </motion.div>
+    </motion.button>
   );
 }

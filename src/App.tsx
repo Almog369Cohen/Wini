@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, lazy, Suspense } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { Page, MoodType } from './types';
 import { useHabits } from './hooks/useHabits';
@@ -15,36 +15,49 @@ import { useVictoryRewards } from './hooks/useVictoryRewards';
 import Layout from './components/Layout';
 import Dashboard from './components/Dashboard/Dashboard';
 import HabitList from './components/Habits/HabitList';
-import SOSPage from './components/SOS/SOSPage';
-import JournalPage from './components/Journal/JournalPage';
-import MilestonesPage from './components/Milestones/MilestonesPage';
-import SettingsPage from './components/Settings/SettingsPage';
-import InnerSpacePage from './components/InnerSpace/InnerSpacePage';
-import MoodCheckIn from './components/MoodCheckIn/MoodCheckIn';
-import DailyPlan from './components/MoodCheckIn/DailyPlan';
-import RoutinesPage from './components/Routines/RoutinesPage';
-import OnboardingQuestionnaire from './components/Onboarding/OnboardingQuestionnaire';
-import type { OnboardingResult } from './components/Onboarding/OnboardingQuestionnaire';
-import { HABIT_TEMPLATES } from './data/habitTemplates';
-import AppTour from './components/Onboarding/AppTour';
-import NutritionPage from './components/Nutrition/NutritionPage';
-import RemindersPage from './components/Reminders/RemindersPage';
-import TasksPage from './components/Tasks/TasksPage';
-import CalendarPage from './components/Calendar/CalendarPage';
-import PartnerPage from './components/Partner/PartnerPage';
-import DailyChallengesPage from './components/Challenges/DailyChallengesPage';
 import { useMealTracker } from './hooks/useMealTracker';
 import { useNotifications } from './hooks/useNotifications';
 import { useTasks } from './hooks/useTasks';
-import FeedbackButton from './components/Feedback/FeedbackButton';
-import UrgeIntervention from './components/UrgeIntervention/UrgeIntervention';
-import BarrierIntervention from './components/UrgeIntervention/BarrierIntervention';
 import Toast from './components/ui/Toast';
 import Confetti from './components/ui/Confetti';
 import VictoryBurst from './components/ui/VictoryBurst';
+import ErrorBoundary from './components/ui/ErrorBoundary';
+import PageTransition from './components/ui/PageTransition';
+import PWAInstallPrompt from './components/ui/PWAInstallPrompt';
+import BottomSheet from './components/ui/BottomSheet';
+import { DashboardSkeleton } from './components/ui/Skeleton';
+import { useVictoryPreferences } from './hooks/useVictoryPreferences';
+import { haptic } from './lib/haptics';
 import { useAuth } from './contexts/AuthContext';
 import LoginScreen from './components/Auth/LoginScreen';
 import SplashScreen from './components/SplashScreen';
+
+// ─── Lazy-loaded pages (code splitting) ───────────────────────────
+const SOSPage = lazy(() => import('./components/SOS/SOSPage'));
+const JournalPage = lazy(() => import('./components/Journal/JournalPage'));
+const MilestonesPage = lazy(() => import('./components/Milestones/MilestonesPage'));
+const SettingsPage = lazy(() => import('./components/Settings/SettingsPage'));
+const InnerSpacePage = lazy(() => import('./components/InnerSpace/InnerSpacePage'));
+const MoodCheckIn = lazy(() => import('./components/MoodCheckIn/MoodCheckIn'));
+const DailyPlan = lazy(() => import('./components/MoodCheckIn/DailyPlan'));
+const RoutinesPage = lazy(() => import('./components/Routines/RoutinesPage'));
+const OnboardingQuestionnaire = lazy(() => import('./components/Onboarding/OnboardingQuestionnaire'));
+const AppTour = lazy(() => import('./components/Onboarding/AppTour'));
+const NutritionPage = lazy(() => import('./components/Nutrition/NutritionPage'));
+const RemindersPage = lazy(() => import('./components/Reminders/RemindersPage'));
+const TasksPage = lazy(() => import('./components/Tasks/TasksPage'));
+const CalendarPage = lazy(() => import('./components/Calendar/CalendarPage'));
+const PartnerPage = lazy(() => import('./components/Partner/PartnerPage'));
+const DailyChallengesPage = lazy(() => import('./components/Challenges/DailyChallengesPage'));
+const VictorySetupPage = lazy(() => import('./components/Victory/VictorySetupPage'));
+const FarewellLetterPage = lazy(() => import('./components/Farewell/FarewellLetterPage'));
+const FeedbackButton = lazy(() => import('./components/Feedback/FeedbackButton'));
+const UrgeIntervention = lazy(() => import('./components/UrgeIntervention/UrgeIntervention'));
+const BarrierIntervention = lazy(() => import('./components/UrgeIntervention/BarrierIntervention'));
+
+import type { OnboardingResult } from './components/Onboarding/OnboardingQuestionnaire';
+import { useFarewellLetters } from './hooks/useFarewellLetters';
+import { HABIT_TEMPLATES } from './data/habitTemplates';
 
 export default function App() {
   const { user, loading, signOut } = useAuth();
@@ -56,11 +69,8 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-cream">
-        <div className="text-center">
-          <div className="text-4xl mb-3">🌱</div>
-          <div className="w-6 h-6 border-2 border-sage border-t-transparent rounded-full animate-spin mx-auto" />
-        </div>
+      <div className="fixed inset-0 bg-cream overflow-hidden">
+        <DashboardSkeleton />
       </div>
     );
   }
@@ -94,6 +104,8 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
   const tasksState = useTasks();
   const { toasts, show: showToast, dismiss: dismissToast } = useToast();
   const victoryRewards = useVictoryRewards();
+  const victoryPreferences = useVictoryPreferences();
+  const farewellLetters = useFarewellLetters();
 
   // Show mood check-in on first open if not checked in today
   const shouldShowMoodCheckIn = !moodState.hasCheckedInToday && habitState.habits.length > 0 && hasProfile;
@@ -350,7 +362,7 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
           />
         );
       case 'innerspace':
-        return <InnerSpacePage {...innerSpaceState} />;
+        return <InnerSpacePage {...innerSpaceState} onNavigate={setCurrentPage} />;
       case 'nutrition':
         return (
           <NutritionPage
@@ -413,13 +425,40 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
             showToast={showToast}
           />
         );
+      case 'victory-setup':
+        return (
+          <VictorySetupPage
+            {...victoryPreferences}
+            showToast={showToast}
+            onComplete={() => setCurrentPage('dashboard')}
+            todayCount={victoryRewards.todayCount}
+          />
+        );
+      case 'farewell':
+        return (
+          <FarewellLetterPage
+            habits={habitState.habits}
+            farewellLetters={farewellLetters}
+            showToast={showToast}
+            onBack={() => setCurrentPage('innerspace')}
+          />
+        );
     }
   };
 
   return (
-    <Layout currentPage={currentPage} onNavigate={setCurrentPage}>
-      <AnimatePresence mode="wait">{renderPage()}</AnimatePresence>
+    <Layout currentPage={currentPage} onNavigate={(page) => { haptic('select'); setCurrentPage(page); }}>
+      <ErrorBoundary onReset={() => setCurrentPage('dashboard')}>
+        <Suspense fallback={<DashboardSkeleton />}>
+          <AnimatePresence mode="wait">
+            <PageTransition pageKey={currentPage}>
+              {renderPage()}
+            </PageTransition>
+          </AnimatePresence>
+        </Suspense>
+      </ErrorBoundary>
       <Toast toasts={toasts} onDismiss={dismissToast} />
+      <PWAInstallPrompt />
       <Confetti active={showConfetti} onComplete={() => setShowConfetti(false)} />
 
       {/* Victory Burst overlay */}
@@ -430,6 +469,7 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
             message={victoryRewards.currentVictory.message}
             subMessage={victoryRewards.currentVictory.subMessage}
             emoji={victoryRewards.currentVictory.emoji}
+            mantra={victoryPreferences.preferences.mantra}
             onComplete={victoryRewards.dismissVictory}
           />
         )}
@@ -437,113 +477,113 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
 
       {/* Onboarding Questionnaire */}
       <AnimatePresence>
-        {!hasProfile && <OnboardingQuestionnaire onComplete={handleOnboardingComplete} />}
+        {!hasProfile && (
+          <Suspense fallback={null}>
+            <OnboardingQuestionnaire onComplete={handleOnboardingComplete} />
+          </Suspense>
+        )}
       </AnimatePresence>
 
       {/* App Tour */}
       <AnimatePresence>
         {showTour && (
-          <AppTour
-            userName={profile?.name || ''}
-            onComplete={() => setShowTour(false)}
-          />
+          <Suspense fallback={null}>
+            <AppTour
+              userName={profile?.name || ''}
+              onComplete={() => setShowTour(false)}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
 
       {/* Mood check-in overlay */}
       <AnimatePresence>
         {(shouldShowMoodCheckIn || showMoodCheckIn) && (
-          <MoodCheckIn
-            onComplete={handleMoodComplete}
-            isUpdate={showMoodCheckIn && moodState.hasCheckedInToday}
-          />
+          <Suspense fallback={null}>
+            <MoodCheckIn
+              onComplete={handleMoodComplete}
+              isUpdate={showMoodCheckIn && moodState.hasCheckedInToday}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
 
       {/* Urge intervention overlay */}
       <AnimatePresence>
         {showUrgeIntervention && (
-          <UrgeIntervention
-            habits={habitState.habits}
-            onComplete={handleUrgeComplete}
-            onClose={() => setShowUrgeIntervention(false)}
-            onNavigate={setCurrentPage}
-          />
+          <Suspense fallback={null}>
+            <UrgeIntervention
+              habits={habitState.habits}
+              onComplete={handleUrgeComplete}
+              onClose={() => setShowUrgeIntervention(false)}
+              onNavigate={setCurrentPage}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
 
       {/* Barrier intervention overlay */}
       <AnimatePresence>
         {showBarrierIntervention && (
-          <BarrierIntervention
-            habits={habitState.habits}
-            onComplete={handleBarrierComplete}
-            onClose={() => setShowBarrierIntervention(false)}
-          />
+          <Suspense fallback={null}>
+            <BarrierIntervention
+              habits={habitState.habits}
+              onComplete={handleBarrierComplete}
+              onClose={() => setShowBarrierIntervention(false)}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
 
-      {/* SOS choice modal */}
-      <AnimatePresence>
-        {showSOSChoice && (
-          <motion.div
-            key="sos-choice"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-            onClick={() => setShowSOSChoice(false)}
+      {/* SOS choice bottom sheet */}
+      <BottomSheet
+        isOpen={showSOSChoice}
+        onClose={() => setShowSOSChoice(false)}
+        title="מה קורה עכשיו?"
+      >
+        <div className="p-5 space-y-3">
+          <p className="text-xs text-text-light text-center mb-2">בחר את המצב שמתאר אותך</p>
+          <button
+            onClick={() => {
+              haptic('medium');
+              setShowSOSChoice(false);
+              setShowUrgeIntervention(true);
+            }}
+            className="w-full flex items-center gap-3 bg-coral/10 active:bg-coral/20 text-right rounded-xl p-4 transition-colors"
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-card rounded-2xl p-6 max-w-sm w-full shadow-xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h2 className="text-lg font-bold text-text text-center mb-2">מה קורה עכשיו?</h2>
-              <p className="text-xs text-text-light text-center mb-5">בחר את המצב שמתאר אותך</p>
-              <div className="space-y-3">
-                <button
-                  onClick={() => {
-                    setShowSOSChoice(false);
-                    setShowUrgeIntervention(true);
-                  }}
-                  className="w-full flex items-center gap-3 bg-coral/10 hover:bg-coral/20 text-right rounded-xl p-4 transition-colors"
-                >
-                  <span className="text-2xl">🔥</span>
-                  <div>
-                    <p className="text-sm font-semibold text-coral">דחף להרגל רע</p>
-                    <p className="text-[11px] text-text-light">אני מרגיש דחף ורוצה עזרה להתגבר</p>
-                  </div>
-                </button>
-                <button
-                  onClick={() => {
-                    setShowSOSChoice(false);
-                    setShowBarrierIntervention(true);
-                  }}
-                  className="w-full flex items-center gap-3 bg-sage/10 hover:bg-sage/20 text-right rounded-xl p-4 transition-colors"
-                >
-                  <span className="text-2xl">🧱</span>
-                  <div>
-                    <p className="text-sm font-semibold text-sage">קושי בהרגל חיובי</p>
-                    <p className="text-[11px] text-text-light">אני עומד לוותר ורוצה כוח להמשיך</p>
-                  </div>
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <span className="text-2xl">🔥</span>
+            <div>
+              <p className="text-sm font-semibold text-coral">דחף להרגל רע</p>
+              <p className="text-[11px] text-text-light">אני מרגיש דחף ורוצה עזרה להתגבר</p>
+            </div>
+          </button>
+          <button
+            onClick={() => {
+              haptic('medium');
+              setShowSOSChoice(false);
+              setShowBarrierIntervention(true);
+            }}
+            className="w-full flex items-center gap-3 bg-sage/10 active:bg-sage/20 text-right rounded-xl p-4 transition-colors"
+          >
+            <span className="text-2xl">🧱</span>
+            <div>
+              <p className="text-sm font-semibold text-sage">קושי בהרגל חיובי</p>
+              <p className="text-[11px] text-text-light">אני עומד לוותר ורוצה כוח להמשיך</p>
+            </div>
+          </button>
+        </div>
+      </BottomSheet>
 
       {/* Feedback floating button */}
       {hasProfile && profile && (
-        <FeedbackButton
-          userName={profile.name}
-          userId={profile.id}
-          onSubmit={feedbackState.submitFeedback}
-          showToast={showToast}
-        />
+        <Suspense fallback={null}>
+          <FeedbackButton
+            userName={profile.name}
+            userId={profile.id}
+            onSubmit={feedbackState.submitFeedback}
+            showToast={showToast}
+          />
+        </Suspense>
       )}
     </Layout>
   );

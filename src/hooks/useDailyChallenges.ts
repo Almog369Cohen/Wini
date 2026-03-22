@@ -24,11 +24,11 @@ interface ChallengesData {
 }
 
 const CATEGORY_META: Record<ChallengeCategory, { label: string; emoji: string; color: string }> = {
-  body: { label: 'גוף', emoji: '💪', color: 'bg-blue-100 text-blue-700' },
-  soul: { label: 'נפש', emoji: '🧘', color: 'bg-purple-100 text-purple-700' },
-  social: { label: 'חברתי', emoji: '🤝', color: 'bg-pink-100 text-pink-700' },
-  habit: { label: 'הרגל', emoji: '🎯', color: 'bg-amber-100 text-amber-700' },
-  fun: { label: 'כיף', emoji: '🎨', color: 'bg-green-100 text-green-700' },
+  body: { label: 'גוף', emoji: '💪', color: 'bg-sea/15 text-sea' },
+  soul: { label: 'נפש', emoji: '🧘', color: 'bg-sage/15 text-sage' },
+  social: { label: 'חברתי', emoji: '🤝', color: 'bg-coral/15 text-coral' },
+  habit: { label: 'הרגל', emoji: '🎯', color: 'bg-sage/15 text-sage-dark' },
+  fun: { label: 'כיף', emoji: '🎨', color: 'bg-sage/15 text-sage' },
 };
 
 const CHALLENGE_POOL: Challenge[] = [

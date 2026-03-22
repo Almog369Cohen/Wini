@@ -324,7 +324,7 @@ export default function ReinforcementGallery() {
                 </span>
                 <button
                   onClick={() => handleDelete(viewItem.id)}
-                  className="text-red-400 p-2"
+                  className="text-coral p-2"
                 >
                   <Trash2 size={18} />
                 </button>

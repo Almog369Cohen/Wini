@@ -34,8 +34,7 @@ const DEFAULT_STATE: NotificationState = {
   enabled: false,
 };
 
-// Check notification timers every minute
-let checkInterval: ReturnType<typeof setInterval> | null = null;
+// Track last notified minute to avoid double-firing
 let lastNotifiedKey = '';
 
 function shouldNotifyNow(reminder: ScheduledReminder): boolean {
@@ -173,10 +172,10 @@ export function useNotifications() {
     };
 
     check(); // Check immediately
-    checkInterval = setInterval(check, 30000); // Check every 30s
+    const intervalId = setInterval(check, 30000); // Check every 30s
 
     return () => {
-      if (checkInterval) clearInterval(checkInterval);
+      clearInterval(intervalId);
     };
   }, [state.enabled, state.reminders, permission]);
 

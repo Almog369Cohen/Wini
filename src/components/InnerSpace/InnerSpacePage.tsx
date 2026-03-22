@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Brain, Mail, Map } from 'lucide-react';
-import type { InnerSpaceData } from '../../types';
+import { Heart, Brain, Mail, Map, Feather } from 'lucide-react';
+import type { InnerSpaceData, Page } from '../../types';
 import ReflectionCards from './ReflectionCards';
 import NeedsMap from './NeedsMap';
 import LetterWriter from './LetterWriter';
@@ -16,6 +16,7 @@ interface InnerSpacePageProps {
   setNeedNote: (needId: string, note: string) => void;
   addLetter: (content: string, type: 'past' | 'future', openDate?: string) => void;
   setJourneyStage: (stage: number) => void;
+  onNavigate?: (page: Page) => void;
 }
 
 export default function InnerSpacePage({
@@ -25,6 +26,7 @@ export default function InnerSpacePage({
   setNeedNote,
   addLetter,
   setJourneyStage,
+  onNavigate,
 }: InnerSpacePageProps) {
   const [tab, setTab] = useState<InnerTab>('reflect');
 
@@ -95,6 +97,26 @@ export default function InnerSpacePage({
           reflectionCount={data.reflections.length}
           needsCount={data.emotionalNeeds.length}
         />
+      )}
+
+      {/* Farewell Letter CTA */}
+      {onNavigate && (
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          onClick={() => onNavigate('farewell')}
+          className="w-full mt-4 bg-card rounded-2xl shadow-sm p-4 flex items-center gap-3 text-right border border-cream-dark"
+        >
+          <div className="w-11 h-11 rounded-xl bg-sage/10 flex items-center justify-center flex-shrink-0">
+            <Feather size={20} className="text-sage" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold text-text">מכתב פרידה להרגל</p>
+            <p className="text-[11px] text-text-light">כתוב מכתב פרידה ושחרר בשלום</p>
+          </div>
+          <span className="text-sage text-xs font-medium">התחל →</span>
+        </motion.button>
       )}
 
       <div className="h-6" />

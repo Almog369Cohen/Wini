@@ -278,7 +278,7 @@ function ConfettiRain({ pieces }: { pieces: ConfettiPiece[] }) {
 function ScreenFlash() {
   return (
     <motion.div
-      className="absolute inset-0 bg-white pointer-events-none"
+      className="absolute inset-0 bg-card pointer-events-none"
       initial={{ opacity: 0.8 }}
       animate={{ opacity: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -351,10 +351,11 @@ export interface VictoryBurstProps {
   message: string;
   subMessage?: string;
   emoji?: string;
+  mantra?: string;
   onComplete: () => void;
 }
 
-export default function VictoryBurst({ tier, message, subMessage, emoji, onComplete }: VictoryBurstProps) {
+export default function VictoryBurst({ tier, message, subMessage, emoji, mantra, onComplete }: VictoryBurstProps) {
   const sparkles = makeSparkles(tier === 3 ? 30 : tier === 2 ? 18 : 8);
   const confetti = tier >= 2 ? makeConfetti(tier === 3 ? 50 : 35) : [];
   const rings = makeRings(tier === 3 ? 4 : tier === 2 ? 2 : 1);
@@ -477,6 +478,18 @@ export default function VictoryBurst({ tier, message, subMessage, emoji, onCompl
             transition={{ delay: 0.5 }}
           >
             {subMessage}
+          </motion.p>
+        )}
+
+        {/* Personal mantra */}
+        {mantra && tier >= 2 && (
+          <motion.p
+            className="text-sm font-bold text-white/80 mt-2 drop-shadow italic"
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.7 }}
+          >
+            &ldquo;{mantra}&rdquo;
           </motion.p>
         )}
 

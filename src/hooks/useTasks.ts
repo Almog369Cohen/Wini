@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 
 export interface Task {
@@ -38,20 +38,8 @@ export function useTasks() {
 
   const today = getToday();
 
-  // Auto-reset recurring tasks each day
-  const tasks = useMemo(() => {
-    if (state.lastResetDate !== today) {
-      // Reset recurring tasks
-      const updated = state.tasks.map(t =>
-        t.recurring ? { ...t, completed: false, completedAt: undefined } : t
-      );
-      return updated;
-    }
-    return state.tasks;
-  }, [state.tasks, state.lastResetDate, today]);
-
-  // Sync reset
-  useMemo(() => {
+  // Auto-reset recurring tasks each day (persist to storage)
+  useEffect(() => {
     if (state.lastResetDate !== today) {
       setState(prev => ({
         ...prev,
@@ -62,6 +50,16 @@ export function useTasks() {
       }));
     }
   }, [state.lastResetDate, today, setState]);
+
+  // Derive tasks - show reset state immediately even before effect runs
+  const tasks = useMemo(() => {
+    if (state.lastResetDate !== today) {
+      return state.tasks.map(t =>
+        t.recurring ? { ...t, completed: false, completedAt: undefined } : t
+      );
+    }
+    return state.tasks;
+  }, [state.tasks, state.lastResetDate, today]);
 
   const addTask = useCallback((title: string, category: Task['category'] = 'general', recurring = false) => {
     const newTask: Task = {

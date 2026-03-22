@@ -237,7 +237,7 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
           }).length / allActive.length : 0}
           label="הרגלים"
           detail={`${allActive.filter(h => h.type === 'build' && h.lastCheckIn && isSameDay(new Date(h.lastCheckIn), new Date())).length + activeQuitHabits.filter(h => h.currentStreak > 0).length}/${allActive.length}`}
-          color="#03b28c"
+          color="var(--color-sage)"
           emoji="🎯"
           onClick={() => onNavigate('habits')}
         />
@@ -245,7 +245,7 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
           value={mealData ? mealData.todayCompletedCount / 5 : 0}
           label="ארוחות"
           detail={mealData ? `${mealData.todayCompletedCount}/5` : '0/5'}
-          color="#059cc0"
+          color="var(--color-sea)"
           emoji="🍽️"
           onClick={() => onNavigate('nutrition')}
         />
@@ -253,7 +253,7 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
           value={mealData ? mealData.todayWater / mealData.waterGoal : 0}
           label="מים"
           detail={mealData ? `${mealData.todayWater}/${mealData.waterGoal}` : '0/8'}
-          color="#059cc0"
+          color="var(--color-sea)"
           emoji="💧"
           onClick={() => onNavigate('nutrition')}
         />
@@ -261,7 +261,7 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
           value={dopamineGoalProgress}
           label="דופמין"
           detail={`${dopamineCount}/${dopamineGoal}`}
-          color="#03b28c"
+          color="var(--color-sage)"
           emoji="⚡"
           onClick={() => onNavigate('sos')}
         />
@@ -271,7 +271,11 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
           VICTORY COUNTER
           ══════════════════════════════════════════════ */}
       <div className="mb-3">
-        <DailyVictoryCounter count={victoryCount} goal={5} />
+        <DailyVictoryCounter
+          count={victoryCount}
+          goal={5}
+          onClick={() => onNavigate('victory-setup')}
+        />
       </div>
 
       {/* ══════════════════════════════════════════════
@@ -398,6 +402,8 @@ export default function Dashboard({ habits, onNavigate, todaySummary, hardHours,
                 { page: 'reminders' as Page, emoji: '🔔', label: 'תזכורות' },
                 { page: 'innerspace' as Page, emoji: '🌙', label: 'המרחב שלי' },
                 { page: 'milestones' as Page, emoji: '🏆', label: 'הישגים' },
+                { page: 'victory-setup' as Page, emoji: '🏆', label: 'ניצחונות' },
+                { page: 'farewell' as Page, emoji: '✉️', label: 'מכתב פרידה' },
                 { page: 'partner' as Page, emoji: '👥', label: 'שותף' },
                 { page: 'routines' as Page, emoji: '🔄', label: 'שגרות' },
                 { page: 'journal' as Page, emoji: '📓', label: 'יומן' },

@@ -12,7 +12,13 @@ export interface FeedbackItem {
 }
 
 // Google Apps Script Web App URL - set this after deploying the script
-const FEEDBACK_ENDPOINT = localStorage.getItem('wini-feedback-endpoint') || '';
+function getFeedbackEndpoint(): string {
+  try {
+    return localStorage.getItem('wini-feedback-endpoint') || '';
+  } catch {
+    return '';
+  }
+}
 
 export function useFeedback() {
   const [feedbacks, setFeedbacks] = useLocalStorage<FeedbackItem[]>('wini-feedbacks', []);
@@ -37,7 +43,7 @@ export function useFeedback() {
     setFeedbacks(prev => [...prev, item]);
 
     // Try to send to endpoint
-    const endpoint = localStorage.getItem('wini-feedback-endpoint');
+    const endpoint = getFeedbackEndpoint();
     if (endpoint) {
       try {
         await fetch(endpoint, {
@@ -65,13 +71,17 @@ export function useFeedback() {
   }, [setFeedbacks]);
 
   const setEndpoint = useCallback((url: string) => {
-    localStorage.setItem('wini-feedback-endpoint', url);
+    try {
+      localStorage.setItem('wini-feedback-endpoint', url);
+    } catch {
+      // Storage full or unavailable
+    }
   }, []);
 
   return {
     feedbacks,
     submitFeedback,
     setEndpoint,
-    hasEndpoint: !!FEEDBACK_ENDPOINT || !!localStorage.getItem('wini-feedback-endpoint'),
+    hasEndpoint: !!getFeedbackEndpoint(),
   };
 }

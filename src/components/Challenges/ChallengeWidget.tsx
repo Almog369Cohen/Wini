@@ -25,7 +25,7 @@ export default function ChallengeWidget({ onNavigate }: ChallengeWidgetProps) {
       <div className="flex items-center gap-3">
         {/* Icon */}
         <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-          allDone ? 'bg-sage/15' : 'bg-amber-50'
+          allDone ? 'bg-sage/15' : 'bg-sage/10'
         }`}>
           {allDone ? '🏆' : '🎯'}
         </div>

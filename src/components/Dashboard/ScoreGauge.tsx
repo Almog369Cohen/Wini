@@ -12,9 +12,9 @@ export default function ScoreGauge({ score, label, size = 180 }: ScoreGaugeProps
   const offset = circumference - (score / 100) * circumference;
 
   const getColor = (s: number) => {
-    if (s >= 70) return '#03b28c';
-    if (s >= 40) return '#059cc0';
-    return '#e05c4d';
+    if (s >= 70) return 'var(--color-sage)';
+    if (s >= 40) return 'var(--color-sea)';
+    return 'var(--color-coral)';
   };
 
   const getGlow = (s: number) => {

@@ -32,7 +32,7 @@ export default function GrowingTree({ daysSinceStart }: GrowingTreeProps) {
         {stage === 'seed' && (
           <motion.g initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3 }}>
             <circle cx="100" cy="168" r="6" fill="#059cc0" />
-            <text x="100" y="150" textAnchor="middle" fontSize="12" fill="#6b6b6b">
+            <text x="100" y="150" textAnchor="middle" fontSize="12" fill="var(--color-text-light)">
               זרע חדש
             </text>
           </motion.g>

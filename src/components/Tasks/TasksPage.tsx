@@ -62,7 +62,7 @@ export default function TasksPage({
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => setShowAdd(true)}
-          className="w-9 h-9 rounded-full bg-sage flex items-center justify-center text-white shadow-sm"
+          className="w-11 h-11 rounded-full bg-sage flex items-center justify-center text-white shadow-sm"
         >
           <Plus size={20} />
         </motion.button>
@@ -244,13 +244,13 @@ function TaskItem({
       <motion.button
         whileTap={{ scale: 0.8 }}
         onClick={() => onToggle(task.id)}
-        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${
+        className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 min-h-[44px] min-w-[44px] ${
           task.completed
             ? 'bg-sage border-sage'
             : 'border-cream-dark hover:border-sage'
         }`}
       >
-        {task.completed && <Check size={12} className="text-white" />}
+        {task.completed && <Check size={14} className="text-white" />}
       </motion.button>
 
       <div className="flex-1 min-w-0">

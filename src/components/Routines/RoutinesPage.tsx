@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Check, Flame, Trash2, Edit3, ChevronLeft, X, Lightbulb, Sunrise, Moon, AlertTriangle, Zap, Sparkles, Heart, Brain, Dumbbell, Users, TrendingUp } from 'lucide-react';
+import { useTheme } from '../../contexts/ThemeContext';
 import type { Routine, RoutineStep, RoutineType } from '../../types';
 import type { useRoutines } from '../../hooks/useRoutines';
 
@@ -11,18 +12,18 @@ interface RoutinesPageProps extends RoutinesState {
   onNavigate: (page: 'sos') => void;
 }
 
-const TYPE_CONFIG: Record<RoutineType, { label: string; emoji: string; color: string; bg: string; border: string; Icon: typeof Sunrise }> = {
-  morning: { label: 'בוקר', emoji: '🌅', color: '#059669', bg: '#d1fae5', border: '#6ee7b7', Icon: Sunrise },
-  night: { label: 'לילה', emoji: '🌙', color: '#7c3aed', bg: '#ede9fe', border: '#c4b5fd', Icon: Moon },
-  crisis: { label: 'חירום', emoji: '🆘', color: '#dc2626', bg: '#fee2e2', border: '#fca5a5', Icon: AlertTriangle },
-  motivation: { label: 'מוטיבציה', emoji: '🔥', color: '#ea580c', bg: '#ffedd5', border: '#fdba74', Icon: Zap },
-  energy: { label: 'אנרגיה', emoji: '⚡', color: '#d97706', bg: '#fef3c7', border: '#fcd34d', Icon: Zap },
-  calm: { label: 'הרגעה', emoji: '🌊', color: '#0284c7', bg: '#e0f2fe', border: '#7dd3fc', Icon: Heart },
-  focus: { label: 'פוקוס', emoji: '🎯', color: '#4f46e5', bg: '#e0e7ff', border: '#a5b4fc', Icon: Brain },
-  social: { label: 'חברתי', emoji: '🤝', color: '#db2777', bg: '#fce7f3', border: '#f9a8d4', Icon: Users },
-  growth: { label: 'צמיחה', emoji: '🌱', color: '#16a34a', bg: '#dcfce7', border: '#86efac', Icon: TrendingUp },
-  body: { label: 'גוף', emoji: '💪', color: '#9333ea', bg: '#f3e8ff', border: '#c084fc', Icon: Dumbbell },
-  custom: { label: 'מותאם אישית', emoji: '✨', color: '#0891b2', bg: '#cffafe', border: '#67e8f9', Icon: Sparkles },
+const TYPE_CONFIG: Record<RoutineType, { label: string; emoji: string; color: string; lightBg: string; darkBg: string; border: string; Icon: typeof Sunrise }> = {
+  morning: { label: 'בוקר', emoji: '🌅', color: '#059669', lightBg: '#d1fae5', darkBg: 'rgba(5,150,105,0.15)', border: '#6ee7b7', Icon: Sunrise },
+  night: { label: 'לילה', emoji: '🌙', color: '#7c3aed', lightBg: '#ede9fe', darkBg: 'rgba(124,58,237,0.15)', border: '#c4b5fd', Icon: Moon },
+  crisis: { label: 'חירום', emoji: '🆘', color: '#dc2626', lightBg: '#fee2e2', darkBg: 'rgba(220,38,38,0.15)', border: '#fca5a5', Icon: AlertTriangle },
+  motivation: { label: 'מוטיבציה', emoji: '🔥', color: '#ea580c', lightBg: '#ffedd5', darkBg: 'rgba(234,88,12,0.15)', border: '#fdba74', Icon: Zap },
+  energy: { label: 'אנרגיה', emoji: '⚡', color: '#d97706', lightBg: '#fef3c7', darkBg: 'rgba(217,119,6,0.15)', border: '#fcd34d', Icon: Zap },
+  calm: { label: 'הרגעה', emoji: '🌊', color: '#0284c7', lightBg: '#e0f2fe', darkBg: 'rgba(2,132,199,0.15)', border: '#7dd3fc', Icon: Heart },
+  focus: { label: 'פוקוס', emoji: '🎯', color: '#4f46e5', lightBg: '#e0e7ff', darkBg: 'rgba(79,70,229,0.15)', border: '#a5b4fc', Icon: Brain },
+  social: { label: 'חברתי', emoji: '🤝', color: '#db2777', lightBg: '#fce7f3', darkBg: 'rgba(219,39,119,0.15)', border: '#f9a8d4', Icon: Users },
+  growth: { label: 'צמיחה', emoji: '🌱', color: '#16a34a', lightBg: '#dcfce7', darkBg: 'rgba(22,163,74,0.15)', border: '#86efac', Icon: TrendingUp },
+  body: { label: 'גוף', emoji: '💪', color: '#9333ea', lightBg: '#f3e8ff', darkBg: 'rgba(147,51,234,0.15)', border: '#c084fc', Icon: Dumbbell },
+  custom: { label: 'מותאם אישית', emoji: '✨', color: '#0891b2', lightBg: '#cffafe', darkBg: 'rgba(8,145,178,0.15)', border: '#67e8f9', Icon: Sparkles },
 };
 
 export default function RoutinesPage({
@@ -40,6 +41,8 @@ export default function RoutinesPage({
   showToast,
   onNavigate: _onNavigate,
 }: RoutinesPageProps) {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [activeTab, setActiveTab] = useState<'my' | 'templates' | 'reflect'>('my');
   const [expandedRoutine, setExpandedRoutine] = useState<string | null>(null);
   const [editingRoutine, setEditingRoutine] = useState<Routine | null>(null);
@@ -208,7 +211,7 @@ export default function RoutinesPage({
                       >
                         <div
                           className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xl"
-                          style={{ backgroundColor: config.bg, border: `2px solid ${config.border}` }}
+                          style={{ backgroundColor: isDark ? config.darkBg : config.lightBg, border: `2px solid ${config.border}` }}
                         >
                           {routine.emoji}
                         </div>
@@ -217,7 +220,7 @@ export default function RoutinesPage({
                             <h3 className="font-semibold text-text text-sm truncate">{routine.name}</h3>
                             <span
                               className="text-[10px] px-1.5 py-0.5 rounded-full font-medium"
-                              style={{ backgroundColor: config.bg, color: config.color }}
+                              style={{ backgroundColor: isDark ? config.darkBg : config.lightBg, color: config.color }}
                             >
                               {config.label}
                             </span>
@@ -386,8 +389,8 @@ export default function RoutinesPage({
                     onClick={() => setTemplateFilter(type)}
                     className="flex-shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all"
                     style={{
-                      backgroundColor: templateFilter === type ? cfg.color : cfg.bg,
-                      color: templateFilter === type ? '#fff' : cfg.color,
+                      backgroundColor: templateFilter === type ? cfg.color : isDark ? cfg.darkBg : cfg.lightBg,
+                      color: templateFilter === type ? '#fff' : isDark ? cfg.color : cfg.color,
                     }}
                   >
                     {cfg.emoji} {cfg.label} ({count})
@@ -407,7 +410,7 @@ export default function RoutinesPage({
                   <div className="flex items-start gap-3 mb-3">
                     <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                      style={{ backgroundColor: config.bg, border: `2px solid ${config.border}` }}
+                      style={{ backgroundColor: isDark ? config.darkBg : config.lightBg, border: `2px solid ${config.border}` }}
                     >
                       {template.emoji}
                     </div>
@@ -415,7 +418,7 @@ export default function RoutinesPage({
                       <h3 className="font-semibold text-text mb-0.5">{template.name}</h3>
                       <span
                         className="text-[10px] px-1.5 py-0.5 rounded-full font-medium"
-                        style={{ backgroundColor: config.bg, color: config.color }}
+                        style={{ backgroundColor: isDark ? config.darkBg : config.lightBg, color: config.color }}
                       >
                         {config.label}
                       </span>
@@ -639,7 +642,7 @@ export default function RoutinesPage({
                         customType === type ? 'border-current' : 'border-transparent'
                       }`}
                       style={{
-                        backgroundColor: cfg.bg,
+                        backgroundColor: isDark ? cfg.darkBg : cfg.lightBg,
                         color: cfg.color,
                         borderColor: customType === type ? cfg.color : 'transparent',
                       }}

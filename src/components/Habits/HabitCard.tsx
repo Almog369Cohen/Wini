@@ -79,7 +79,7 @@ export default function HabitCard({
           <motion.div
             className="h-full rounded-full"
             style={{
-              backgroundColor: isQuit ? '#e05c4d' : '#03b28c',
+              backgroundColor: isQuit ? 'var(--color-coral)' : 'var(--color-sage)',
             }}
             initial={{ width: 0 }}
             animate={{
