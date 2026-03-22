@@ -292,7 +292,7 @@ export default function UrgeIntervention({
                 {/* Outer glow */}
                 <motion.div
                   className="absolute rounded-full"
-                  style={{ width: 200, height: 200, backgroundColor: 'rgba(3,178,140,0.15)' }}
+                  style={{ width: 200, height: 200, backgroundColor: 'rgba(3,178,140,0.25)' }}
                   animate={{
                     scale: breathStarted ? breathScale * 1.15 : 1,
                     opacity: breathStarted ? 0.4 : 0.2,
@@ -1021,8 +1021,8 @@ export default function UrgeIntervention({
                     animate={{ opacity: 1, y: 0 }}
                     className="w-full max-w-sm mb-5 rounded-2xl p-4"
                     style={{
-                      backgroundColor: 'rgba(5,156,192,0.15)',
-                      border: '1px solid rgba(5,156,192,0.3)',
+                      backgroundColor: 'rgba(5,156,192,0.25)',
+                      border: '1px solid rgba(5,156,192,0.4)',
                     }}
                   >
                     <p className="text-sm font-semibold text-white/90 mb-2 text-center">
@@ -1089,8 +1089,8 @@ export default function UrgeIntervention({
                 transition={{ delay: 0.6 }}
                 className="rounded-2xl p-4 mb-6 w-full max-w-sm text-center"
                 style={{
-                  backgroundColor: 'rgba(3,178,140,0.15)',
-                  border: '1px solid rgba(3,178,140,0.3)',
+                  backgroundColor: 'rgba(3,178,140,0.25)',
+                  border: '1px solid rgba(3,178,140,0.4)',
                 }}
               >
                 <Flame size={18} className="text-white/50 mx-auto mb-2" />
@@ -1129,7 +1129,7 @@ export default function UrgeIntervention({
                   ? 'rgba(3,178,140,1)'
                   : i < step
                   ? 'rgba(3,178,140,0.5)'
-                  : 'rgba(255,255,255,0.15)',
+                  : 'rgba(255,255,255,0.25)',
             }}
           />
         ))}

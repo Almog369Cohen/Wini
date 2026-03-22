@@ -91,7 +91,7 @@ export default function BarrierIntervention({
             <div
               key={i}
               className="w-8 h-1 rounded-full transition-all"
-              style={{ backgroundColor: i <= step ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.15)' }}
+              style={{ backgroundColor: i <= step ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.25)' }}
             />
           ))}
         </div>
@@ -219,8 +219,8 @@ export default function BarrierIntervention({
                 animate={{ scale: 1, opacity: 1 }}
                 className="w-full rounded-2xl p-4 mb-4 text-center"
                 style={{
-                  backgroundColor: 'rgba(5,156,192,0.15)',
-                  border: '1px solid rgba(5,156,192,0.3)',
+                  backgroundColor: 'rgba(5,156,192,0.25)',
+                  border: '1px solid rgba(5,156,192,0.4)',
                 }}
               >
                 <p className="text-white/90 text-sm font-medium mb-1">
@@ -246,8 +246,8 @@ export default function BarrierIntervention({
                   transition={{ delay: 0.2 }}
                   className="w-full rounded-2xl p-4 mb-4"
                   style={{
-                    backgroundColor: 'rgba(3,178,140,0.15)',
-                    border: '1px solid rgba(3,178,140,0.3)',
+                    backgroundColor: 'rgba(3,178,140,0.25)',
+                    border: '1px solid rgba(3,178,140,0.4)',
                   }}
                 >
                   <p className="text-sm font-semibold text-white/90 mb-2 flex items-center gap-1.5">
