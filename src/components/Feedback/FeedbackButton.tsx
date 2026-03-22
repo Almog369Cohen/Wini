@@ -11,11 +11,11 @@ interface FeedbackButtonProps {
   showToast: (msg: string, type?: 'success' | 'error') => void;
 }
 
-const FEEDBACK_TYPES: { type: FeedbackItem['type']; label: string; emoji: string; color: string; lightBg: string; darkBg: string; Icon: typeof Lightbulb }[] = [
-  { type: 'idea', label: 'רעיון חדש', emoji: '💡', color: '#059669', lightBg: '#d1fae5', darkBg: 'rgba(5,150,105,0.15)', Icon: Lightbulb },
-  { type: 'improvement', label: 'שיפור', emoji: '🔧', color: '#0891b2', lightBg: '#cffafe', darkBg: 'rgba(8,145,178,0.15)', Icon: Wrench },
-  { type: 'bug', label: 'באג / תקלה', emoji: '🐛', color: '#dc2626', lightBg: '#fee2e2', darkBg: 'rgba(220,38,38,0.15)', Icon: Bug },
-  { type: 'other', label: 'אחר', emoji: '💬', color: '#7c3aed', lightBg: '#ede9fe', darkBg: 'rgba(124,58,237,0.15)', Icon: MessageCircle },
+const FEEDBACK_TYPES: { type: FeedbackItem['type']; label: string; emoji: string; color: string; darkColor: string; lightBg: string; darkBg: string; Icon: typeof Lightbulb }[] = [
+  { type: 'idea', label: 'רעיון חדש', emoji: '💡', color: '#059669', darkColor: '#6ee7b7', lightBg: '#d1fae5', darkBg: '#1e3530', Icon: Lightbulb },
+  { type: 'improvement', label: 'שיפור', emoji: '🔧', color: '#0891b2', darkColor: '#67e8f9', lightBg: '#cffafe', darkBg: '#1e3035', Icon: Wrench },
+  { type: 'bug', label: 'באג / תקלה', emoji: '🐛', color: '#dc2626', darkColor: '#fca5a5', lightBg: '#fee2e2', darkBg: '#3d2525', Icon: Bug },
+  { type: 'other', label: 'אחר', emoji: '💬', color: '#7c3aed', darkColor: '#c4b5fd', lightBg: '#ede9fe', darkBg: '#2d2340', Icon: MessageCircle },
 ];
 
 export default function FeedbackButton({ userName, userId, onSubmit, showToast }: FeedbackButtonProps) {
@@ -89,8 +89,8 @@ export default function FeedbackButton({ userName, userId, onSubmit, showToast }
                     className="flex-1 py-2 px-1 rounded-xl text-xs font-medium transition-all flex flex-col items-center gap-1"
                     style={{
                       backgroundColor: selectedType === ft.type ? (isDark ? ft.darkBg : ft.lightBg) : 'transparent',
-                      color: selectedType === ft.type ? ft.color : (isDark ? '#9a9aa0' : '#9ca3af'),
-                      border: `2px solid ${selectedType === ft.type ? ft.color : 'transparent'}`,
+                      color: selectedType === ft.type ? (isDark ? ft.darkColor : ft.color) : (isDark ? '#9a9aa0' : '#9ca3af'),
+                      border: `2px solid ${selectedType === ft.type ? (isDark ? ft.darkColor : ft.color) : 'transparent'}`,
                     }}
                   >
                     <span className="text-base">{ft.emoji}</span>

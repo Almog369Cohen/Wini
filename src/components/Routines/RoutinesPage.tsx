@@ -12,18 +12,18 @@ interface RoutinesPageProps extends RoutinesState {
   onNavigate: (page: 'sos') => void;
 }
 
-const TYPE_CONFIG: Record<RoutineType, { label: string; emoji: string; color: string; lightBg: string; darkBg: string; border: string; Icon: typeof Sunrise }> = {
-  morning: { label: 'בוקר', emoji: '🌅', color: '#059669', lightBg: '#d1fae5', darkBg: 'rgba(5,150,105,0.15)', border: '#6ee7b7', Icon: Sunrise },
-  night: { label: 'לילה', emoji: '🌙', color: '#7c3aed', lightBg: '#ede9fe', darkBg: 'rgba(124,58,237,0.15)', border: '#c4b5fd', Icon: Moon },
-  crisis: { label: 'חירום', emoji: '🆘', color: '#dc2626', lightBg: '#fee2e2', darkBg: 'rgba(220,38,38,0.15)', border: '#fca5a5', Icon: AlertTriangle },
-  motivation: { label: 'מוטיבציה', emoji: '🔥', color: '#ea580c', lightBg: '#ffedd5', darkBg: 'rgba(234,88,12,0.15)', border: '#fdba74', Icon: Zap },
-  energy: { label: 'אנרגיה', emoji: '⚡', color: '#d97706', lightBg: '#fef3c7', darkBg: 'rgba(217,119,6,0.15)', border: '#fcd34d', Icon: Zap },
-  calm: { label: 'הרגעה', emoji: '🌊', color: '#0284c7', lightBg: '#e0f2fe', darkBg: 'rgba(2,132,199,0.15)', border: '#7dd3fc', Icon: Heart },
-  focus: { label: 'פוקוס', emoji: '🎯', color: '#4f46e5', lightBg: '#e0e7ff', darkBg: 'rgba(79,70,229,0.15)', border: '#a5b4fc', Icon: Brain },
-  social: { label: 'חברתי', emoji: '🤝', color: '#db2777', lightBg: '#fce7f3', darkBg: 'rgba(219,39,119,0.15)', border: '#f9a8d4', Icon: Users },
-  growth: { label: 'צמיחה', emoji: '🌱', color: '#16a34a', lightBg: '#dcfce7', darkBg: 'rgba(22,163,74,0.15)', border: '#86efac', Icon: TrendingUp },
-  body: { label: 'גוף', emoji: '💪', color: '#9333ea', lightBg: '#f3e8ff', darkBg: 'rgba(147,51,234,0.15)', border: '#c084fc', Icon: Dumbbell },
-  custom: { label: 'מותאם אישית', emoji: '✨', color: '#0891b2', lightBg: '#cffafe', darkBg: 'rgba(8,145,178,0.15)', border: '#67e8f9', Icon: Sparkles },
+const TYPE_CONFIG: Record<RoutineType, { label: string; emoji: string; color: string; darkColor: string; lightBg: string; darkBg: string; border: string; Icon: typeof Sunrise }> = {
+  morning: { label: 'בוקר', emoji: '🌅', color: '#059669', darkColor: '#6ee7b7', lightBg: '#d1fae5', darkBg: '#1e3530', border: '#6ee7b7', Icon: Sunrise },
+  night: { label: 'לילה', emoji: '🌙', color: '#7c3aed', darkColor: '#c4b5fd', lightBg: '#ede9fe', darkBg: '#2d2340', border: '#c4b5fd', Icon: Moon },
+  crisis: { label: 'חירום', emoji: '🆘', color: '#dc2626', darkColor: '#fca5a5', lightBg: '#fee2e2', darkBg: '#3d2525', border: '#fca5a5', Icon: AlertTriangle },
+  motivation: { label: 'מוטיבציה', emoji: '🔥', color: '#ea580c', darkColor: '#fdba74', lightBg: '#ffedd5', darkBg: '#3d3020', border: '#fdba74', Icon: Zap },
+  energy: { label: 'אנרגיה', emoji: '⚡', color: '#d97706', darkColor: '#fcd34d', lightBg: '#fef3c7', darkBg: '#3d3520', border: '#fcd34d', Icon: Zap },
+  calm: { label: 'הרגעה', emoji: '🌊', color: '#0284c7', darkColor: '#7dd3fc', lightBg: '#e0f2fe', darkBg: '#1e2d3d', border: '#7dd3fc', Icon: Heart },
+  focus: { label: 'פוקוס', emoji: '🎯', color: '#4f46e5', darkColor: '#a5b4fc', lightBg: '#e0e7ff', darkBg: '#252840', border: '#a5b4fc', Icon: Brain },
+  social: { label: 'חברתי', emoji: '🤝', color: '#db2777', darkColor: '#f9a8d4', lightBg: '#fce7f3', darkBg: '#3d2030', border: '#f9a8d4', Icon: Users },
+  growth: { label: 'צמיחה', emoji: '🌱', color: '#16a34a', darkColor: '#86efac', lightBg: '#dcfce7', darkBg: '#1e3a2a', border: '#86efac', Icon: TrendingUp },
+  body: { label: 'גוף', emoji: '💪', color: '#9333ea', darkColor: '#c084fc', lightBg: '#f3e8ff', darkBg: '#2d2040', border: '#c084fc', Icon: Dumbbell },
+  custom: { label: 'מותאם אישית', emoji: '✨', color: '#0891b2', darkColor: '#67e8f9', lightBg: '#cffafe', darkBg: '#1e3035', border: '#67e8f9', Icon: Sparkles },
 };
 
 export default function RoutinesPage({
@@ -220,7 +220,7 @@ export default function RoutinesPage({
                             <h3 className="font-semibold text-text text-sm truncate">{routine.name}</h3>
                             <span
                               className="text-[10px] px-1.5 py-0.5 rounded-full font-medium"
-                              style={{ backgroundColor: isDark ? config.darkBg : config.lightBg, color: config.color }}
+                              style={{ backgroundColor: isDark ? config.darkBg : config.lightBg, color: isDark ? config.darkColor : config.color }}
                             >
                               {config.label}
                             </span>
@@ -229,7 +229,7 @@ export default function RoutinesPage({
                             <div className="flex-1 h-1.5 bg-cream-dark rounded-full overflow-hidden">
                               <motion.div
                                 className="h-full rounded-full"
-                                style={{ backgroundColor: config.color }}
+                                style={{ backgroundColor: isDark ? config.darkColor : config.color }}
                                 initial={{ width: 0 }}
                                 animate={{ width: `${progress * 100}%` }}
                                 transition={{ duration: 0.5 }}
@@ -390,7 +390,7 @@ export default function RoutinesPage({
                     className="flex-shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all"
                     style={{
                       backgroundColor: templateFilter === type ? cfg.color : isDark ? cfg.darkBg : cfg.lightBg,
-                      color: templateFilter === type ? '#fff' : isDark ? cfg.color : cfg.color,
+                      color: templateFilter === type ? '#fff' : isDark ? cfg.darkColor : cfg.color,
                     }}
                   >
                     {cfg.emoji} {cfg.label} ({count})
@@ -418,7 +418,7 @@ export default function RoutinesPage({
                       <h3 className="font-semibold text-text mb-0.5">{template.name}</h3>
                       <span
                         className="text-[10px] px-1.5 py-0.5 rounded-full font-medium"
-                        style={{ backgroundColor: isDark ? config.darkBg : config.lightBg, color: config.color }}
+                        style={{ backgroundColor: isDark ? config.darkBg : config.lightBg, color: isDark ? config.darkColor : config.color }}
                       >
                         {config.label}
                       </span>
@@ -445,7 +445,7 @@ export default function RoutinesPage({
                         ? 'bg-cream-dark text-text-light cursor-not-allowed'
                         : 'text-white active:scale-95'
                     }`}
-                    style={!alreadyAdded ? { backgroundColor: config.color } : undefined}
+                    style={!alreadyAdded ? { backgroundColor: isDark ? config.darkColor : config.color } : undefined}
                   >
                     {alreadyAdded ? '✅ כבר נוספה' : '➕ הוסף לשגרות שלי'}
                   </button>
@@ -643,8 +643,8 @@ export default function RoutinesPage({
                       }`}
                       style={{
                         backgroundColor: isDark ? cfg.darkBg : cfg.lightBg,
-                        color: cfg.color,
-                        borderColor: customType === type ? cfg.color : 'transparent',
+                        color: isDark ? cfg.darkColor : cfg.color,
+                        borderColor: customType === type ? (isDark ? cfg.darkColor : cfg.color) : 'transparent',
                       }}
                     >
                       {cfg.emoji} {cfg.label}

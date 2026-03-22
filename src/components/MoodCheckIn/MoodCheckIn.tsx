@@ -9,27 +9,27 @@ interface MoodCheckInProps {
   isUpdate?: boolean;
 }
 
-const MOODS: { type: MoodType; emoji: string; label: string; lightBg: string; darkBg: string; border: string }[] = [
-  { type: 'happy', emoji: '😊', label: 'שמח', lightBg: '#fef9c3', darkBg: 'rgba(253,224,71,0.15)', border: '#fde047' },
-  { type: 'calm', emoji: '🧘', label: 'רגוע', lightBg: '#dcfce7', darkBg: 'rgba(134,239,172,0.15)', border: '#86efac' },
-  { type: 'energetic', emoji: '⚡', label: 'אנרגטי', lightBg: '#ffedd5', darkBg: 'rgba(253,186,116,0.15)', border: '#fdba74' },
-  { type: 'hopeful', emoji: '🌅', label: 'מלא תקווה', lightBg: '#f3e8ff', darkBg: 'rgba(192,132,252,0.15)', border: '#c084fc' },
-  { type: 'neutral', emoji: '😐', label: 'ניטרלי', lightBg: '#f3f4f6', darkBg: 'rgba(209,213,219,0.12)', border: '#d1d5db' },
-  { type: 'tired', emoji: '😴', label: 'עייף', lightBg: '#dbeafe', darkBg: 'rgba(147,197,253,0.15)', border: '#93c5fd' },
-  { type: 'sad', emoji: '😢', label: 'עצוב', lightBg: '#e0e7ff', darkBg: 'rgba(165,180,252,0.15)', border: '#a5b4fc' },
-  { type: 'anxious', emoji: '😰', label: 'חרד', lightBg: '#fee2e2', darkBg: 'rgba(252,165,165,0.15)', border: '#fca5a5' },
-  { type: 'frustrated', emoji: '😣', label: 'מתוסכל', lightBg: '#ffe4e6', darkBg: 'rgba(253,164,175,0.15)', border: '#fda4af' },
-  { type: 'irritable', emoji: '😤', label: 'עצבני', lightBg: '#fef3c7', darkBg: 'rgba(252,211,77,0.15)', border: '#fcd34d' },
-  { type: 'lonely', emoji: '🫂', label: 'בודד', lightBg: '#ccfbf1', darkBg: 'rgba(94,234,212,0.15)', border: '#5eead4' },
-  { type: 'exhausted', emoji: '🥱', label: 'תשוש', lightBg: '#f1f5f9', darkBg: 'rgba(203,213,225,0.12)', border: '#cbd5e1' },
+const MOODS: { type: MoodType; emoji: string; label: string; lightBg: string; darkBg: string; border: string; darkText: string }[] = [
+  { type: 'happy', emoji: '😊', label: 'שמח', lightBg: '#fef9c3', darkBg: '#3d3a20', border: '#fde047', darkText: '#fde68a' },
+  { type: 'calm', emoji: '🧘', label: 'רגוע', lightBg: '#dcfce7', darkBg: '#1e3a2a', border: '#86efac', darkText: '#86efac' },
+  { type: 'energetic', emoji: '⚡', label: 'אנרגטי', lightBg: '#ffedd5', darkBg: '#3d3020', border: '#fdba74', darkText: '#fdba74' },
+  { type: 'hopeful', emoji: '🌅', label: 'מלא תקווה', lightBg: '#f3e8ff', darkBg: '#2d2340', border: '#c084fc', darkText: '#c4b5fd' },
+  { type: 'neutral', emoji: '😐', label: 'ניטרלי', lightBg: '#f3f4f6', darkBg: '#333335', border: '#d1d5db', darkText: '#d1d5db' },
+  { type: 'tired', emoji: '😴', label: 'עייף', lightBg: '#dbeafe', darkBg: '#1e2d40', border: '#93c5fd', darkText: '#93c5fd' },
+  { type: 'sad', emoji: '😢', label: 'עצוב', lightBg: '#e0e7ff', darkBg: '#252840', border: '#a5b4fc', darkText: '#a5b4fc' },
+  { type: 'anxious', emoji: '😰', label: 'חרד', lightBg: '#fee2e2', darkBg: '#3d2525', border: '#fca5a5', darkText: '#fca5a5' },
+  { type: 'frustrated', emoji: '😣', label: 'מתוסכל', lightBg: '#ffe4e6', darkBg: '#3d2528', border: '#fda4af', darkText: '#fda4af' },
+  { type: 'irritable', emoji: '😤', label: 'עצבני', lightBg: '#fef3c7', darkBg: '#3d3520', border: '#fcd34d', darkText: '#fcd34d' },
+  { type: 'lonely', emoji: '🫂', label: 'בודד', lightBg: '#ccfbf1', darkBg: '#1e3535', border: '#5eead4', darkText: '#5eead4' },
+  { type: 'exhausted', emoji: '🥱', label: 'תשוש', lightBg: '#f1f5f9', darkBg: '#2d3035', border: '#cbd5e1', darkText: '#cbd5e1' },
 ];
 
 const ENERGY_LEVELS = [
-  { level: 1, label: 'ריק לגמרי', emoji: '🪫', lightBg: '#fee2e2', darkBg: 'rgba(252,165,165,0.15)', border: '#fca5a5' },
-  { level: 2, label: 'נמוך', emoji: '🔋', lightBg: '#ffedd5', darkBg: 'rgba(253,186,116,0.15)', border: '#fdba74' },
-  { level: 3, label: 'בינוני', emoji: '⚡', lightBg: '#fef9c3', darkBg: 'rgba(253,224,71,0.15)', border: '#fde047' },
-  { level: 4, label: 'טוב', emoji: '💪', lightBg: '#dcfce7', darkBg: 'rgba(134,239,172,0.15)', border: '#86efac' },
-  { level: 5, label: 'מלא אנרגיה', emoji: '🚀', lightBg: '#d1fae5', darkBg: 'rgba(110,231,183,0.15)', border: '#6ee7b7' },
+  { level: 1, label: 'ריק לגמרי', emoji: '🪫', lightBg: '#fee2e2', darkBg: '#3d2525', border: '#fca5a5', darkText: '#fca5a5' },
+  { level: 2, label: 'נמוך', emoji: '🔋', lightBg: '#ffedd5', darkBg: '#3d3020', border: '#fdba74', darkText: '#fdba74' },
+  { level: 3, label: 'בינוני', emoji: '⚡', lightBg: '#fef9c3', darkBg: '#3d3a20', border: '#fde047', darkText: '#fde68a' },
+  { level: 4, label: 'טוב', emoji: '💪', lightBg: '#dcfce7', darkBg: '#1e3a2a', border: '#86efac', darkText: '#86efac' },
+  { level: 5, label: 'מלא אנרגיה', emoji: '🚀', lightBg: '#d1fae5', darkBg: '#1e3530', border: '#6ee7b7', darkText: '#6ee7b7' },
 ];
 
 const GREETING = () => {
@@ -122,7 +122,7 @@ export default function MoodCheckIn({ onComplete, isUpdate = false }: MoodCheckI
                       </motion.div>
                     )}
                     <span className="text-xl">{mood.emoji}</span>
-                    <span className="text-[10px] font-medium text-text">{mood.label}</span>
+                    <span className="text-[10px] font-medium" style={{ color: isDark ? mood.darkText : '#1f1f21' }}>{mood.label}</span>
                   </motion.button>
                 );
               })}
@@ -181,7 +181,7 @@ export default function MoodCheckIn({ onComplete, isUpdate = false }: MoodCheckI
                     className="border-2 rounded-xl p-3.5 flex items-center gap-3 transition-all active:scale-95"
                   >
                     <span className="text-2xl">{e.emoji}</span>
-                    <span className="font-semibold text-text">{e.label}</span>
+                    <span className="font-semibold" style={{ color: isDark ? e.darkText : '#1f1f21' }}>{e.label}</span>
                     {isSelected && (
                       <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mr-auto">
                         <Check size={18} className="text-sage" />
