@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { ReactNode } from 'react';
 import {
   Home,
@@ -5,6 +6,15 @@ import {
   AlertCircle,
   BookOpen,
   CalendarCheck,
+  Briefcase,
+  Users,
+  Zap,
+  MessageCircle,
+  FileText,
+  Megaphone,
+  Instagram,
+  LayoutDashboard,
+  ArrowLeftRight,
 } from 'lucide-react';
 import type { Page } from '../types';
 
@@ -14,7 +24,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const navItems: { page: Page; label: string; Icon: typeof Home }[] = [
+const personalNavItems: { page: Page; label: string; Icon: typeof Home }[] = [
   { page: 'dashboard', label: 'הגן שלי', Icon: Home },
   { page: 'habits', label: 'הרגלים', Icon: ListChecks },
   { page: 'sos', label: 'SOS', Icon: AlertCircle },
@@ -22,7 +32,20 @@ const navItems: { page: Page; label: string; Icon: typeof Home }[] = [
   { page: 'journal', label: 'יומן', Icon: BookOpen },
 ];
 
+const businessNavItems: { page: Page; label: string; Icon: typeof Home }[] = [
+  { page: 'business-dashboard', label: 'דשבורד', Icon: LayoutDashboard },
+  { page: 'crm', label: 'לידים', Icon: Users },
+  { page: 'whatsapp', label: 'WhatsApp', Icon: MessageCircle },
+  { page: 'automations', label: 'אוטומציות', Icon: Zap },
+  { page: 'marketing', label: 'שיווק', Icon: Megaphone },
+];
+
+const businessPages: Page[] = ['business-dashboard', 'crm', 'automations', 'whatsapp', 'forms', 'marketing', 'instagram-flows'];
+
 export default function Layout({ currentPage, onNavigate, children }: LayoutProps) {
+  const isBusinessPage = businessPages.includes(currentPage);
+  const navItems = isBusinessPage ? businessNavItems : personalNavItems;
+
   return (
     <div className="flex flex-col min-h-dvh">
       <main className="flex-1 overflow-y-auto" style={{ paddingBottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))' }}>{children}</main>
@@ -42,7 +65,7 @@ export default function Layout({ currentPage, onNavigate, children }: LayoutProp
                     : ''
                 } ${
                   isActive
-                    ? 'text-sage scale-105'
+                    ? isBusinessPage ? 'text-[#059cc0] scale-105' : 'text-sage scale-105'
                     : 'text-text-light hover:text-sage-light'
                 }`}
               >
@@ -69,6 +92,21 @@ export default function Layout({ currentPage, onNavigate, children }: LayoutProp
               </button>
             );
           })}
+
+          {/* Mode Switch Button */}
+          <button
+            onClick={() => onNavigate(isBusinessPage ? 'dashboard' : 'business-dashboard')}
+            className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all duration-200 text-text-light hover:text-sage-light"
+          >
+            {isBusinessPage ? (
+              <Home size={20} strokeWidth={1.8} />
+            ) : (
+              <Briefcase size={20} strokeWidth={1.8} />
+            )}
+            <span className="text-[10px]">
+              {isBusinessPage ? 'אישי' : 'עסקי'}
+            </span>
+          </button>
         </div>
       </nav>
     </div>

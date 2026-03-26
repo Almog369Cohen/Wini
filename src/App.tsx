@@ -39,6 +39,7 @@ import { useTasks } from './hooks/useTasks';
 import FeedbackButton from './components/Feedback/FeedbackButton';
 import UrgeIntervention from './components/UrgeIntervention/UrgeIntervention';
 import BarrierIntervention from './components/UrgeIntervention/BarrierIntervention';
+import BusinessApp from './components/DJBusiness/BusinessApp';
 import Toast from './components/ui/Toast';
 import Confetti from './components/ui/Confetti';
 import VictoryBurst from './components/ui/VictoryBurst';
@@ -410,6 +411,21 @@ function AuthenticatedApp({ user, signOut }: { user: import('firebase/auth').Use
       case 'challenges':
         return (
           <DailyChallengesPage
+            showToast={showToast}
+          />
+        );
+      // Business pages
+      case 'business-dashboard':
+      case 'crm':
+      case 'automations':
+      case 'whatsapp':
+      case 'forms':
+      case 'marketing':
+      case 'instagram-flows':
+        return (
+          <BusinessApp
+            currentPage={currentPage}
+            onNavigate={setCurrentPage}
             showToast={showToast}
           />
         );

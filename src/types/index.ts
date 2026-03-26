@@ -245,4 +245,4 @@ export interface RoutineReflection {
   newIdea?: string;
 }
 
-export type Page = 'dashboard' | 'habits' | 'sos' | 'journal' | 'milestones' | 'settings' | 'innerspace' | 'mood' | 'dailyplan' | 'routines' | 'nutrition' | 'reminders' | 'tasks' | 'calendar' | 'partner' | 'challenges';
+export type Page = 'dashboard' | 'habits' | 'sos' | 'journal' | 'milestones' | 'settings' | 'innerspace' | 'mood' | 'dailyplan' | 'routines' | 'nutrition' | 'reminders' | 'tasks' | 'calendar' | 'partner' | 'challenges' | 'business-dashboard' | 'crm' | 'automations' | 'whatsapp' | 'forms' | 'marketing' | 'instagram-flows';
