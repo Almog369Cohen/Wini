@@ -1,16 +1,17 @@
-# Task: Generate 60 Content Ideas for DJ Almog Cohen
+# משימה: ייצור 60 רעיונות תוכן ל-DJ אלמוג כהן
 
-- **From:** Claude Code
-- **To:** Manus
-- **Priority:** high
-- **Type:** data
-- **Status:** pending
+- **מאת:** Claude Code
+- **עבור:** Manus
+- **דחיפות:** גבוהה
+- **סוג:** מידע
+- **סטטוס:** ממתין
 
-## Description
-Generate 60 content ideas (30 for wedding audience, 30 for DJ course audience) that will be imported into the marketing system. Each idea needs to follow the brand rules from Skill "Almog Cohen Brand Core".
+## תיאור
+צריך לייצר 60 רעיונות תוכן — 30 לקהל חתונות ו-30 לקהל קורסי DJ.
+כל רעיון צריך לעקוב אחרי כללי המותג מסקיל "זהות המותג".
 
-## Output Format
-Please write the output as a JSON array in this exact structure:
+## פורמט הפלט
+לכתוב את הפלט כמערך JSON במבנה הזה בדיוק:
 
 ```json
 [
@@ -18,7 +19,7 @@ Please write the output as a JSON array in this exact structure:
     "id": "w01",
     "category": "wedding_highlight",
     "title": "כותרת בעברית",
-    "caption": "קפשן מלא בעברית עם הוקים, ערך, ו-CTA",
+    "caption": "כיתוב מלא בעברית עם הוק, ערך, וקריאה לפעולה",
     "hashtags": ["#חתונה", "#DJ", "#אלמוגכהן"],
     "platforms": ["instagram", "tiktok"],
     "contentType": "reel",
@@ -29,7 +30,7 @@ Please write the output as a JSON array in this exact structure:
 ]
 ```
 
-## Categories to Use
+## קטגוריות לשימוש
 - `wedding_highlight` — הייליט חתונה
 - `event_recap` — סיכום אירוע
 - `behind_scenes` — מאחורי הקלעים
@@ -40,49 +41,49 @@ Please write the output as a JSON array in this exact structure:
 - `engagement` — אינטראקציה
 - `personal_brand` — מיתוג אישי
 
-## Content Pillars (from Brand Strategy)
+## עמודי תוכן (מהאסטרטגיה)
 
-### Wedding Ideas (30) — distribute across:
-- **Authority (8):** mistakes couples make, what makes a dancefloor work, how to choose a DJ
-- **Proof (8):** real wedding moments + commentary, before/after energy, client testimonials
-- **Emotional Connection (7):** why weddings need emotional accuracy, personal stories, crowd reading
-- **Filtering (7):** "I'm not for everyone", "if you want precision and feeling, let's talk"
+### רעיונות לחתונות (30) — לחלק ככה:
+- **סמכות (8):** טעויות שזוגות עושים, מה בונה רחבה, איך בוחרים DJ
+- **הוכחה (8):** רגעים אמיתיים מחתונות + פרשנות, לפני/אחרי אנרגיה, המלצות לקוחות
+- **חיבור רגשי (7):** למה חתונות צריכות דיוק רגשי, סיפורים אישיים, קריאת קהל
+- **סינון (7):** "אני לא מתאים לכולם", "אם חשוב לכם דיוק ותחושה, בואו נדבר"
 
-### Course Ideas (30) — distribute across:
-- **Authority (8):** beginner mistakes, things nobody explains, how confidence is built
-- **Proof (8):** student transformations, lesson clips, progress stories
-- **Emotional Connection (7):** fear of starting, feeling stuck, overwhelm
-- **Call to Action (7):** which track fits you, what you actually get, how to know if ready
+### רעיונות לקורסים (30) — לחלק ככה:
+- **סמכות (8):** טעויות של מתחילים, דברים שאף אחד לא מסביר, איך בונים ביטחון
+- **הוכחה (8):** שינויים אצל תלמידים, קטעים משיעורים, סיפורי התקדמות
+- **חיבור רגשי (7):** פחד להתחיל, תחושת תקיעות, עומס
+- **הנעה לפעולה (7):** איזה מסלול מתאים לך, מה מקבלים בפועל, איך לדעת אם מוכן
 
-## Platforms
-- `instagram` — posts, reels, carousels, stories
-- `tiktok` — short videos, trends
-- `facebook` — posts, groups
-- `youtube` — shorts, longer content
+## פלטפורמות
+- `instagram` — פוסטים, רילסים, קרוסלות, סטוריז
+- `tiktok` — סרטונים קצרים, טרנדים
+- `facebook` — פוסטים, קבוצות
+- `youtube` — שורטסים, תוכן ארוך
 
-## Content Types
-- `post` — static image + caption
-- `reel` — short video (Instagram/TikTok)
-- `story` — story format
-- `video` — longer video (YouTube)
+## סוגי תוכן
+- `post` — תמונה + כיתוב
+- `reel` — סרטון קצר (אינסטגרם/טיקטוק)
+- `story` — סטורי
+- `video` — סרטון ארוך (יוטיוב)
 
-## Quality Rules
-- Hebrew only (all text)
-- Mature tone, no childish hype
-- Real value in every piece
-- Strong hook in first line of caption
-- CTA that feels selective, not desperate
-- Viral score should reflect estimated engagement potential
+## כללי איכות
+- עברית בלבד (כל הטקסטים)
+- טון בוגר, בלי הייפ ילדותי
+- ערך אמיתי בכל יחידת תוכן
+- הוק חזק בשורה הראשונה של הכיתוב
+- קריאה לפעולה סלקטיבית, לא נואשת
+- ציון ויראליות = פוטנציאל מעורבות משוער
 
-## Acceptance Criteria
-- [ ] 30 wedding ideas with all fields filled
-- [ ] 30 course ideas with all fields filled
-- [ ] All categories represented
-- [ ] All content types used (reel, post, story, video)
-- [ ] All platforms covered
-- [ ] Valid JSON format
-- [ ] Hebrew only for title, caption, shootingTips
+## קריטריונים להצלחה
+- [ ] 30 רעיונות חתונה עם כל השדות מלאים
+- [ ] 30 רעיונות קורסים עם כל השדות מלאים
+- [ ] כל הקטגוריות מיוצגות
+- [ ] כל סוגי התוכן בשימוש (רילס, פוסט, סטורי, וידאו)
+- [ ] כל הפלטפורמות מכוסות
+- [ ] פורמט JSON תקין
+- [ ] עברית בלבד בכותרת, כיתוב, טיפי צילום
 
-## Where to Put Output
-Save the JSON to: `.manus/outputs/2026-03-26-content-ideas-60.json`
-Also update `.manus/STATUS.md` to mark this task as done.
+## איפה לשמור את הפלט
+לשמור את ה-JSON ב: `.manus/outputs/2026-03-26-content-ideas-60.json`
+גם לעדכן את `.manus/STATUS.md` ולסמן שהמשימה הושלמה.

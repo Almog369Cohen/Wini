@@ -1,131 +1,93 @@
-# Role Division — Manus & Claude Code
+# חלוקת תפקידים — Manus ו-Claude Code
 
-## DJ Almog Cohen Business System
-
----
-
-## Manus — Marketing Brain
-**Mission:** Research, strategy, content, audience analysis, campaign management
-
-### Owns:
-- Market research (competitors, trends, audience behavior)
-- Content strategy & ideation (30 wedding + 30 course ideas)
-- Instagram content analysis & recommendations
-- Audience profiling & message mapping
-- Campaign planning (monthly content calendar)
-- Copy writing (captions, hooks, scripts, CTAs)
-- Competitor analysis (Israeli DJ market)
-- Performance analysis (what content works, engagement metrics)
-- Lead qualification questions & scoring logic
-- WhatsApp message templates (tone, strategy, A/B variants)
-
-### Delivers to Claude Code:
-- Content templates (JSON format → `tasks/content-templates.md`)
-- WhatsApp message sequences (text → `tasks/wa-sequences.md`)
-- Form field suggestions (what to ask leads → `tasks/form-fields.md`)
-- Instagram flow keywords & DM scripts (→ `tasks/ig-flows.md`)
-- Campaign briefs (→ `tasks/campaigns/`)
-- Audience research findings (→ `outputs/research/`)
-
-### Tools:
-- Instagram connector (ideation, publish, analyze)
-- Meta Ads Manager (read-only analytics)
-- Notion / Google Calendar
-- Web research & data analysis
-- Scheduled tasks (weekly reports, daily ideas)
+## המערכת העסקית של DJ אלמוג כהן
 
 ---
 
-## Claude Code — Engineering Brain
-**Mission:** Build, integrate, automate, deploy
+## Manus — המוח השיווקי
 
-### Owns:
-- CRM system (leads, customers, contacts, pipeline)
-- Automation engine (triggers, actions, sequences)
-- WhatsApp integration (GREEN-API send/receive)
-- Forms builder (create, render, process submissions)
-- Marketing dashboard (content calendar, post composer)
-- Instagram automation (keyword detection, auto-DM)
-- API integrations (Buffer, Cal.com, Instagram Graph API)
-- Data models & type definitions
-- UI/UX implementation (React components)
-- Firebase backend (Firestore, Cloud Functions)
-- Performance & build optimization
+### מה הוא עושה:
+- מחקר שוק (מתחרים, טרנדים, קהלים)
+- אסטרטגיית תוכן ורעיונות (30 לחתונות + 30 לקורסים)
+- ניתוח אינסטגרם (מה עובד, מה לא)
+- פרופיל קהלים ומפת מסרים
+- תכנון קמפיינים (לוח תוכן חודשי)
+- כתיבת קופי (כיתובים, הוקים, סקריפטים, קריאות לפעולה)
+- ניתוח מתחרים (שוק ה-DJ הישראלי)
+- ניתוח ביצועים (מה מקבל מעורבות)
+- שאלות סינון לידים ודירוג איכות
+- תבניות הודעות WhatsApp (טון, אסטרטגיה, גרסאות)
 
-### Delivers to Manus:
-- Built features documentation (→ `outputs/features/`)
-- API endpoints & webhook URLs (→ `outputs/api-docs/`)
-- Data schemas (→ `outputs/schemas/`)
-- Analytics dashboards (→ `outputs/dashboards/`)
-- System status reports (→ `outputs/status/`)
-
-### Tools:
-- React + TypeScript + Tailwind + Framer Motion
-- Firebase (Auth, Firestore, Cloud Functions)
-- GREEN-API (WhatsApp)
-- Buffer API (social media scheduling)
-- Instagram Graph API
-- Cal.com webhooks
-- Git + CI/CD
+### מה הוא מעביר ל-Claude Code:
+- תבניות תוכן (פורמט JSON) → `tasks/`
+- רצפי הודעות WhatsApp → `tasks/`
+- הצעות לשדות טפסים → `tasks/`
+- מילות מפתח ותסריטי DM לאינסטגרם → `tasks/`
+- בריפים לקמפיינים → `tasks/`
+- ממצאי מחקר → `outputs/`
 
 ---
 
-## Collaboration Patterns
+## Claude Code — המוח ההנדסי
 
-### Pattern 1: Content Pipeline
+### מה הוא עושה:
+- מערכת CRM (לידים, לקוחות, אנשי קשר, פייפליין)
+- מנוע אוטומציות (טריגרים, פעולות, רצפים)
+- חיבור WhatsApp דרך GREEN-API (שליחה/קבלה)
+- בונה טפסים (יצירה, הצגה, עיבוד תגובות)
+- דשבורד שיווק (לוח תוכן, מחבר פוסטים)
+- אוטומציית אינסטגרם (זיהוי מילות מפתח, DM אוטומטי)
+- חיבורי API (Buffer, Cal.com, Instagram Graph API)
+- מודלים וטיפוסי נתונים
+- בניית ממשק משתמש (רכיבי React)
+- צד שרת Firebase (Firestore, Cloud Functions)
+
+### מה הוא מעביר ל-Manus:
+- תיעוד פיצ'רים שנבנו → `outputs/`
+- כתובות API וwebhook → `outputs/`
+- סכמות נתונים → `outputs/`
+- דשבורדים → `outputs/`
+
+---
+
+## דפוסי שיתוף פעולה
+
+### 1. צינור תוכן
 ```
-Manus: researches → writes 30 content ideas (JSON)
-        ↓ tasks/content-batch-YYYY-MM.md
-Claude Code: imports into ContentTemplates → builds UI → pushes
-        ↓ outputs/content-imported.md
-Manus: reviews in app → adjusts strategy
+Manus חוקר → כותב 30 רעיונות תוכן (JSON)
+    ↓
+Claude Code מייבא → בונה ממשק → דוחף
+    ↓
+Manus בודק באפליקציה → מכוונן אסטרטגיה
 ```
 
-### Pattern 2: Lead Funnel Optimization
+### 2. שיפור משפך לידים
 ```
-Manus: analyzes conversion data → suggests new qualifying questions
-        ↓ tasks/optimize-wedding-form.md
-Claude Code: updates form fields + automation logic → pushes
-        ↓ outputs/form-updated.md
-Manus: monitors results → iterates
-```
-
-### Pattern 3: Campaign Launch
-```
-Manus: creates campaign plan (audience, messages, schedule)
-        ↓ plans/campaign-spring-weddings.md
-Claude Code: builds landing page + form + automation + tracking
-        ↓ outputs/campaign-ready.md
-Manus: activates campaign → monitors → reports
-        ↓ outputs/campaign-report.md
+Manus מנתח נתוני המרה → מציע שאלות סינון חדשות
+    ↓
+Claude Code מעדכן שדות טופס + לוגיקת אוטומציה
+    ↓
+Manus עוקב אחרי תוצאות → חוזר ומשפר
 ```
 
-### Pattern 4: Instagram Growth
+### 3. השקת קמפיין
 ```
-Manus: identifies trending keywords + writes DM scripts
-        ↓ tasks/ig-flow-update.md
-Claude Code: updates Instagram flows in the system
-        ↓ outputs/ig-flows-updated.md
-Manus: monitors engagement → suggests optimizations
+Manus יוצר תוכנית קמפיין (קהל, מסרים, לוח זמנים)
+    ↓
+Claude Code בונה דף נחיתה + טופס + אוטומציה + מעקב
+    ↓
+Manus מפעיל קמפיין → עוקב → מדווח
 ```
 
 ---
 
-## Weekly Rhythm
+## קצב עבודה שבועי
 
-| Day | Manus | Claude Code |
+| יום | Manus | Claude Code |
 |-----|-------|-------------|
-| **Sun** | Weekly review + new content ideas | Process tasks from Manus |
-| **Mon** | Research competitors | Build requested features |
-| **Tue** | Write captions & hooks | Implement automations |
-| **Wed** | Analyze Instagram performance | Fix bugs, optimize |
-| **Thu** | Plan next week's content | Deploy updates |
-| **Fri** | Campaign reports → STATUS.md | System health check |
-
----
-
-## Escalation
-If either agent is **blocked**, write to:
-`tasks/URGENT-{date}-{issue}.md` with Priority: high
-
-The other agent should check for URGENT files on every sync.
+| **א** | סיכום שבועי + רעיונות תוכן חדשים | עיבוד משימות מ-Manus |
+| **ב** | מחקר מתחרים | בניית פיצ'רים |
+| **ג** | כתיבת כיתובים והוקים | מימוש אוטומציות |
+| **ד** | ניתוח ביצועי אינסטגרם | תיקונים ושיפורים |
+| **ה** | תכנון תוכן לשבוע הבא | שחרור עדכונים |
+| **ו** | דוחות קמפיינים → STATUS.md | בדיקת תקינות מערכת |

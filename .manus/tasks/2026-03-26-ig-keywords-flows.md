@@ -1,22 +1,24 @@
-# Task: Instagram Keyword Flows for Auto-DM
+# משימה: זרימות אינסטגרם למילות מפתח ו-DM אוטומטי
 
-- **From:** Claude Code
-- **To:** Manus
-- **Priority:** high
-- **Type:** data
-- **Status:** pending
+- **מאת:** Claude Code
+- **עבור:** Manus
+- **דחיפות:** גבוהה
+- **סוג:** מידע
+- **סטטוס:** ממתין
 
-## Description
-Create Instagram auto-DM flows (replacing ManyChat). Currently there's only 1 working flow with keyword "מאורסים" that got 5 sends and 80% CTR. We need more flows for both audiences.
+## תיאור
+ליצור זרימות DM אוטומטי לאינסטגרם (מחליף את ManyChat).
+כרגע יש רק זרימה אחת עם מילת מפתח "מאורסים" שקיבלה 5 שליחות ו-80% CTR.
+צריך עוד זרימות לשני הקהלים.
 
-## Current ManyChat Setup (being replaced)
-- Keyword "מאורסים" → 3 random replies + DM with links
-- Requires follow before sending link (high friction — losing people)
-- No qualifying questions, no follow-up sequence
-- 609 contacts, 496 unhandled messages
+## מה קורה היום ב-ManyChat (מוחלף)
+- מילת מפתח "מאורסים" → 3 תגובות + DM עם קישורים
+- דורש עקיבה לפני שליחת קישור (חיכוך גבוה — מאבדים אנשים)
+- אין שאלות סינון, אין רצף מעקב
+- 609 אנשי קשר, 496 הודעות לא מטופלות
 
-## What We Need
-For each flow, provide:
+## מה צריך
+לכל זרימה, לספק:
 
 ```json
 {
@@ -28,48 +30,48 @@ For each flow, provide:
   ],
   "dmMessage": "הודעת DM ראשונה בעברית...",
   "followUpMessages": [
-    { "delay": "1 day", "message": "הודעת פולואפ..." },
-    { "delay": "3 days", "message": "הודעת פולואפ שנייה..." }
+    { "delay": "יום 1", "message": "הודעת מעקב..." },
+    { "delay": "3 ימים", "message": "הודעת מעקב שנייה..." }
   ],
   "audience": "wedding | course",
-  "goal": "lead_capture | engagement | trust",
+  "goal": "לכידת ליד | מעורבות | אמון",
   "qualifyingQuestions": ["שאלה מסננת 1?", "שאלה מסננת 2?"]
 }
 ```
 
-## Flows to Create
+## זרימות ליצירה
 
-### Wedding Flows (5)
-1. **"מאורסים"** — improved version of existing flow (no follow requirement!)
-2. **"DJ לחתונה"** — for people asking about wedding DJ
-3. **"תאריך פנוי"** — for people asking about availability
-4. **"הצעת מחיר"** — for people asking about pricing
-5. **"חתונה"** — generic wedding keyword
+### זרימות חתונה (5)
+1. **"מאורסים"** — גרסה משופרת (בלי דרישת עקיבה!)
+2. **"DJ לחתונה"** — לאנשים ששואלים על DJ לחתונה
+3. **"תאריך פנוי"** — לאנשים שבודקים זמינות
+4. **"הצעת מחיר"** — לאנשים ששואלים על מחיר
+5. **"חתונה"** — מילת מפתח כללית
 
-### Course Flows (3)
-6. **"קורס DJ"** — for people interested in learning
-7. **"ללמוד"** — broader learning keyword
-8. **"מתחיל"** — for beginners
+### זרימות קורסים (3)
+6. **"קורס DJ"** — למתעניינים בלימודים
+7. **"ללמוד"** — מילת מפתח רחבה יותר
+8. **"מתחיל"** — למתחילים
 
-### Brand Flows (2)
-9. **"ציוד"** — Fix Mix equipment rental
-10. **"פודקאסט"** — podcast inquiries
+### זרימות מותג (2)
+9. **"ציוד"** — השכרת ציוד Fix Mix
+10. **"פודקאסט"** — פניות לפודקאסט
 
-## Rules
-- NO follow requirement before sending info (removes friction)
-- Include qualifying questions (when is the event? budget? experience level?)
-- DM tone: premium but warm, per Brand Core rules
-- Each flow should capture the contact as a lead in CRM
-- Hebrew only
-- CTAs: "בדיקת התאמה" style, not "book now!!!"
+## כללים
+- בלי דרישת עקיבה לפני שליחת מידע (מוריד חיכוך)
+- לכלול שאלות סינון (מתי האירוע? תקציב? רמת ניסיון?)
+- טון ה-DM: פרימיום אבל חם, לפי כללי זהות המותג
+- כל זרימה צריכה ללכוד את איש הקשר כליד במערכת
+- עברית בלבד
+- קריאות לפעולה: סגנון "בדיקת התאמה", לא "הזמן עכשיו!!!"
 
-## Acceptance Criteria
-- [ ] 10 flows with all fields
-- [ ] Auto-reply options (3 per flow, varied)
-- [ ] DM message with value + CTA
-- [ ] Follow-up sequence (2 messages per flow)
-- [ ] Qualifying questions
-- [ ] Hebrew only
+## קריטריונים להצלחה
+- [ ] 10 זרימות עם כל השדות
+- [ ] אפשרויות תגובה (3 לכל זרימה, מגוונות)
+- [ ] הודעת DM עם ערך + קריאה לפעולה
+- [ ] רצף מעקב (2 הודעות לכל זרימה)
+- [ ] שאלות סינון
+- [ ] עברית בלבד
 
-## Where to Put Output
-Save to: `.manus/outputs/2026-03-26-ig-flows.json`
+## איפה לשמור
+לשמור ב: `.manus/outputs/2026-03-26-ig-flows.json`

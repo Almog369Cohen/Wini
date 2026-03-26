@@ -1,85 +1,47 @@
-# System Status — DJ Almog Cohen
+# מצב מערכת — DJ אלמוג כהן
 
-**Last Updated:** 2026-03-26
-**Updated By:** Claude Code
-
----
-
-## Current Sprint: Phase 1 — Foundation
-
-### Claude Code Status
-| Module | Status | Files | Notes |
-|--------|--------|-------|-------|
-| CRM & Lead Pipeline | **DONE** | `src/components/DJBusiness/CRM/` | Kanban + List view, Add/Edit/Delete leads |
-| CRM Dashboard | **DONE** | `src/components/DJBusiness/CRM/Dashboard.tsx` | KPIs, pipeline chart, monthly chart |
-| WhatsApp Hub | **DONE** | `src/components/DJBusiness/WhatsApp/` | GREEN-API integration, templates, send/log |
-| Automation Engine | **DONE** | `src/components/DJBusiness/Automations/` | 8 pre-built templates, on/off toggle |
-| Forms Builder | **DONE** | `src/components/DJBusiness/Forms/` | 5 templates (wedding, course, rental, podcast, mailing) |
-| Business Navigation | **DONE** | `src/components/Layout.tsx` | Mode switch: personal ↔ business |
-| Brand Core Data | **DONE** | `src/data/brandCore.ts` | Brand identity, audiences, message map |
-| Marketing Page | **IN PROGRESS** | `src/components/DJBusiness/Marketing/` | Content generator, calendar, composer |
-| Instagram Automation | **IN PROGRESS** | `src/components/DJBusiness/Instagram/` | Keyword flows, auto-DM (replaces ManyChat) |
-| Content Templates (60) | **WAITING FOR MANUS** | `src/data/contentTemplates.ts` | Need 30 wedding + 30 course ideas from Manus |
-
-### Manus Status
-| Task | Status | Notes |
-|------|--------|-------|
-| Brand Core Skills | **READY** | 3 skills created (Brand Core, Weddings, DJ Academy) |
-| Audience Profiles | **READY** | Wedding couples + DJ students profiles complete |
-| Message Map | **READY** | Loaded into `src/data/brandCore.ts` |
-| Content Ideas (60) | **PENDING** | Manus to generate and push to `tasks/` |
-| Instagram Competitor Research | **PENDING** | Manus to research Israeli DJ market |
-| WhatsApp Sequence Optimization | **PENDING** | Manus to review and improve message templates |
+**עדכון אחרון:** 2026-03-26
+**עודכן על ידי:** Claude Code
 
 ---
 
-## What Manus Should Do Next
-1. **Generate 60 content ideas** (30 wedding, 30 course) in JSON format → push to `tasks/content-ideas.md`
-2. **Research 10 Israeli DJ competitors** → push findings to `outputs/competitor-research.md`
-3. **Review WhatsApp templates** in `src/types/whatsapp.ts` → suggest improvements in `tasks/wa-optimize.md`
-4. **Create Instagram flow keywords** → push to `tasks/ig-keywords.md`
+## ספרינט נוכחי: שלב 1 — תשתית
 
-## What Claude Code Will Do Next
-1. Build Marketing Page (content generator + calendar)
-2. Build Instagram Automation page
-3. Import content templates from Manus
-4. Add Buffer API integration for auto-posting
-5. Set up Firebase Cloud Functions for webhooks
+### מצב Claude Code
+
+| מודול | סטטוס | הערות |
+|-------|--------|-------|
+| CRM ופייפליין לידים | **הושלם** | קנבן + תצוגת רשימה, הוספה/עריכה/מחיקה |
+| דשבורד עסקי | **הושלם** | מדדים, גרף פייפליין, גרף חודשי |
+| WhatsApp Hub | **הושלם** | חיבור GREEN-API, תבניות, שליחה/לוג |
+| מנוע אוטומציות | **הושלם** | 8 תבניות מוכנות, מתג הפעלה/כיבוי |
+| בונה טפסים | **הושלם** | 5 תבניות (חתונה, קורס, ציוד, פודקאסט, תפוצה) |
+| ניווט עסקי | **הושלם** | מעבר בין מצב אישי למצב עסקי |
+| נתוני מותג | **הושלם** | זהות, קהלים, מפת מסרים |
+| דף שיווק | **בעבודה** | מחולל תוכן, לוח שנה, מחבר פוסטים |
+| אוטומציית אינסטגרם | **בעבודה** | זרימות מילות מפתח, DM אוטומטי (מחליף ManyChat) |
+| 60 תבניות תוכן | **ממתין ל-Manus** | צריך 30 לחתונות + 30 לקורסים |
+
+### מצב Manus
+
+| משימה | סטטוס | הערות |
+|-------|--------|-------|
+| סקילים למותג | **מוכן** | 3 סקילים (מותג, חתונות, קורסים) |
+| פרופילי קהלים | **מוכן** | זוגות + תלמידי DJ |
+| מפת מסרים | **מוכן** | נטען לקוד |
+| 60 רעיונות תוכן | **ממתין** | Manus צריך לייצר ולדחוף ל-tasks/ |
+| מחקר מתחרים | **ממתין** | Manus צריך לחקור שוק DJ ישראלי |
+| שיפור תבניות WhatsApp | **ממתין** | Manus צריך לבדוק ולשפר |
 
 ---
 
-## System Architecture
-```
-Frontend: React + TypeScript + Tailwind + Framer Motion (Vite)
-Backend: Firebase Auth (existing) + Firestore (new) + Cloud Functions (planned)
-WhatsApp: GREEN-API (idInstance: configured by user)
-Scheduling: Buffer API (planned)
-Instagram: Graph API (planned, replaces ManyChat)
-Calendar: Cal.com webhooks (planned)
-Data: localStorage (current) → Firestore (migration planned)
-```
+## המשימה הבאה של Manus
+1. **לקרוא** את `PROTOCOL.md` ו-`ROLES.md`
+2. **לייצר 60 רעיונות תוכן** לפי `tasks/2026-03-26-content-ideas-60.md`
+3. **לשמור** את התוצר ב-`outputs/`
+4. **לעדכן** את הקובץ הזה
 
-## Key Files Map
-```
-src/types/crm.ts           — Lead, Customer, Contact types
-src/types/automation.ts     — Automation engine types + 8 templates
-src/types/whatsapp.ts       — WhatsApp types + GREEN-API helpers
-src/types/forms.ts          — Form builder types + 5 templates
-src/types/marketing.ts      — Content, scheduling, Instagram types
-src/hooks/useCRM.ts         — CRM state management
-src/hooks/useWhatsApp.ts    — GREEN-API integration
-src/hooks/useAutomations.ts — Automation CRUD
-src/hooks/useForms.ts       — Forms CRUD
-src/data/brandCore.ts       — Brand identity & audience data
-src/components/DJBusiness/  — All business UI components
-```
-
-## Costs
-| Service | Current | After Migration |
-|---------|---------|-----------------|
-| ManyChat | $25/mo | $0 (built-in) |
-| Make | $9/mo | $0 (built-in) |
-| SmartSuite | $?/mo | $0 (Firebase free tier) |
-| Fillout | $?/mo | $0 (built-in) |
-| GREEN-API | stays | stays |
-| Buffer | new | ~$6/mo |
+## המשימה הבאה של Claude Code
+1. לסיים דף שיווק ואינסטגרם
+2. לייבא תבניות תוכן מ-Manus כשיהיו מוכנות
+3. להוסיף חיבור Buffer API לפרסום אוטומטי

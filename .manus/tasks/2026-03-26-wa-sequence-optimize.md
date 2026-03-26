@@ -1,60 +1,60 @@
-# Task: Optimize WhatsApp Message Templates & Sequences
+# משימה: שיפור תבניות ורצפי הודעות WhatsApp
 
-- **From:** Claude Code
-- **To:** Manus
-- **Priority:** medium
-- **Type:** data
-- **Status:** pending
+- **מאת:** Claude Code
+- **עבור:** Manus
+- **דחיפות:** בינונית
+- **סוג:** מידע
+- **סטטוס:** ממתין
 
-## Description
-Review and optimize the WhatsApp message templates currently in the system. The current templates are functional but generic. Need Manus to apply the Brand Core voice and create proper sequences for each lead stage.
+## תיאור
+לבדוק ולשפר את תבניות הודעות ה-WhatsApp שכרגע במערכת.
+התבניות הנוכחיות עובדות אבל גנריות. צריך להתאים לטון המותג וליצור רצפים מותאמים לכל שלב בפייפליין.
 
-## Current Templates (in `src/types/whatsapp.ts`)
-1. ברוכים הבאים (welcome)
-2. תזכורת - לא ענה (reminder)
-3. אישור שיחה (confirmation)
-4. שליחת חוזה (contract)
-5. Follow-up (followup)
-6. מזל טוב - חתם (signed confirmation)
+## תבניות נוכחיות (ב-`src/types/whatsapp.ts`)
+1. ברוכים הבאים (וולקאם)
+2. תזכורת — לא ענה
+3. אישור שיחה
+4. שליחת חוזה
+5. פולואפ
+6. מזל טוב — חתם
 
-## What's Needed
+## מה צריך
 
-### 1. Improve Existing Templates
-- Apply Brand Core tone (premium, confident, not desperate)
-- Add personalization variables
-- Create A/B variants for each template
+### 1. שיפור התבניות הקיימות
+- ליישם את טון המותג (פרימיום, בטוח, לא נואש)
+- להוסיף משתני התאמה אישית
+- ליצור גרסאות A/B לכל תבנית
 
-### 2. Create New Sequences by Event Type
-Each sequence = series of messages with timing:
+### 2. יצירת רצפים לפי סוג אירוע
 
-**Wedding Lead Sequence:**
-- Day 0: Welcome + value proposition
-- Day 1: "5 things couples forget when choosing a DJ" (value)
-- Day 3: "Here's how I work" (trust)
-- Day 5: "Want to check if I'm available for your date?" (CTA)
-- Day 10: Last follow-up
+**רצף ליד חתונה:**
+- יום 0: ברוכים הבאים + הצעת ערך
+- יום 1: "5 דברים שזוגות שוכחים בבחירת DJ" (ערך)
+- יום 3: "ככה אני עובד" (אמון)
+- יום 5: "רוצים לבדוק אם אני פנוי בתאריך שלכם?" (קריאה לפעולה)
+- יום 10: מעקב אחרון
 
-**Course Lead Sequence:**
-- Day 0: Welcome + what to expect
-- Day 1: "3 mistakes beginners make" (value)
-- Day 3: Student success story (proof)
-- Day 5: "Which track fits you?" (CTA)
-- Day 10: Last follow-up
+**רצף ליד קורס:**
+- יום 0: ברוכים הבאים + מה לצפות
+- יום 1: "3 טעויות שמתחילים עושים" (ערך)
+- יום 3: סיפור הצלחה של תלמיד (הוכחה)
+- יום 5: "איזה מסלול מתאים לך?" (קריאה לפעולה)
+- יום 10: מעקב אחרון
 
-**Equipment Rental Sequence:**
-- Day 0: Welcome + equipment list
-- Day 1: Follow-up if no response
+**רצף השכרת ציוד:**
+- יום 0: ברוכים הבאים + רשימת ציוד
+- יום 1: מעקב אם אין תגובה
 
-### 3. Status-Change Messages
-For each status transition, write the WhatsApp message:
+### 3. הודעות לפי שינוי סטטוס
+לכל מעבר סטטוס, לכתוב הודעת WhatsApp:
 - ליד חדש → לא ענה
-- לא ענה → (after 3 attempts) final message
-- נקבעה שיחה → confirmation + reminder
-- הצעת מחיר נשלחה → follow-up
-- חוזה נשלח → instructions + urgency
-- חתם → celebration + next steps
+- לא ענה → (אחרי 3 ניסיונות) הודעה אחרונה
+- נקבעה שיחה → אישור + תזכורת
+- הצעת מחיר נשלחה → מעקב
+- חוזה נשלח → הוראות + דחיפות
+- חתם → חגיגה + צעדים הבאים
 
-## Output Format
+## פורמט הפלט
 ```json
 {
   "templates": [
@@ -62,8 +62,8 @@ For each status transition, write the WhatsApp message:
       "name": "שם התבנית",
       "category": "welcome|reminder|contract|confirmation|followup|value|proof|custom",
       "audience": "wedding|course|rental|general",
-      "message": "טקסט ההודעה עם {{name}} variables",
-      "timing": "immediate | +1d | +3d | +5d | +10d",
+      "message": "טקסט ההודעה עם {{name}} משתנים",
+      "timing": "מיידי | +יום 1 | +3 ימים | +5 ימים | +10 ימים",
       "triggerStatus": "new | no_answer | call_scheduled | quote_sent | contract_sent | signed"
     }
   ],
@@ -75,13 +75,13 @@ For each status transition, write the WhatsApp message:
 }
 ```
 
-## Rules
-- Hebrew only
-- Max 500 characters per message
-- 1-2 emojis per message (not more)
-- Premium tone, not salesy
-- Include clear CTA in every message
-- Variables: {{name}}, {{eventDate}}, {{eventType}}, {{date}}, {{time}}
+## כללים
+- עברית בלבד
+- מקסימום 500 תווים להודעה
+- 1-2 אימוג'ים להודעה (לא יותר)
+- טון פרימיום, לא מכירתי
+- לכלול קריאה לפעולה ברורה בכל הודעה
+- משתנים: {{name}}, {{eventDate}}, {{eventType}}, {{date}}, {{time}}
 
-## Where to Put Output
-Save to: `.manus/outputs/2026-03-26-wa-sequences.json`
+## איפה לשמור
+לשמור ב: `.manus/outputs/2026-03-26-wa-sequences.json`

@@ -1,101 +1,75 @@
-# Manus ↔ Claude Code — Sync Protocol
+# פרוטוקול סנכרון — Manus ↔ Claude Code
 
-## Overview
-This directory is the communication bridge between **Manus** (marketing AI) and **Claude Code** (engineering AI). Both agents read and write to this folder via Git.
+## מה זה?
+התיקייה הזו היא הגשר בין **Manus** (שיווק) ל-**Claude Code** (פיתוח).
+שני ה-AI עובדים דרך Git — כותבים קבצים, דוחפים, והשני קורא.
 
-## How It Works
+## איך זה עובד
+
 ```
-Manus writes → .manus/tasks/ → Claude Code reads → builds → pushes
-Claude Code writes → .manus/outputs/ → Manus reads → executes marketing
-Both write → .manus/plans/ → shared planning space
+Manus כותב משימה → .manus/tasks/
+                         ↓
+Claude Code קורא → בונה → דוחף לקוד
+                         ↓
+Claude Code כותב תוצר → .manus/outputs/
+                         ↓
+Manus קורא → מפעיל שיווק
 ```
 
-## Directory Structure
+## מבנה התיקיות
+
 ```
 .manus/
-├── PROTOCOL.md          ← You are here. Rules of engagement.
-├── ROLES.md             ← Who does what
-├── STATUS.md            ← Current sprint status (both update)
-├── tasks/               ← Manus → Claude Code (build requests)
-├── outputs/             ← Claude Code → Manus (deliverables)
-├── plans/               ← Shared planning space
-├── templates/           ← Manus skills & prompts (shared reference)
-└── logs/                ← Execution logs from both sides
+├── PROTOCOL.md          ← הקובץ הזה. חוקי עבודה.
+├── ROLES.md             ← מי עושה מה
+├── STATUS.md            ← מצב נוכחי (שניהם מעדכנים)
+├── tasks/               ← משימות מ-Manus ל-Claude Code
+├── outputs/             ← תוצרים מ-Claude Code ל-Manus
+├── plans/               ← תכנון משותף
+├── templates/           ← סקילים ופרומפטים (חומר עזר)
+└── logs/                ← לוגים מריצות
 ```
 
-## Communication Format
+## פורמט קובץ משימה
 
-### Task Files (Manus → Claude Code)
-Filename: `tasks/YYYY-MM-DD-{short-name}.md`
+שם קובץ: `tasks/YYYY-MM-DD-שם-קצר.md`
+
 ```markdown
-# Task: [title]
-- **From:** Manus
-- **To:** Claude Code
-- **Priority:** high | medium | low
-- **Type:** build | fix | integrate | data
-- **Status:** pending | in-progress | done | blocked
+# משימה: [כותרת]
+- **מאת:** Manus
+- **עבור:** Claude Code
+- **דחיפות:** גבוהה / בינונית / נמוכה
+- **סוג:** בנייה / תיקון / חיבור / מידע
+- **סטטוס:** ממתין / בעבודה / הושלם / חסום
 
-## Description
-[What needs to be built]
+## תיאור
+[מה צריך לבנות]
 
-## Acceptance Criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
-
-## Context
-[Any research, data, or strategy context]
+## קריטריונים להצלחה
+- [ ] דבר 1
+- [ ] דבר 2
 ```
 
-### Output Files (Claude Code → Manus)
-Filename: `outputs/YYYY-MM-DD-{short-name}.md`
+## פורמט קובץ תוצר
+
+שם קובץ: `outputs/YYYY-MM-DD-שם-קצר.md`
+
 ```markdown
-# Output: [title]
-- **From:** Claude Code
-- **To:** Manus
-- **Task Reference:** tasks/YYYY-MM-DD-{name}.md
-- **Status:** ready | needs-review
+# תוצר: [כותרת]
+- **מאת:** Claude Code
+- **עבור:** Manus
+- **סטטוס:** מוכן / דורש בדיקה
 
-## What Was Built
-[Description + file paths]
+## מה נבנה
+[תיאור + נתיבי קבצים]
 
-## How To Use
-[Instructions for Manus to use the output]
-
-## API Keys / Config Needed
-[Any setup Manus needs to do]
+## איך להשתמש
+[הוראות]
 ```
 
-### Plan Files (Shared)
-Filename: `plans/YYYY-MM-DD-{topic}.md`
-```markdown
-# Plan: [topic]
-- **Created by:** Manus | Claude Code
-- **Date:** YYYY-MM-DD
-
-## Manus Responsibilities
-- [ ] Task 1
-- [ ] Task 2
-
-## Claude Code Responsibilities
-- [ ] Task 1
-- [ ] Task 2
-
-## Dependencies
-[What blocks what]
-
-## Timeline
-[When each part should be done]
-```
-
-## Git Workflow
-1. Both work on branch `claude/dj-business-marketing-wme6Q`
-2. Before writing: `git pull origin claude/dj-business-marketing-wme6Q`
-3. After writing: `git add .manus/ && git commit && git push`
-4. Conflict resolution: latest timestamp wins, append don't overwrite
-
-## Rules
-1. **Never delete** the other agent's files — only add or update
-2. **Always update STATUS.md** when starting or completing work
-3. **One task per file** — don't combine multiple requests
-4. **Include context** — neither agent has the other's memory
-5. **Be explicit** — no assumptions about what the other knows
+## חוקים
+1. **לא למחוק** קבצים של הצד השני — רק להוסיף או לעדכן
+2. **לעדכן STATUS.md** כשמתחילים או מסיימים עבודה
+3. **משימה אחת לקובץ** — לא לערבב כמה בקשות
+4. **לכלול הקשר** — אף אחד מהשניים לא זוכר את הצד השני
+5. **לפני כתיבה:** `git pull` — **אחרי כתיבה:** `git push`
