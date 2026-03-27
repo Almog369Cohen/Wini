@@ -1,0 +1,17 @@
+{
+  "name": "dj-almog-bots",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "generate": "tsx bots/run.ts generate",
+    "research": "tsx bots/run.ts research",
+    "market": "tsx bots/run.ts market",
+    "batch": "tsx bots/run.ts batch",
+    "quick": "tsx bots/run.ts quick"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.0"
+  }
+}
